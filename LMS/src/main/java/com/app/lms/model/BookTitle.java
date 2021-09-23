@@ -35,7 +35,7 @@ public class BookTitle {
 	private LibrarySection section;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "title", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "title", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<BookCopy> bookCopies;
 	
 	public BookTitle() {

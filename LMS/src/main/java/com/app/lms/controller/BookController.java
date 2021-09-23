@@ -47,7 +47,7 @@ public class BookController {
 		if(bookId.length()==4) {
 			bt = bookService.getBookTitle(bookId);
 			ObjectNode objectNode = mapper.valueToTree(bt);
-			ArrayNode arrayNode = objectNode.arrayNode();
+			ArrayNode arrayNode = objectNode.putArray("bookCopies");
 			for(BookCopy bookCopy : bt.getBookCopies()) {
 				ObjectNode node = mapper.createObjectNode();
 				node.put("copyId", bookCopy.getCopyId());
