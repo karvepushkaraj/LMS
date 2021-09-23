@@ -62,4 +62,18 @@ public class BookServiceImpl implements BookService {
 		return bc;
 	}
 
+	@Override
+	public void deleteBook(String bookId) {
+		BookTitle bt = getBookTitle(bookId.substring(0, 4));
+		BookCopy bc = null;
+		if(bt!=null) {
+			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+			bc = basicDaoBookCopy.getById(key);
+			basicDaoBookCopy.delete(bc);
+		}
+		if(bt.getBookCopies().isEmpty()) {
+			basicDaoBookTitle.delete(bt);
+		}
+	}
+
 }

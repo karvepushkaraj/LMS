@@ -2,7 +2,9 @@ package com.app.lms.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
 @RequestMapping("api/v1/lms/books")
@@ -42,13 +46,26 @@ public class BookController {
 		BookCopy bc = null;
 		if(bookId.length()==4) {
 			bt = bookService.getBookTitle(bookId);
-			return mapper.writeValueAsString(bt);
+			ObjectNode objectNode = mapper.valueToTree(bt);
+			ArrayNode arrayNode = objectNode.arrayNode();
+			for(BookCopy bookCopy : bt.getBookCopies()) {
+				ObjectNode node = mapper.createObjectNode();
+				node.put("copyId", bookCopy.getCopyId());
+				node.put("price", bookCopy.getPrice());
+				arrayNode.add(node);
+			}
+			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 		}
 		else if(bookId.length()==5) {
 			bc = bookService.getBookCopy(bookId);
 			return mapper.writeValueAsString(bc);
 		}
 		return null;
+	}
+	
+	@DeleteMapping("/{id}")
+	public void deleteBook(@PathVariable("id") String bookId) {
+		bookService.deleteBook(bookId);
 	}
 	
 }

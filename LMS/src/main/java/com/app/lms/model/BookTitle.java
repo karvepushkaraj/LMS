@@ -17,7 +17,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "booktitle")
@@ -27,13 +26,16 @@ public class BookTitle {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "titleIdSequence")
 	@SequenceGenerator(name = "titleIdSequence", initialValue = 1000, allocationSize = 1)
 	private int titleId;
+	
 	@Column(length = 50)
 	private String title, author, publication;
+	
 	@ManyToOne
 	@JoinColumn(name = "sectionId")
 	private LibrarySection section;
+	
 	@JsonIgnore
-	@OneToMany(mappedBy = "title", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "title", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<BookCopy> bookCopies;
 	
 	public BookTitle() {

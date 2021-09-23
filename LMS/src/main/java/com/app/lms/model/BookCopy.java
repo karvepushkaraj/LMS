@@ -17,7 +17,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -28,7 +27,6 @@ public class BookCopy {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "titleId")
-//	@JsonBackReference
 	private BookTitle title;
 	
 	@Id
