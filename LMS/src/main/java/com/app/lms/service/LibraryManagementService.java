@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,21 +15,20 @@ import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
 
 @Service("LibraryManagementService")
-//@Scope("prototype")
 @Transactional
-public class LibraryManagementServiceImpl implements BookService, MemberService {
+public class LibraryManagementService implements BookService, MemberService {
 	
 	@Autowired
 	@Qualifier("BasicDao")
-	private BasicDao<BookTitle, Integer> basicDaoBookTitle;
+	private BasicDao<BookTitle, Integer> bookTitleDao;
 	
 	@Autowired
 	@Qualifier("BasicDao")
-	private BasicDao<BookCopy, CopyId> basicDaoBookCopy;
+	private BasicDao<BookCopy, CopyId> bookCopyDao;
 	
 	@Autowired
 	@Qualifier("BasicDao")
-	private BasicDao<Member, Integer> basicDaoMember;
+	private BasicDao<Member, Integer> memberDao;
 	
 	@Autowired
 	@Qualifier("LibraryAdminService")
@@ -38,9 +36,9 @@ public class LibraryManagementServiceImpl implements BookService, MemberService 
 	
 	@PostConstruct
 	public void setClazz() {
-		basicDaoBookTitle.setClazz(BookTitle.class);
-		basicDaoBookCopy.setClazz(BookCopy.class);
-		basicDaoMember.setClazz(Member.class);
+		bookTitleDao.setClazz(BookTitle.class);
+		bookCopyDao.setClazz(BookCopy.class);
+		memberDao.setClazz(Member.class);
 	}
 
 	@Override
@@ -48,15 +46,15 @@ public class LibraryManagementServiceImpl implements BookService, MemberService 
 		LibrarySection librarySection = librarySectionService.getLibrarySection(sectionId);
 		if(librarySection!=null) {
 			bookTitle.setSection(librarySection);
-			basicDaoBookTitle.add(bookTitle);
+			bookTitleDao.add(bookTitle);
 			bookCopy.setTitle(bookTitle);
-			basicDaoBookCopy.add(bookCopy);
+			bookCopyDao.add(bookCopy);
 		}
 	}
 
 	@Override
 	public BookTitle getBookTitle(String titleId) {
-		return basicDaoBookTitle.getById(Integer.valueOf(titleId));
+		return bookTitleDao.getById(Integer.valueOf(titleId));
 	}
 
 	@Override
@@ -65,7 +63,7 @@ public class LibraryManagementServiceImpl implements BookService, MemberService 
 		BookCopy bc = null;
 		if(bt!=null) {
 			CopyId key = new CopyId(bt, Integer.valueOf(copyId.substring(4)));
-			bc = basicDaoBookCopy.getById(key);
+			bc = bookCopyDao.getById(key);
 		}
 		return bc;
 	}
@@ -76,22 +74,22 @@ public class LibraryManagementServiceImpl implements BookService, MemberService 
 		BookCopy bc = null;
 		if(bt!=null) {
 			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
-			bc = basicDaoBookCopy.getById(key);
-			basicDaoBookCopy.delete(bc);
+			bc = bookCopyDao.getById(key);
+			bookCopyDao.delete(bc);
 		}
 		if(bt.getBookCopies().isEmpty()) {
-			basicDaoBookTitle.delete(bt);
+			bookTitleDao.delete(bt);
 		}
 	}
 	
 	@Override
 	public Member getMember(int memberId) {
-		return basicDaoMember.getById(memberId);
+		return memberDao.getById(memberId);
 	}
 
 	@Override
 	public void addMember(Member member) {
-		basicDaoMember.add(member);
+		memberDao.add(member);
 	}
 
 //	@Override
@@ -104,9 +102,9 @@ public class LibraryManagementServiceImpl implements BookService, MemberService 
 
 	@Override
 	public void deleteMember(int memberId) {
-		Member m1 = basicDaoMember.getById(memberId);
+		Member m1 = memberDao.getById(memberId);
 		if(m1!=null)
-			basicDaoMember.delete(m1);
+			memberDao.delete(m1);
 	}
 
 }

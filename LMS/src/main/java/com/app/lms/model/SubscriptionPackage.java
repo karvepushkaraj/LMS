@@ -6,8 +6,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class SubscriptionPackage {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "packageIdSequence")
+	@SequenceGenerator(name = "packageIdSequence", initialValue = 1, allocationSize = 1)
 	private int packageId;
 	
 	@Column(length = 50)
@@ -25,7 +31,7 @@ public class SubscriptionPackage {
 	private float fees;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<PackageSection> packageSection;
 	
 	@JsonIgnore
