@@ -89,4 +89,10 @@ public class LibraryManagementController {
 		memberService.deleteMember(memberId);
 	}
 	
+	@PostMapping("/subscribe")
+	public void addSubscription(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+		JsonNode node = new ObjectMapper().readTree(input);
+		memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt());
+	}
+	
 }

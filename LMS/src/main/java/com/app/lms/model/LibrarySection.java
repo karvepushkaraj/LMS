@@ -20,11 +20,14 @@ public class LibrarySection {
 	@Id
 	@Column(length = 3)
 	private String sectionId;
+	
 	@Column(length = 50)
 	private String sectionName;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "section", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<BookTitle> bookTitles;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "section", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<PackageSection> packageSection;

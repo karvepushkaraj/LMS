@@ -12,4 +12,6 @@ public interface MemberService {
 	
 	void deleteMember(int memberId);
 	
+	void addSubscription(int memberId, int pkgId);
+	
 }

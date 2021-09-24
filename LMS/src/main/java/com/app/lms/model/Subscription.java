@@ -5,13 +5,18 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "subscriptions")
@@ -19,17 +24,26 @@ public class Subscription {
 
 	@Id
 	@Column(length = 20)
-	private String subscriptionId;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "subIdSequence")
+	@SequenceGenerator(name = "subIdSequence", initialValue = 1, allocationSize = 1)
+	private int subscriptionId;
+	
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "packageId")
 	private SubscriptionPackage pkg;
+	
 	@Temporal(TemporalType.DATE)
 	private Date startDate;
+	
 	@Convert(converter = TransactionStatusConverter.class)
 	private TransactionStatus status;
+	
+	@JsonIgnore
 	@OneToOne(mappedBy = "subscription")
 	private SubscriptionFee subscriptionFee;
 	
@@ -37,16 +51,15 @@ public class Subscription {
 		super();
 	}
 
-	public Subscription(String subscriptionId, Member member, SubscriptionPackage pkg, Date startDate,
+	public Subscription(Member member, SubscriptionPackage pkg, Date startDate,
 			TransactionStatus status) {
-		this.subscriptionId = subscriptionId;
 		this.member = member;
 		this.pkg = pkg;
 		this.startDate = startDate;
 		this.status = status;
 	}
 
-	public String getSubscriptionId() {
+	public int getSubscriptionId() {
 		return subscriptionId;
 	}
 
@@ -78,7 +91,7 @@ public class Subscription {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((subscriptionId == null) ? 0 : subscriptionId.hashCode());
+		result = prime * result + subscriptionId;
 		return result;
 	}
 
@@ -91,10 +104,7 @@ public class Subscription {
 		if (getClass() != obj.getClass())
 			return false;
 		Subscription other = (Subscription) obj;
-		if (subscriptionId == null) {
-			if (other.subscriptionId != null)
-				return false;
-		} else if (!subscriptionId.equals(other.subscriptionId))
+		if (subscriptionId != other.subscriptionId)
 			return false;
 		return true;
 	}

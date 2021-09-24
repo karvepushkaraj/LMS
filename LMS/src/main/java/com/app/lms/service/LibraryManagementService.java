@@ -13,6 +13,9 @@ import com.app.lms.model.BookTitle;
 import com.app.lms.model.CopyId;
 import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
+import com.app.lms.model.Subscription;
+import com.app.lms.model.SubscriptionPackage;
+import com.app.lms.model.TransactionStatus;
 
 @Service("LibraryManagementService")
 @Transactional
@@ -31,14 +34,23 @@ public class LibraryManagementService implements BookService, MemberService {
 	private BasicDao<Member, Integer> memberDao;
 	
 	@Autowired
+	@Qualifier("BasicDao")
+	private BasicDao<Subscription, Integer> subscriptionDao;
+	
+	@Autowired
 	@Qualifier("LibraryAdminService")
 	private LibrarySectionService librarySectionService;
+	
+	@Autowired
+	@Qualifier("LibraryAdminService")
+	private SubscriptionPackageService subpkgService;
 	
 	@PostConstruct
 	public void setClazz() {
 		bookTitleDao.setClazz(BookTitle.class);
 		bookCopyDao.setClazz(BookCopy.class);
 		memberDao.setClazz(Member.class);
+		subscriptionDao.setClazz(Subscription.class);
 	}
 
 	@Override
@@ -105,6 +117,14 @@ public class LibraryManagementService implements BookService, MemberService {
 		Member m1 = memberDao.getById(memberId);
 		if(m1!=null)
 			memberDao.delete(m1);
+	}
+
+	@Override
+	public void addSubscription(int memberId, int pkgId) {
+		Member member = getMember(memberId);
+		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
+		Subscription sub = new Subscription(member, pkg, null, TransactionStatus.ACTIVE);
+		subscriptionDao.add(sub);
 	}
 
 }
