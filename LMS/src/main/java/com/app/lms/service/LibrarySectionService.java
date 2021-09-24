@@ -6,9 +6,9 @@ public interface LibrarySectionService {
 	
 	LibrarySection getLibrarySection(String id);
 	
-	void addLibrarySection(LibrarySection bookSection);
+	void addLibrarySection(LibrarySection librarySection);
 	
-	void updateLibrarySection(LibrarySection bookSection);
+	void updateLibrarySection(LibrarySection librarySection);
 	
 	void deleteLibrarySection(String id);
 	

@@ -10,17 +10,25 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "packages")
 public class SubscriptionPackage {
 
 	@Id
 	private int packageId;
+	
 	@Column(length = 50)
 	private String packageName;
-	private float fees, deposite;
+	
+	private float fees;
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL)
 	private Set<PackageSection> packageSection;
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL)
 	private Set<Subscription> subscriptions;
 	
@@ -28,11 +36,10 @@ public class SubscriptionPackage {
 		super();
 	}
 
-	public SubscriptionPackage(int packageId, String packageName, float fees, float deposite) {
+	public SubscriptionPackage(int packageId, String packageName, float fees) {
 		this.packageId = packageId;
 		this.packageName = packageName;
 		this.fees = fees;
-		this.deposite = deposite;
 	}
 
 	public int getPackageId() {
@@ -53,14 +60,6 @@ public class SubscriptionPackage {
 
 	public void setFees(float fees) {
 		this.fees = fees;
-	}
-
-	public float getDeposite() {
-		return deposite;
-	}
-
-	public void setDeposite(float deposite) {
-		this.deposite = deposite;
 	}
 
 	public Set<PackageSection> getPackageSection() {
@@ -95,8 +94,7 @@ public class SubscriptionPackage {
 
 	@Override
 	public String toString() {
-		return "Package [packageId=" + packageId + ", packageName=" + packageName + ", fees=" + fees + ", deposite="
-				+ deposite + "]";
+		return "Package [packageId=" + packageId + ", packageName=" + packageName + ", fees=" + fees + "]";
 	}
 
 }

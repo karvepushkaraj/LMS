@@ -16,42 +16,29 @@ import com.app.lms.model.LibrarySection;
 import com.app.lms.service.LibrarySectionService;
 
 @RestController
-@RequestMapping("api/v1/lms/librarysection")
-public class LibrarySectionController {
+@RequestMapping("api/v1/lms")
+public class LibraryAdminController {
 	
 	@Autowired
-	@Qualifier("LibrarySectionService")
+	@Qualifier("LibraryAdminService")
 	private LibrarySectionService librarySectionService;
 	
-	@GetMapping
+	@GetMapping("/librarysection")
 	public LibrarySection getLibrarySection(@RequestParam("id") String id) {
 		return librarySectionService.getLibrarySection(id);
 	}
-	
-//	@GetMapping
-//	public String getBookSection(@RequestParam("id") String id) throws JsonProcessingException {
-//		BookSection bd = bookSectionService.getBookSection(id);
-//		return new ObjectMapper().writeValueAsString(bd);
-//	}
-	
-	@PostMapping
-	public void addLibrarySection(@RequestBody LibrarySection bookSection) {
-		librarySectionService.addLibrarySection(bookSection);
+		
+	@PostMapping("/librarysection")
+	public void addLibrarySection(@RequestBody LibrarySection librarySection) {
+		librarySectionService.addLibrarySection(librarySection);
 	}
 	
-//	@PostMapping
-//	public void addBookSection(@RequestBody String bookSection) throws JsonMappingException, JsonProcessingException {
-//		ObjectMapper obj = new ObjectMapper();
-//		BookSection bs = obj.readValue(bookSection, BookSection.class);
-//		bookSectionService.addBookSection(bs);
-//	}
-	
-	@PutMapping
-	public void updateLibrarySection(@RequestBody LibrarySection bookSection) {
-		librarySectionService.updateLibrarySection(bookSection);
+	@PutMapping("/librarysection")
+	public void updateLibrarySection(@RequestBody LibrarySection librarySection) {
+		librarySectionService.updateLibrarySection(librarySection);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/librarysection/{id}")
 	public void deleteLibrarySection(@PathVariable("id") String id) {
 		librarySectionService.deleteLibrarySection(id);
 	}

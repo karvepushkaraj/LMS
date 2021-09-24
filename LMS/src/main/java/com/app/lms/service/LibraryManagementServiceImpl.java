@@ -4,6 +4,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,10 +13,12 @@ import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
 import com.app.lms.model.CopyId;
 import com.app.lms.model.LibrarySection;
+import com.app.lms.model.Member;
 
-@Service("BookService")
+@Service("LibraryManagementService")
+//@Scope("prototype")
 @Transactional
-public class BookServiceImpl implements BookService {
+public class LibraryManagementServiceImpl implements BookService, MemberService {
 	
 	@Autowired
 	@Qualifier("BasicDao")
@@ -26,13 +29,18 @@ public class BookServiceImpl implements BookService {
 	private BasicDao<BookCopy, CopyId> basicDaoBookCopy;
 	
 	@Autowired
-	@Qualifier("LibrarySectionService")
+	@Qualifier("BasicDao")
+	private BasicDao<Member, Integer> basicDaoMember;
+	
+	@Autowired
+	@Qualifier("LibraryAdminService")
 	private LibrarySectionService librarySectionService;
 	
 	@PostConstruct
 	public void setClazz() {
 		basicDaoBookTitle.setClazz(BookTitle.class);
 		basicDaoBookCopy.setClazz(BookCopy.class);
+		basicDaoMember.setClazz(Member.class);
 	}
 
 	@Override
@@ -74,6 +82,31 @@ public class BookServiceImpl implements BookService {
 		if(bt.getBookCopies().isEmpty()) {
 			basicDaoBookTitle.delete(bt);
 		}
+	}
+	
+	@Override
+	public Member getMember(int memberId) {
+		return basicDaoMember.getById(memberId);
+	}
+
+	@Override
+	public void addMember(Member member) {
+		basicDaoMember.add(member);
+	}
+
+//	@Override
+//	public void updateMember(Member member) {
+//		// TODO Auto-generated method stub
+//		Member m1 = basicDao.getById(member.getMemberId());
+//		if(m1!=null)
+//			m1
+//	}
+
+	@Override
+	public void deleteMember(int memberId) {
+		Member m1 = basicDaoMember.getById(memberId);
+		if(m1!=null)
+			basicDaoMember.delete(m1);
 	}
 
 }

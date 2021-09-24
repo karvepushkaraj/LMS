@@ -11,4 +11,5 @@ public interface BasicDao<T, K extends Serializable> {
 	void add(T record);
 
 	void delete(T record);
+	
 }

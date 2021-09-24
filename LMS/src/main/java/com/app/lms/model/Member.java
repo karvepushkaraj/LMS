@@ -8,20 +8,27 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "members")
 public class Member {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "memberIdSequence")
+	@SequenceGenerator(name = "memberIdSequence", initialValue = 10000, allocationSize = 1)
 	private int memberId;
 	
 	@Column(length = 50)
@@ -36,16 +43,20 @@ public class Member {
 	@Convert(converter = MemActStatusConverter.class)
 	private MemberActivityStatus status;
 	
+	@JsonIgnore
 	@OneToOne
 	@JoinColumns({@JoinColumn(name = "titleId"), @JoinColumn(name = "copyId")})
 	private BookCopy book;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private Set<Subscription> subscriptions;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private Set<BookTransaction> booktransactions;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private Set<Deposite> deposite;
 

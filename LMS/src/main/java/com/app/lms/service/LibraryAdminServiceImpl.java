@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.lms.dao.BasicDao;
 import com.app.lms.model.LibrarySection;
 
-@Service("LibrarySectionService")
+@Service("LibraryAdminService")
 @Transactional
-public class LibrarySectionServiceImpl implements LibrarySectionService {
+public class LibraryAdminServiceImpl implements LibrarySectionService {
 	
 	@Autowired
 	@Qualifier("BasicDao")

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
+import com.app.lms.model.Member;
 import com.app.lms.service.BookService;
+import com.app.lms.service.MemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,14 +24,18 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
-@RequestMapping("api/v1/lms/books")
-public class BookController {
+@RequestMapping("api/v1/lms")
+public class LibraryManagementController {
 
 	@Autowired
-	@Qualifier("BookService")
+	@Qualifier("LibraryManagementService")
 	private BookService bookService;
 	
-	@PostMapping
+	@Autowired
+	@Qualifier("LibraryManagementService")
+	private MemberService memberService;
+	
+	@PostMapping("/books")
 	public void addBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonNode = mapper.readTree(input);
@@ -39,7 +45,7 @@ public class BookController {
 		bookService.addBook(sectionId, bt, bc);
 	}
 	
-	@GetMapping
+	@GetMapping("/books")
 	public String getBook(@RequestParam("id") String bookId) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		BookTitle bt = null;
@@ -63,9 +69,24 @@ public class BookController {
 		return null;
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/books/{id}")
 	public void deleteBook(@PathVariable("id") String bookId) {
 		bookService.deleteBook(bookId);
+	}
+	
+	@GetMapping("/member")
+	public Member getMember(@RequestParam("id") int memberId) {
+		return memberService.getMember(memberId);
+	}
+	
+	@PostMapping("/member")
+	public void addMember(@RequestBody Member member) {
+		memberService.addMember(member);
+	}
+	
+	@DeleteMapping("/member/{id}")
+	public void deleteMember(@PathVariable("id") int memberId) {
+		memberService.deleteMember(memberId);
 	}
 	
 }

@@ -2,8 +2,7 @@ package com.app.lms.model;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
-
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,7 +43,7 @@ public class BookCopy {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-	private Set<BookTransaction> booktransactions;
+	private List<BookTransaction> booktransactions;
 
 	public BookCopy() {
 		super();
@@ -85,8 +84,8 @@ public class BookCopy {
 		this.purchaseDate = purchaseDate;
 	}
 
-	public Set<BookTransaction> getBooktransactions() {
-		return Collections.unmodifiableSet(booktransactions);
+	public List<BookTransaction> getBooktransactions() {
+		return Collections.unmodifiableList(booktransactions);
 	}
 
 	@Override
