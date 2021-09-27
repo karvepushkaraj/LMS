@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "bookcopy")
+@Table(name = "bookcopies")
 @IdClass(CopyId.class)
 public class BookCopy {
 	

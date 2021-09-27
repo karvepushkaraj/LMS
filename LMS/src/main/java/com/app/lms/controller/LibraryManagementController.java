@@ -15,6 +15,7 @@ import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
 import com.app.lms.model.Member;
 import com.app.lms.service.BookService;
+import com.app.lms.service.BookTransactionService;
 import com.app.lms.service.MemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -34,6 +35,10 @@ public class LibraryManagementController {
 	@Autowired
 	@Qualifier("LibraryManagementService")
 	private MemberService memberService;
+	
+	@Autowired
+	@Qualifier("LibraryManagementService")
+	private BookTransactionService bookTransactionService;
 	
 	@PostMapping("/books")
 	public void addBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
@@ -93,6 +98,12 @@ public class LibraryManagementController {
 	public void addSubscription(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		JsonNode node = new ObjectMapper().readTree(input);
 		memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt());
+	}
+	
+	@PostMapping("/issue")
+	public void issueBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+		JsonNode node = new ObjectMapper().readTree(input);
+		bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
 	}
 	
 }

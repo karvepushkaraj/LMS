@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.app.lms.dao.BasicDao;
 import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
+import com.app.lms.model.BookTransaction;
 import com.app.lms.model.CopyId;
 import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
@@ -19,7 +20,7 @@ import com.app.lms.model.TransactionStatus;
 
 @Service("LibraryManagementService")
 @Transactional
-public class LibraryManagementService implements BookService, MemberService {
+public class LibraryManagementService implements BookService, MemberService, BookTransactionService {
 	
 	@Autowired
 	@Qualifier("BasicDao")
@@ -38,6 +39,10 @@ public class LibraryManagementService implements BookService, MemberService {
 	private BasicDao<Subscription, Integer> subscriptionDao;
 	
 	@Autowired
+	@Qualifier("BasicDao")
+	private BasicDao<BookTransaction, Integer> bookTransactionDao;
+	
+	@Autowired
 	@Qualifier("LibraryAdminService")
 	private LibrarySectionService librarySectionService;
 	
@@ -51,6 +56,7 @@ public class LibraryManagementService implements BookService, MemberService {
 		bookCopyDao.setClazz(BookCopy.class);
 		memberDao.setClazz(Member.class);
 		subscriptionDao.setClazz(Subscription.class);
+		bookTransactionDao.setClazz(BookTransaction.class);
 	}
 
 	@Override
@@ -125,6 +131,14 @@ public class LibraryManagementService implements BookService, MemberService {
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
 		Subscription sub = new Subscription(member, pkg, null, TransactionStatus.ACTIVE);
 		subscriptionDao.add(sub);
+	}
+
+	@Override
+	public void issueBook(String bookid, int memberid) {
+		BookCopy bc = getBookCopy(bookid);
+		Member m = getMember(memberid);
+		BookTransaction bt = new BookTransaction(m, bc, null, null, TransactionStatus.ACTIVE);
+		bookTransactionDao.add(bt);
 	}
 
 }
