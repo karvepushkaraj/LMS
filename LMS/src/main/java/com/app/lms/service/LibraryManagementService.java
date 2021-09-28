@@ -141,4 +141,14 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		bookTransactionDao.add(bt);
 	}
 
+	@Override
+	public void returnBook(String bookid, int memberid) {
+		BookCopy bc = getBookCopy(bookid);
+		Member m = getMember(memberid);
+		if(m.getBook().equals(bc) && bc.getMember().equals(m)) {
+			
+		}
+			
+	}
+
 }

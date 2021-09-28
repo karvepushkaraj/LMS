@@ -138,6 +138,14 @@ public class Member {
 	public Set<Deposite> getDeposite() {
 		return Collections.unmodifiableSet(deposite);
 	}
+	
+	public BookCopy getBook() {
+		return book;
+	}
+	
+	public void setBook(BookCopy book) {
+		this.book = book;
+	}
 
 	@Override
 	public int hashCode() {

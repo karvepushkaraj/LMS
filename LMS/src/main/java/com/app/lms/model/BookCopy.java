@@ -87,6 +87,14 @@ public class BookCopy {
 	public List<BookTransaction> getBooktransactions() {
 		return Collections.unmodifiableList(booktransactions);
 	}
+	
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
 
 	@Override
 	public int hashCode() {

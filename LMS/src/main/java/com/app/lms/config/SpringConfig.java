@@ -15,7 +15,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan("com.app.lms")
+//@ComponentScan("com.app.lms")
 @PropertySource(value = "classpath:application.properties")
 public class SpringConfig {
 
@@ -39,7 +39,7 @@ public class SpringConfig {
 		properties.put("hibernate.hbm2ddl.auto", env.getRequiredProperty("hibernate.hbm2ddl.auto"));
 		return properties;
 	}
-
+	
 	@Bean
 	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
 		return new HibernateTransactionManager(sessionFactory);
