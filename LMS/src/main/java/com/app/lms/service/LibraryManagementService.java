@@ -1,5 +1,7 @@
 package com.app.lms.service;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.app.lms.dao.AuxiliaryDao;
 import com.app.lms.dao.BasicDao;
 import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
@@ -41,6 +44,10 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<BookTransaction, Integer> bookTransactionDao;
+	
+	@Autowired
+	@Qualifier("AuxiliaryDao")
+	private AuxiliaryDao auxiliaryDao;
 	
 	@Autowired
 	@Qualifier("LibraryAdminService")
@@ -135,20 +142,28 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public void issueBook(String bookid, int memberid) {
-		BookCopy bc = getBookCopy(bookid);
-		Member m = getMember(memberid);
-		BookTransaction bt = new BookTransaction(m, bc, null, null, TransactionStatus.ACTIVE);
-		bookTransactionDao.add(bt);
+		String freebksecid = auxiliaryDao.getFreeBookSection(bookid);
+		List<String> freememsecids = auxiliaryDao.getFreeMemberSections(memberid);
+		if(freebksecid!=null && freememsecids!=null && freememsecids.contains(freebksecid)) {
+			BookCopy bc = getBookCopy(bookid);
+			Member m = getMember(memberid);
+			BookTransaction bt = new BookTransaction(m, bc, null, null, TransactionStatus.ACTIVE);
+			bookTransactionDao.add(bt);
+			bc.setMember(m);
+			m.addBook(bc);
+		}
 	}
 
 	@Override
 	public void returnBook(String bookid, int memberid) {
-		BookCopy bc = getBookCopy(bookid);
-		Member m = getMember(memberid);
-		if(m.getBook().equals(bc) && bc.getMember().equals(m)) {
-			
+		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid);
+		if(bktrans!=null) {
+			BookCopy bc = getBookCopy(bookid);
+			Member m = getMember(memberid);
+			bktrans.setStatus(TransactionStatus.EXPIRED);
+			bc.setMember(null);
+			m.removeBook(bc);
 		}
-			
 	}
 
 }

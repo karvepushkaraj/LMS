@@ -37,7 +37,8 @@ public class BookCopy {
 	
 	private Date purchaseDate;
 	
-	@OneToOne
+	@JsonIgnore
+	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;
 	

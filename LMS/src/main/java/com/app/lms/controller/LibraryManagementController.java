@@ -106,4 +106,10 @@ public class LibraryManagementController {
 		bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
 	}
 	
+	@PostMapping("/return")
+	public void returnBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+		JsonNode node = new ObjectMapper().readTree(input);
+		bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt());
+	}
+	
 }

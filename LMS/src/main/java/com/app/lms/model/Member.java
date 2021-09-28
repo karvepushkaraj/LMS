@@ -44,9 +44,9 @@ public class Member {
 	private MemberActivityStatus status;
 	
 	@JsonIgnore
-	@OneToOne
-	@JoinColumns({@JoinColumn(name = "titleId"), @JoinColumn(name = "copyId")})
-	private BookCopy book;
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//	@JoinColumns({@JoinColumn(name = "titleId"), @JoinColumn(name = "copyId")})
+	private Set<BookCopy> books;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -139,12 +139,16 @@ public class Member {
 		return Collections.unmodifiableSet(deposite);
 	}
 	
-	public BookCopy getBook() {
-		return book;
+	public Set<BookCopy> getBook() {
+		return Collections.unmodifiableSet(books);
 	}
 	
-	public void setBook(BookCopy book) {
-		this.book = book;
+	public void addBook(BookCopy book) {
+		books.add(book);
+	}
+	
+	public void removeBook(BookCopy book) {
+		books.remove(book);
 	}
 
 	@Override
