@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.app.lms.util.TransactionStatusConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
@@ -26,36 +27,35 @@ public class Subscription {
 
 	@Id
 	@Column(length = 20)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "subIdSequence")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subIdSequence")
 	@SequenceGenerator(name = "subIdSequence", initialValue = 1, allocationSize = 1)
 	private int subscriptionId;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;
-	
+
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "packageId")
 	private SubscriptionPackage pkg;
-	
-	@JsonFormat(shape = Shape.STRING,pattern = "dd-MM-yyyy")
+
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date startDate;
-	
+
 	@Convert(converter = TransactionStatusConverter.class)
 	private TransactionStatus status;
-	
+
 	@JsonIgnore
 	@OneToOne(mappedBy = "subscription")
 	private SubscriptionFee subscriptionFee;
-	
+
 	public Subscription() {
 		super();
 	}
 
-	public Subscription(Member member, SubscriptionPackage pkg, Date startDate,
-			TransactionStatus status) {
+	public Subscription(Member member, SubscriptionPackage pkg, Date startDate, TransactionStatus status) {
 		this.member = member;
 		this.pkg = pkg;
 		this.startDate = startDate;

@@ -25,39 +25,39 @@ import com.app.lms.model.TransactionStatus;
 @Service("LibraryManagementService")
 @Transactional
 public class LibraryManagementService implements BookService, MemberService, BookTransactionService {
-	
+
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<BookTitle, Integer> bookTitleDao;
-	
+
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<BookCopy, CopyId> bookCopyDao;
-	
+
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<Member, Integer> memberDao;
-	
+
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<Subscription, Integer> subscriptionDao;
-	
+
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<BookTransaction, Integer> bookTransactionDao;
-	
+
 	@Autowired
 	@Qualifier("AuxiliaryDao")
 	private AuxiliaryDao auxiliaryDao;
-	
+
 	@Autowired
 	@Qualifier("LibraryAdminService")
 	private LibrarySectionService librarySectionService;
-	
+
 	@Autowired
 	@Qualifier("LibraryAdminService")
 	private SubscriptionPackageService subpkgService;
-	
+
 	@PostConstruct
 	public void setClazz() {
 		bookTitleDao.setClazz(BookTitle.class);
@@ -70,7 +70,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) {
 		LibrarySection librarySection = librarySectionService.getLibrarySection(sectionId);
-		if(librarySection!=null) {
+		if (librarySection != null) {
 			bookTitle.setSection(librarySection);
 			bookTitleDao.add(bookTitle);
 			bookCopy.setTitle(bookTitle);
@@ -87,7 +87,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	public BookCopy getBookCopy(String copyId) {
 		BookTitle bt = getBookTitle(copyId.substring(0, 4));
 		BookCopy bc = null;
-		if(bt!=null) {
+		if (bt != null) {
 			CopyId key = new CopyId(bt, Integer.valueOf(copyId.substring(4)));
 			bc = bookCopyDao.getById(key);
 		}
@@ -98,16 +98,16 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	public void deleteBook(String bookId) {
 		BookTitle bt = getBookTitle(bookId.substring(0, 4));
 		BookCopy bc = null;
-		if(bt!=null) {
+		if (bt != null) {
 			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
 			bc = bookCopyDao.getById(key);
 			bookCopyDao.delete(bc);
 		}
-		if(bt.getBookCopies().isEmpty()) {
+		if (bt.getBookCopies().isEmpty()) {
 			bookTitleDao.delete(bt);
 		}
 	}
-	
+
 	@Override
 	public Member getMember(int memberId) {
 		return memberDao.getById(memberId);
@@ -129,7 +129,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public void deleteMember(int memberId) {
 		Member m1 = memberDao.getById(memberId);
-		if(m1!=null)
+		if (m1 != null)
 			memberDao.delete(m1);
 	}
 
@@ -145,7 +145,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	public void issueBook(String bookid, int memberid) {
 		String freebksecid = auxiliaryDao.getFreeBookSection(bookid);
 		List<String> freememsecids = auxiliaryDao.getFreeMemberSections(memberid);
-		if(freebksecid!=null && freememsecids!=null && freememsecids.contains(freebksecid)) {
+		if (freebksecid != null && freememsecids != null && freememsecids.contains(freebksecid)) {
 			BookCopy bc = getBookCopy(bookid);
 			Member m = getMember(memberid);
 			Timestamp issueDate = new Timestamp(System.currentTimeMillis());
@@ -159,7 +159,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public void returnBook(String bookid, int memberid) {
 		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid);
-		if(bktrans!=null) {
+		if (bktrans != null) {
 			BookCopy bc = getBookCopy(bookid);
 			Member m = getMember(memberid);
 			bktrans.setStatus(TransactionStatus.EXPIRED);

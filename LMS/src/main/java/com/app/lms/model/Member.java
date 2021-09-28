@@ -11,15 +11,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.app.lms.util.MemActStatusConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,37 +27,37 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Member {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "memberIdSequence")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "memberIdSequence")
 	@SequenceGenerator(name = "memberIdSequence", initialValue = 10000, allocationSize = 1)
 	private int memberId;
-	
+
 	@Column(length = 50)
 	private String name, mobileNumber, emailId;
-	
-	@JsonFormat(shape = Shape.STRING,pattern = "dd-MM-yyyy")
+
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date enrollmentDate;
-	
-	@JsonFormat(shape = Shape.STRING,pattern = "dd-MM-yyyy")
+
+	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date exitDate;
-	
+
 	@Convert(converter = MemActStatusConverter.class)
 	private MemberActivityStatus status;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 //	@JoinColumns({@JoinColumn(name = "titleId"), @JoinColumn(name = "copyId")})
 	private Set<BookCopy> books;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private Set<Subscription> subscriptions;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private Set<BookTransaction> booktransactions;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	private Set<Deposite> deposite;
@@ -142,15 +140,15 @@ public class Member {
 	public Set<Deposite> getDeposite() {
 		return Collections.unmodifiableSet(deposite);
 	}
-	
+
 	public Set<BookCopy> getBook() {
 		return Collections.unmodifiableSet(books);
 	}
-	
+
 	public void addBook(BookCopy book) {
 		books.add(book);
 	}
-	
+
 	public void removeBook(BookCopy book) {
 		books.remove(book);
 	}

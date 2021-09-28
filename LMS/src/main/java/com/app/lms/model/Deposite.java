@@ -13,12 +13,12 @@ public class Deposite {
 
 	@Id
 	private String transactionId;
-	
+
 	private float deposite;
-	
+
 	@Column(length = 20)
 	private String receiptNumber;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;

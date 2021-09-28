@@ -21,7 +21,7 @@ public class PackageSection {
 	private SubscriptionPackage pkg;
 
 	private int numberOfBooks;
-	
+
 	public PackageSection() {
 		super();
 	}

@@ -29,25 +29,25 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @RestController
 @RequestMapping("api/v1/lms")
 public class LibraryAdminController {
-	
+
 	@Autowired
 	@Qualifier("LibraryAdminService")
 	private LibrarySectionService librarySectionService;
-	
+
 	@Autowired
 	@Qualifier("LibraryAdminService")
 	private SubscriptionPackageService subpkgService;
-	
+
 	@GetMapping("/section")
 	public LibrarySection getLibrarySection(@RequestParam("id") String id) {
 		return librarySectionService.getLibrarySection(id);
 	}
-		
+
 	@PostMapping("/section")
 	public void addLibrarySection(@RequestBody LibrarySection librarySection) {
 		librarySectionService.addLibrarySection(librarySection);
 	}
-	
+
 	@PutMapping("/section")
 	public void updateLibrarySection(@RequestBody LibrarySection librarySection) {
 		librarySectionService.updateLibrarySection(librarySection);
@@ -57,7 +57,7 @@ public class LibraryAdminController {
 	public void deleteLibrarySection(@PathVariable("id") String id) {
 		librarySectionService.deleteLibrarySection(id);
 	}
-	
+
 	@PostMapping("/package")
 	public void addSubscriptionPackage(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -65,19 +65,19 @@ public class LibraryAdminController {
 		SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
 		Map<String, Integer> map = new HashMap<>();
 		ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
-		for(JsonNode node : arrayNode) {
+		for (JsonNode node : arrayNode) {
 			map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
 		}
 		subpkgService.addSubscriptionPackage(pkg, map);
 	}
-	
+
 	@GetMapping("/package")
 	public String getSubscriptionPackage(@RequestParam("id") int id) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(id);
 		ObjectNode objectNode = mapper.valueToTree(pkg);
 		ArrayNode arrayNode = objectNode.putArray("sections");
-		for(PackageSection ps : pkg.getPackageSection()) {
+		for (PackageSection ps : pkg.getPackageSection()) {
 			ObjectNode node = mapper.createObjectNode();
 			node.put("sectionId", ps.getSection().getSectionId());
 			node.put("noOfBooks", ps.getNumberOfBooks());
@@ -85,7 +85,7 @@ public class LibraryAdminController {
 		}
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 	}
-	
+
 	@DeleteMapping("/package/{id}")
 	public void deleteSubscriptionPackage(@PathVariable("id") int id) {
 		subpkgService.deleteSubscriptionPackage(id);

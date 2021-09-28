@@ -7,7 +7,7 @@ public class PackageSectionId implements Serializable {
 	private static final long serialVersionUID = -7759046928604702040L;
 	private LibrarySection section;
 	private SubscriptionPackage pkg;
-	
+
 	public PackageSectionId() {
 		super();
 	}

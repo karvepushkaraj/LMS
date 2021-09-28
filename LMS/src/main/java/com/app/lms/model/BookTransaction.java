@@ -2,7 +2,6 @@ package com.app.lms.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,38 +15,39 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.app.lms.util.TransactionStatusConverter;
+
 @Entity
 @Table(name = "booktransactions")
 public class BookTransaction {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "bookTransSequence")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookTransSequence")
 	@SequenceGenerator(name = "bookTransSequence", initialValue = 1, allocationSize = 1)
 	private int transactionId;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;
-	
+
 	@ManyToOne
-	@JoinColumns({@JoinColumn(name = "copyId"), @JoinColumn(name = "titleId") })
+	@JoinColumns({ @JoinColumn(name = "copyId"), @JoinColumn(name = "titleId") })
 	private BookCopy book;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date issueDate;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date returnDate;
-	
+
 	@Convert(converter = TransactionStatusConverter.class)
 	private TransactionStatus status;
-	
+
 	public BookTransaction() {
 		super();
 	}
 
-	public BookTransaction(Member member, BookCopy book, Date issueDate, Date returnDate,
-			TransactionStatus status) {
+	public BookTransaction(Member member, BookCopy book, Date issueDate, Date returnDate, TransactionStatus status) {
 		this.member = member;
 		this.book = book;
 		this.issueDate = issueDate;

@@ -18,19 +18,19 @@ import com.app.lms.model.SubscriptionPackage;
 @Service("LibraryAdminService")
 @Transactional
 public class LibraryAdminService implements LibrarySectionService, SubscriptionPackageService {
-	
+
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<LibrarySection, String> librarySectionDao;
-	
+
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<SubscriptionPackage, Integer> subscriptionPackageDao;
-	
+
 	@Autowired
 	@Qualifier("BasicDao")
 	private BasicDao<PackageSection, PackageSectionId> pkgSecDao;
-	
+
 	@PostConstruct
 	public void setClazz() {
 		librarySectionDao.setClazz(LibrarySection.class);
@@ -42,12 +42,12 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	public LibrarySection getLibrarySection(String id) {
 		return librarySectionDao.getById(id);
 	}
-	
+
 	@Override
 	public void addLibrarySection(LibrarySection bookSection) {
 		librarySectionDao.add(bookSection);
 	}
-	
+
 	@Override
 	public void updateLibrarySection(LibrarySection bookSection) {
 //		LibrarySection bs = getLibrarySection(bookSection.getSectionId());
@@ -59,16 +59,16 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	@Override
 	public void deleteLibrarySection(String id) {
 		LibrarySection bs = getLibrarySection(id);
-		if(bs!=null)
+		if (bs != null)
 			librarySectionDao.delete(bs);
 	}
 
 	@Override
 	public void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map) {
 		subscriptionPackageDao.add(pkg);
-		for(String key : map.keySet()) {
+		for (String key : map.keySet()) {
 			LibrarySection ls = getLibrarySection(key);
-			if(ls!=null) {
+			if (ls != null) {
 				PackageSection pkgsec = new PackageSection(ls, pkg, map.get(key));
 				pkgSecDao.add(pkgsec);
 			}
@@ -83,7 +83,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	@Override
 	public void deleteSubscriptionPackage(int id) {
 		SubscriptionPackage pkg = getSubscriptionPackage(id);
-		if(pkg!=null)
+		if (pkg != null)
 			subscriptionPackageDao.delete(pkg);
 	}
 

@@ -15,18 +15,18 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	private Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}
-	
+
 	@Override
 	public String getFreeBookSection(String bookid) {
 		String queryString = "select sectionid from freebooks where bookid=?";
 		Query<?> query = getSession().createSQLQuery(queryString);
 		query.setParameter(1, bookid);
 		List<?> list = query.list();
-		if(list.size()==1)
+		if (list.size() == 1)
 			return (String) list.get(0);
 		return null;
 	}
@@ -38,7 +38,7 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 		Query<?> query = getSession().createSQLQuery(queryString);
 		query.setParameter(1, memberid);
 		List<?> list = query.list();
-		if(!list.isEmpty())
+		if (!list.isEmpty())
 			return (List<String>) list;
 		return null;
 	}
@@ -51,7 +51,7 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 		query.setParameter(2, bookid.substring(0, 4));
 		query.setParameter(3, bookid.substring(4));
 		List<BookTransaction> list = query.list();
-		if(list.size()==1)
+		if (list.size() == 1)
 			return list.get(0);
 		return null;
 	}

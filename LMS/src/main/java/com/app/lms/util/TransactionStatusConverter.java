@@ -1,7 +1,9 @@
-package com.app.lms.model;
+package com.app.lms.util;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+
+import com.app.lms.model.TransactionStatus;
 
 @Converter(autoApply = true)
 public class TransactionStatusConverter implements AttributeConverter<TransactionStatus, Integer> {

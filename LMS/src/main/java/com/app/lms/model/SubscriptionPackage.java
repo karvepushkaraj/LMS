@@ -21,23 +21,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class SubscriptionPackage {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "packageIdSequence")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "packageIdSequence")
 	@SequenceGenerator(name = "packageIdSequence", initialValue = 1, allocationSize = 1)
 	private int packageId;
-	
+
 	@Column(length = 50)
 	private String packageName;
-	
+
 	private float fees;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<PackageSection> packageSection;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL)
 	private Set<Subscription> subscriptions;
-	
+
 	public SubscriptionPackage() {
 		super();
 	}
