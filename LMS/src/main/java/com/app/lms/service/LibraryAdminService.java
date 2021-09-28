@@ -50,9 +50,10 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	
 	@Override
 	public void updateLibrarySection(LibrarySection bookSection) {
-		LibrarySection bs = getLibrarySection(bookSection.getSectionId());
-		if(bs!=null)
-			bs.setSectionName(bookSection.getSectionName());
+//		LibrarySection bs = getLibrarySection(bookSection.getSectionId());
+//		if(bs!=null)
+//			bs.setSectionName(bookSection.getSectionName());
+		librarySectionDao.add(bookSection);
 	}
 
 	@Override

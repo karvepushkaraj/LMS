@@ -15,8 +15,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 @Entity
 @Table(name = "bookcopies")
@@ -35,6 +39,8 @@ public class BookCopy {
 	
 	private float price;
 	
+	@JsonFormat(shape = Shape.STRING,pattern = "dd-MM-yyyy")
+	@Temporal(TemporalType.DATE)
 	private Date purchaseDate;
 	
 	@JsonIgnore

@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -34,9 +36,11 @@ public class Member {
 	@Column(length = 50)
 	private String name, mobileNumber, emailId;
 	
+	@JsonFormat(shape = Shape.STRING,pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date enrollmentDate;
 	
+	@JsonFormat(shape = Shape.STRING,pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date exitDate;
 	

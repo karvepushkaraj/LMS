@@ -13,9 +13,12 @@ public class LateFee {
 
 	@Id
 	private int transactionId;
+	
 	private float lateFees;
+	
 	@Column(length = 20)
 	private String receiptNumber;
+	
 	@OneToOne
 	@PrimaryKeyJoinColumn
 	private BookTransaction transaction;

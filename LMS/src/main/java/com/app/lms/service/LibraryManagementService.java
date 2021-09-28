@@ -1,5 +1,6 @@
 package com.app.lms.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -147,7 +148,8 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		if(freebksecid!=null && freememsecids!=null && freememsecids.contains(freebksecid)) {
 			BookCopy bc = getBookCopy(bookid);
 			Member m = getMember(memberid);
-			BookTransaction bt = new BookTransaction(m, bc, null, null, TransactionStatus.ACTIVE);
+			Timestamp issueDate = new Timestamp(System.currentTimeMillis());
+			BookTransaction bt = new BookTransaction(m, bc, issueDate, null, TransactionStatus.ACTIVE);
 			bookTransactionDao.add(bt);
 			bc.setMember(m);
 			m.addBook(bc);
@@ -161,6 +163,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 			BookCopy bc = getBookCopy(bookid);
 			Member m = getMember(memberid);
 			bktrans.setStatus(TransactionStatus.EXPIRED);
+			bktrans.setReturnDate(new Timestamp(System.currentTimeMillis()));
 			bc.setMember(null);
 			m.removeBook(bc);
 		}

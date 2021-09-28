@@ -13,9 +13,12 @@ public class SubscriptionFee {
 
 	@Id
 	private int subscriptionId;
+	
 	private float fees;
+	
 	@Column(length = 20)
 	private String receiptNumber;
+	
 	@OneToOne
 	@PrimaryKeyJoinColumn
 	private Subscription subscription;
