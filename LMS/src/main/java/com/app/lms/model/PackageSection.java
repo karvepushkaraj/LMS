@@ -5,8 +5,10 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "packagesection")
 @IdClass(PackageSectionId.class)
 public class PackageSection {
 
