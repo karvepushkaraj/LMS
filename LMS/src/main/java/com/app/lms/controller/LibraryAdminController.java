@@ -2,6 +2,9 @@ package com.app.lms.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.app.lms.model.LibrarySection;
 import com.app.lms.model.PackageSection;
 import com.app.lms.model.SubscriptionPackage;
@@ -44,7 +46,7 @@ public class LibraryAdminController {
 	}
 
 	@PostMapping("/section")
-	public void addLibrarySection(@RequestBody LibrarySection librarySection) {
+	public void addLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
 		librarySectionService.addLibrarySection(librarySection);
 	}
 
