@@ -11,6 +11,6 @@ public interface BookService {
 
 	BookCopy getBookCopy(String copyId);
 
-	void deleteBook(String bookId);
+	boolean deleteBook(String bookId);
 
 }

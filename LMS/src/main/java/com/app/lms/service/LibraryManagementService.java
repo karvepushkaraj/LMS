@@ -1,10 +1,13 @@
 package com.app.lms.service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.hibernate.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -70,12 +73,12 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) {
 		LibrarySection librarySection = librarySectionService.getLibrarySection(sectionId);
-		if (librarySection != null) {
-			bookTitle.setSection(librarySection);
-			bookTitleDao.add(bookTitle);
-			bookCopy.setTitle(bookTitle);
-			bookCopyDao.add(bookCopy);
-		}
+		if (librarySection == null)
+			throw new TransactionException("Invalid section id");
+		bookTitle.setSection(librarySection);
+		bookTitleDao.add(bookTitle);
+		bookCopy.setTitle(bookTitle);
+		bookCopyDao.add(bookCopy);
 	}
 
 	@Override
@@ -95,17 +98,23 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public void deleteBook(String bookId) {
+	public boolean deleteBook(String bookId) {
 		BookTitle bt = getBookTitle(bookId.substring(0, 4));
 		BookCopy bc = null;
-		if (bt != null) {
-			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
-			bc = bookCopyDao.getById(key);
-			bookCopyDao.delete(bc);
-		}
+		if (bt == null)
+			throw new TransactionException("Book not found");
+		CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+		bc = bookCopyDao.getById(key);
+		if (bc == null)
+			throw new TransactionException("Book not found");
+		bookCopyDao.delete(bc);
+
 		if (bt.getBookCopies().isEmpty()) {
 			bookTitleDao.delete(bt);
 		}
+		if (getBookCopy(bookId) == null)
+			return true;
+		return false;
 	}
 
 	@Override
@@ -127,46 +136,56 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 //	}
 
 	@Override
-	public void deleteMember(int memberId) {
+	public boolean deleteMember(int memberId) {
 		Member m1 = memberDao.getById(memberId);
-		if (m1 != null)
-			memberDao.delete(m1);
+		if (m1 == null)
+			throw new TransactionException("Member not found");
+		memberDao.delete(m1);
+		if (getMember(memberId) == null)
+			return true;
+		return false;
 	}
 
 	@Override
 	public void addSubscription(int memberId, int pkgId) {
 		Member member = getMember(memberId);
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
-		Subscription sub = new Subscription(member, pkg, null, TransactionStatus.ACTIVE);
+		if (member == null || pkg == null)
+			throw new TransactionException("Invalid member id or package id");
+		Subscription sub = new Subscription(member, pkg, new Date(System.currentTimeMillis()),
+				TransactionStatus.ACTIVE);
 		subscriptionDao.add(sub);
 	}
 
 	@Override
-	public void issueBook(String bookid, int memberid) {
+	public int issueBook(String bookid, int memberid) {
 		String freebksecid = auxiliaryDao.getFreeBookSection(bookid);
 		List<String> freememsecids = auxiliaryDao.getFreeMemberSections(memberid);
-		if (freebksecid != null && freememsecids != null && freememsecids.contains(freebksecid)) {
-			BookCopy bc = getBookCopy(bookid);
-			Member m = getMember(memberid);
-			Timestamp issueDate = new Timestamp(System.currentTimeMillis());
-			BookTransaction bt = new BookTransaction(m, bc, issueDate, null, TransactionStatus.ACTIVE);
-			bookTransactionDao.add(bt);
-			bc.setMember(m);
-			m.addBook(bc);
-		}
+		if (freebksecid == null || freememsecids == null || !freememsecids.contains(freebksecid))
+			return -1;
+		BookCopy bc = getBookCopy(bookid);
+		Member m = getMember(memberid);
+		Timestamp issueDate = new Timestamp(System.currentTimeMillis());
+		BookTransaction bt = new BookTransaction(m, bc, issueDate, null, TransactionStatus.ACTIVE);
+		bookTransactionDao.add(bt);
+		bc.setMember(m);
+		m.addBook(bc);
+		return auxiliaryDao.getActBkTrans(bookid, memberid).getTransactionId();
 	}
 
 	@Override
-	public void returnBook(String bookid, int memberid) {
+	public boolean returnBook(String bookid, int memberid) {
 		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid);
-		if (bktrans != null) {
-			BookCopy bc = getBookCopy(bookid);
-			Member m = getMember(memberid);
-			bktrans.setStatus(TransactionStatus.EXPIRED);
-			bktrans.setReturnDate(new Timestamp(System.currentTimeMillis()));
-			bc.setMember(null);
-			m.removeBook(bc);
-		}
+		if (bktrans == null)
+			return false;
+		BookCopy bc = getBookCopy(bookid);
+		Member m = getMember(memberid);
+		bktrans.setStatus(TransactionStatus.EXPIRED);
+		bktrans.setReturnDate(new Timestamp(System.currentTimeMillis()));
+		bc.setMember(null);
+		m.removeBook(bc);
+		return true;
+
 	}
 
 }

@@ -10,6 +10,6 @@ public interface SubscriptionPackageService {
 
 	SubscriptionPackage getSubscriptionPackage(int id);
 
-	void deleteSubscriptionPackage(int id);
+	boolean deleteSubscriptionPackage(int id);
 
 }

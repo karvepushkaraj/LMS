@@ -16,6 +16,12 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import com.app.lms.util.MemActStatusConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -31,8 +37,18 @@ public class Member {
 	@SequenceGenerator(name = "memberIdSequence", initialValue = 10000, allocationSize = 1)
 	private int memberId;
 
+	@NotBlank
+	@Length(max = 50)
 	@Column(length = 50)
-	private String name, mobileNumber, emailId;
+	private String name;
+	
+	@Pattern(regexp = "[0-9]{10}",message = "Invalid mobile number")
+	@Column(length = 50)
+	private String mobileNumber;
+	
+	@Email(message = "Invalid email id")
+	@Column(length = 50)
+	private String emailId;
 
 	@JsonFormat(shape = Shape.STRING, pattern = "dd-MM-yyyy")
 	@Temporal(TemporalType.DATE)

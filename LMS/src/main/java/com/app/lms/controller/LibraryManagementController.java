@@ -1,5 +1,8 @@
 package com.app.lms.controller;
 
+import javax.validation.Valid;
+
+import org.hibernate.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,6 +50,8 @@ public class LibraryManagementController {
 		String sectionId = jsonNode.get("sectionId").asText();
 		BookTitle bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
 		BookCopy bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
+		if (sectionId == null || bt == null || bc == null)
+			throw new TransactionException("Invalid request");
 		bookService.addBook(sectionId, bt, bc);
 	}
 
@@ -57,6 +62,8 @@ public class LibraryManagementController {
 		BookCopy bc = null;
 		if (bookId.length() == 4) {
 			bt = bookService.getBookTitle(bookId);
+			if (bt == null)
+				throw new TransactionException("Book Not Found");
 			ObjectNode objectNode = mapper.valueToTree(bt);
 			ArrayNode arrayNode = objectNode.putArray("bookCopies");
 			for (BookCopy bookCopy : bt.getBookCopies()) {
@@ -68,29 +75,43 @@ public class LibraryManagementController {
 			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 		} else if (bookId.length() == 5) {
 			bc = bookService.getBookCopy(bookId);
+			if (bc == null)
+				throw new TransactionException("Book Not Found");
 			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(bc);
 		}
-		return null;
+		throw new TransactionException("Invalid Request Parameter");
 	}
 
 	@DeleteMapping("/books/{id}")
-	public void deleteBook(@PathVariable("id") String bookId) {
-		bookService.deleteBook(bookId);
+	public String deleteBook(@PathVariable("id") String bookId) {
+		if (bookId.length() != 5)
+			throw new TransactionException("Invalid book Id");
+		boolean flag = bookService.deleteBook(bookId);
+		if (flag)
+			return "Book deleted sucessfully";
+		return "Transaction Failed";
 	}
 
 	@GetMapping("/member")
 	public Member getMember(@RequestParam("id") int memberId) {
+		if (memberId < 10000)
+			throw new TransactionException("Invalid Request Parameter");
 		return memberService.getMember(memberId);
 	}
 
 	@PostMapping("/member")
-	public void addMember(@RequestBody Member member) {
+	public void addMember(@Valid @RequestBody Member member) {
 		memberService.addMember(member);
 	}
 
 	@DeleteMapping("/member/{id}")
-	public void deleteMember(@PathVariable("id") int memberId) {
-		memberService.deleteMember(memberId);
+	public String deleteMember(@PathVariable("id") int memberId) {
+		if (memberId < 10000)
+			throw new TransactionException("Invalid Request Parameter");
+		boolean flag = memberService.deleteMember(memberId);
+		if (flag)
+			return "Member deleted sucessfully";
+		return "Transaction Failed";
 	}
 
 	@PostMapping("/subscribe")
@@ -100,15 +121,21 @@ public class LibraryManagementController {
 	}
 
 	@PostMapping("/issue")
-	public void issueBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+	public String issueBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		JsonNode node = new ObjectMapper().readTree(input);
-		bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
+		int response = bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
+		if(response>0)
+			return "Transaction Sucessful. Transaction Id : "+response;
+		return "Transaction Failed";
 	}
 
 	@PostMapping("/return")
-	public void returnBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+	public String returnBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		JsonNode node = new ObjectMapper().readTree(input);
-		bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt());
+		boolean flag = bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt());
+		if (flag)
+			return "Transaction Sucessful";
+		return "Transaction Failed";
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.hibernate.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -50,17 +51,20 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 
 	@Override
 	public void updateLibrarySection(LibrarySection bookSection) {
-//		LibrarySection bs = getLibrarySection(bookSection.getSectionId());
-//		if(bs!=null)
-//			bs.setSectionName(bookSection.getSectionName());
-		librarySectionDao.add(bookSection);
+		LibrarySection bs = getLibrarySection(bookSection.getSectionId());
+		if(bs!=null)
+			bs.setSectionName(bookSection.getSectionName());
 	}
 
 	@Override
-	public void deleteLibrarySection(String id) {
+	public boolean deleteLibrarySection(String id) {
 		LibrarySection bs = getLibrarySection(id);
-		if (bs != null)
-			librarySectionDao.delete(bs);
+		if (bs == null)
+			throw new TransactionException("Library Section not Found");
+		librarySectionDao.delete(bs);
+		if(getLibrarySection(id)==null)
+			return true;
+		return false;
 	}
 
 	@Override
@@ -68,10 +72,11 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 		subscriptionPackageDao.add(pkg);
 		for (String key : map.keySet()) {
 			LibrarySection ls = getLibrarySection(key);
-			if (ls != null) {
-				PackageSection pkgsec = new PackageSection(ls, pkg, map.get(key));
-				pkgSecDao.add(pkgsec);
-			}
+			if (ls == null)
+				throw new TransactionException("Invalid Section ID : "+ key);
+			PackageSection pkgsec = new PackageSection(ls, pkg, map.get(key));
+			pkgSecDao.add(pkgsec);
+
 		}
 	}
 
@@ -81,10 +86,14 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	}
 
 	@Override
-	public void deleteSubscriptionPackage(int id) {
+	public boolean deleteSubscriptionPackage(int id) {
 		SubscriptionPackage pkg = getSubscriptionPackage(id);
-		if (pkg != null)
-			subscriptionPackageDao.delete(pkg);
+		if (pkg == null)
+			throw new TransactionException("Subscription Package not Found");
+		subscriptionPackageDao.delete(pkg);
+		if(getSubscriptionPackage(id)==null)
+			return true;
+		return false;
 	}
 
 }

@@ -10,7 +10,7 @@ public interface MemberService {
 
 //	void updateMember(Member member);
 
-	void deleteMember(int memberId);
+	boolean deleteMember(int memberId);
 
 	void addSubscription(int memberId, int pkgId);
 

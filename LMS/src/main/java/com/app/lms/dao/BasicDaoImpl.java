@@ -42,7 +42,7 @@ public class BasicDaoImpl<T, K extends Serializable> implements BasicDao<T, K> {
 
 	@Override
 	public void add(T record) {
-		getSession().saveOrUpdate(record);
+		getSession().save(record);
 	}
 
 	@Override

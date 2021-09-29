@@ -10,6 +10,6 @@ public interface LibrarySectionService {
 
 	void updateLibrarySection(LibrarySection librarySection);
 
-	void deleteLibrarySection(String id);
+	boolean deleteLibrarySection(String id);
 
 }
