@@ -31,7 +31,7 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 
 	@Override
 	public String getFreeBookSection(String bookid) {
-		String queryString = "select sectionid from freebooks where bookid=?";
+		String queryString = "select section_id from free_book where book_id=?";
 		Query<?> query = getSession().createSQLQuery(queryString);
 		query.setParameter(1, bookid);
 		List<?> list = query.list();
@@ -43,7 +43,7 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> getFreeMemberSections(int memberid) {
-		String queryString = "select sectionid from freemembers where memberid=?";
+		String queryString = "select section_id from free_member where member_id=?";
 		Query<?> query = getSession().createSQLQuery(queryString);
 		query.setParameter(1, memberid);
 		List<?> list = query.list();
@@ -54,7 +54,7 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 
 	@Override
 	public BookTransaction getActBkTrans(String bookid, int memberid) {
-		String queryString = "from BookTransaction where memberId=?1 and titleId=?2 and copyId=?3 and status=1";
+		String queryString = "from BookTransaction where member_id=?1 and title_id=?2 and copy_id=?3 and status=1";
 		Query<BookTransaction> query = getSession().createQuery(queryString, BookTransaction.class);
 		query.setParameter(1, memberid);
 		query.setParameter(2, bookid.substring(0, 4));

@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 import com.app.lms.util.TransactionStatusConverter;
 
 @Entity
-@Table(name = "booktransactions")
+//@Table(name = "booktransactions")
 public class BookTransaction {
 
 	@Id

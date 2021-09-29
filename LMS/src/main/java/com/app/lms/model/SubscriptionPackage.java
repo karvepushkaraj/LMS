@@ -18,7 +18,7 @@ import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "packages")
+//@Table(name = "packages")
 public class SubscriptionPackage {
 
 	@Id

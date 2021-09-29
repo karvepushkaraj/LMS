@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 @Entity
-@Table(name = "bookcopies")
+//@Table(name = "bookcopies")
 @IdClass(CopyId.class)
 public class BookCopy {
 

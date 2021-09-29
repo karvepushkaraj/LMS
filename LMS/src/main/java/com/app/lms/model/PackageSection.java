@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "packagesection")
+//@Table(name = "packagesection")
 @IdClass(PackageSectionId.class)
 public class PackageSection {
 

@@ -8,7 +8,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "latefees")
+//@Table(name = "latefees")
 public class LateFee {
 
 	@Id

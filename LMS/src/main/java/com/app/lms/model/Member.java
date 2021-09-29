@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "members")
+//@Table(name = "members")
 public class Member {
 
 	@Id

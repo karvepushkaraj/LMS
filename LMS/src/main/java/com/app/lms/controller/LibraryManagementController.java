@@ -124,8 +124,8 @@ public class LibraryManagementController {
 	public String issueBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		JsonNode node = new ObjectMapper().readTree(input);
 		int response = bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
-		if(response>0)
-			return "Transaction Sucessful. Transaction Id : "+response;
+		if (response > 0)
+			return "Transaction Sucessful. Transaction Id : " + response;
 		return "Transaction Failed";
 	}
 
