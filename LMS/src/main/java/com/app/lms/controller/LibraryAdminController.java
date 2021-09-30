@@ -2,7 +2,6 @@ package com.app.lms.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.hibernate.TransactionException;
@@ -29,6 +28,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/**
+ * Controller for Library Admin Operations.
+ * 
+ * @author karve
+ *
+ */
+
 @RestController
 @RequestMapping("api/v1/lms")
 public class LibraryAdminController {
@@ -41,6 +47,11 @@ public class LibraryAdminController {
 	@Qualifier("LibraryAdminService")
 	private SubscriptionPackageService subpkgService;
 
+	/**
+	 * Get single Library Section.
+	 * @param id {@link LibrarySection} id
+	 * @return {@link LibrarySection} or {@code null}
+	 */
 	@GetMapping("/section")
 	public LibrarySection getLibrarySection(@RequestParam("id") String id) {
 		if (id.length() != 3)
@@ -48,16 +59,29 @@ public class LibraryAdminController {
 		return librarySectionService.getLibrarySection(id);
 	}
 
+	/**
+	 * Add new Library Section.
+	 * @param librarySection {@link LibrarySection}
+	 */
 	@PostMapping("/section")
 	public void addLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
 		librarySectionService.addLibrarySection(librarySection);
 	}
 
+	/**
+	 * Update existing Library Section.
+	 * @param librarySection {@link LibrarySection}
+	 */
 	@PutMapping("/section")
 	public void updateLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
 		librarySectionService.updateLibrarySection(librarySection);
 	}
 
+	/**
+	 * Delete Library Section.
+	 * @param id {@link LibrarySection} id
+	 * @return String message
+	 */
 	@DeleteMapping("/section/{id}")
 	public String deleteLibrarySection(@PathVariable("id") String id) {
 		if (id.length() != 3)
@@ -68,6 +92,12 @@ public class LibraryAdminController {
 		return "Transaction Failed";
 	}
 
+	/**
+	 * Add new Subscription Package.
+	 * @param input {@link SubscriptionPackage} id and array of {@link LibrarySection} id & no. of Books
+	 * @throws JsonMappingException
+	 * @throws JsonProcessingException
+	 */
 	@PostMapping("/package")
 	public void addSubscriptionPackage(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -83,6 +113,12 @@ public class LibraryAdminController {
 		subpkgService.addSubscriptionPackage(pkg, map);
 	}
 
+	/**
+	 * Get single Subscription Package.
+	 * @param id {@link SubscriptionPackage} id
+	 * @return {@link SubscriptionPackage} and array of {@link LibrarySection} id & no. of Books
+	 * @throws JsonProcessingException
+	 */
 	@GetMapping("/package")
 	public String getSubscriptionPackage(@RequestParam("id") int id) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -100,6 +136,11 @@ public class LibraryAdminController {
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 	}
 
+	/**
+	 * Delete Subscription Package.
+	 * @param id {@link SubscriptionPackage} id
+	 * @return String message
+	 */
 	@DeleteMapping("/package/{id}")
 	public String deleteSubscriptionPackage(@PathVariable("id") int id) {
 		boolean flag = subpkgService.deleteSubscriptionPackage(id);

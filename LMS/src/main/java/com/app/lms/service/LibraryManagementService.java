@@ -24,6 +24,12 @@ import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.model.TransactionStatus;
 
+/**
+ * Implementation of {@link BookService}, {@link MemberService}, {@link BookTransactionService}
+ * @author karve
+ *
+ */
+
 @Service("LibraryManagementService")
 @Transactional
 public class LibraryManagementService implements BookService, MemberService, BookTransactionService {

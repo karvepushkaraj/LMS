@@ -16,6 +16,14 @@ import com.app.lms.controller.LibraryManagementController;
 import com.app.lms.dao.AuxiliaryDao;
 import com.app.lms.model.LibrarySection;
 
+/**
+ * Adds dummy data for Library Sections, Subscription Packages and Books
+ * in create mode.
+ * 
+ * @author karve
+ *
+ */
+
 @Configuration
 public class AppConfig {
 

@@ -11,6 +11,13 @@ import org.springframework.stereotype.Repository;
 
 import com.app.lms.model.BookTransaction;
 
+/**
+ * Implementation of Auxiliary Dao interface.
+ * @see AuxiliaryDao
+ * @author karve
+ *
+ */
+
 @Repository("AuxiliaryDao")
 public class AuxiliaryDaoImpl implements AuxiliaryDao {
 

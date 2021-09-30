@@ -16,6 +16,12 @@ import com.app.lms.model.PackageSection;
 import com.app.lms.model.PackageSectionId;
 import com.app.lms.model.SubscriptionPackage;
 
+/**
+ * Implementation of {@link LibrarySectionService}, {@link SubscriptionPackageService}
+ * @author karve
+ *
+ */
+
 @Service("LibraryAdminService")
 @Transactional
 public class LibraryAdminService implements LibrarySectionService, SubscriptionPackageService {

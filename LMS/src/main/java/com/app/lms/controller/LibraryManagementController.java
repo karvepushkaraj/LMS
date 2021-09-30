@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
+import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
+import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.service.BookService;
 import com.app.lms.service.BookTransactionService;
 import com.app.lms.service.MemberService;
@@ -27,6 +29,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
+/**
+ * Controller for Library Management Operations.
+ * 
+ * @author karve
+ *
+ */
 
 @RestController
 @RequestMapping("api/v1/lms")
@@ -44,6 +53,12 @@ public class LibraryManagementController {
 	@Qualifier("LibraryManagementService")
 	private BookTransactionService bookTransactionService;
 
+	/**
+	 * Add Book with new Book Title.
+	 * @param input {@link LibrarySection} id, {@link BookTitle} and {@link BookCopy}
+	 * @throws JsonMappingException
+	 * @throws JsonProcessingException
+	 */
 	@PostMapping("/books")
 	public void addBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -56,6 +71,12 @@ public class LibraryManagementController {
 		bookService.addBook(sectionId, bt, bc);
 	}
 
+	/**
+	 * Get single Book Title if id length is 4 or Book Copy if id length is 5.
+	 * @param bookId {@link BookTitle} id or {@link BookCopy} id
+	 * @return {@link BookTitle} or {@link BookCopy}
+	 * @throws JsonProcessingException
+	 */
 	@GetMapping("/books")
 	public String getBook(@RequestParam("id") String bookId) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
@@ -83,6 +104,11 @@ public class LibraryManagementController {
 		throw new TransactionException("Invalid Request Parameter");
 	}
 
+	/**
+	 * Delete BookCopy. Also deletes Book Title if there are no Book Copies available.
+	 * @param bookId {@link BookCopy} id
+	 * @return String message
+	 */
 	@DeleteMapping("/books/{id}")
 	public String deleteBook(@PathVariable("id") String bookId) {
 		if (bookId.length() != 5)
@@ -93,6 +119,11 @@ public class LibraryManagementController {
 		return "Transaction Failed";
 	}
 
+	/**
+	 * Get Member.
+	 * @param memberId {@link Member} id
+	 * @return Member {@link Member}
+	 */
 	@GetMapping("/member")
 	public Member getMember(@RequestParam("id") int memberId) {
 		if (memberId < 10000)
@@ -100,16 +131,29 @@ public class LibraryManagementController {
 		return memberService.getMember(memberId);
 	}
 
+	/**
+	 * Add new Member.
+	 * @param member {@link Member}
+	 */
 	@PostMapping("/member")
 	public void addMember(@Valid @RequestBody Member member) {
 		memberService.addMember(member);
 	}
 
+	/**
+	 * Update existing Member details.
+	 * @param member {@link Member}
+	 */
 	@PutMapping("/member")
 	public void updateMember(@Valid @RequestBody Member member) {
 		memberService.updateMember(member);
 	}
 
+	/**
+	 * Delete Member.
+	 * @param memberId {@link Member} id
+	 * @return String message
+	 */
 	@DeleteMapping("/member/{id}")
 	public String deleteMember(@PathVariable("id") int memberId) {
 		if (memberId < 10000)
@@ -120,12 +164,25 @@ public class LibraryManagementController {
 		return "Transaction Failed";
 	}
 
+	/**
+	 * Add new Subscription of a Member to Subscription Package.
+	 * @param input {@link Member} id and {@link SubscriptionPackage} id
+	 * @throws JsonMappingException
+	 * @throws JsonProcessingException
+	 */
 	@PostMapping("/subscribe")
 	public void addSubscription(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		JsonNode node = new ObjectMapper().readTree(input);
 		memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt());
 	}
 
+	/**
+	 * Issue Book Copy to Member.
+	 * @param input {@link Member} id and {@link BookCopy} id
+	 * @return String message
+	 * @throws JsonMappingException
+	 * @throws JsonProcessingException
+	 */
 	@PostMapping("/issue")
 	public String issueBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		JsonNode node = new ObjectMapper().readTree(input);
@@ -135,6 +192,13 @@ public class LibraryManagementController {
 		return "Transaction Failed";
 	}
 
+	/**
+	 * Return issued Book Copy from Member.
+	 * @param input {@link Member} id and {@link BookCopy} id
+	 * @return String message
+	 * @throws JsonMappingException
+	 * @throws JsonProcessingException
+	 */
 	@PostMapping("/return")
 	public String returnBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
 		JsonNode node = new ObjectMapper().readTree(input);
