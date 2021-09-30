@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,19 +59,19 @@ public class Member {
 	private MemberActivityStatus status;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<BookCopy> books;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Subscription> subscriptions;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<BookTransaction> booktransactions;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Deposite> deposite;
 
 	public Member() {
