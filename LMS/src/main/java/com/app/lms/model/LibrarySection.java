@@ -9,17 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Length;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-//@Table(name = "librarysections")
 public class LibrarySection {
 
 	@Id
@@ -27,7 +20,7 @@ public class LibrarySection {
 	@Column(length = 3)
 	private String sectionId;
 
-	@Pattern(regexp = "[\\w ]{1,50}",message = "Invalid section Name")
+	@Pattern(regexp = "[\\w ]{1,50}", message = "Invalid section Name")
 	@Column(length = 50)
 	private String sectionName;
 

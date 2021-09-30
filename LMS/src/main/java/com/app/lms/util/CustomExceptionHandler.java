@@ -27,16 +27,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), status,
-				ex.getMessage());
+		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), status, ex.getMessage());
 		return handleExceptionInternal(ex, error, headers, status, request);
 	}
-	
+
 	@ExceptionHandler(HibernateException.class)
 	protected ResponseEntity<Object> handleNonExistentRecord(HibernateException ex, WebRequest request) {
 		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), HttpStatus.BAD_REQUEST,
 				ex.getMessage());
-		
 		return new ResponseEntity<Object>(error, new HttpHeaders(), error.getStatus());
 	}
 

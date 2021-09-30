@@ -5,11 +5,11 @@ import java.util.Date;
 import org.springframework.http.HttpStatus;
 
 public class ErrorMessage {
-	
+
 	private Date timestamp;
 	private HttpStatus status;
 	private String message;
-	
+
 	public ErrorMessage() {
 		super();
 	}
@@ -48,5 +48,5 @@ public class ErrorMessage {
 	public String toString() {
 		return "ErrorMessage [timestamp=" + timestamp + ", status=" + status + ", message=" + message + "]";
 	}
-	
+
 }

@@ -1,8 +1,7 @@
 package com.app.lms.model;
 
 import java.util.Collections;
-import java.util.Set;
-
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,12 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-//@Table(name = "booktitles")
 public class BookTitle {
 
 	@Id
@@ -36,7 +32,7 @@ public class BookTitle {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "title", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<BookCopy> bookCopies;
+	private List<BookCopy> bookCopies;
 
 	public BookTitle() {
 		super();
@@ -86,8 +82,8 @@ public class BookTitle {
 		this.section = section;
 	}
 
-	public Set<BookCopy> getBookCopies() {
-		return Collections.unmodifiableSet(bookCopies);
+	public List<BookCopy> getBookCopies() {
+		return Collections.unmodifiableList(bookCopies);
 	}
 
 	@Override

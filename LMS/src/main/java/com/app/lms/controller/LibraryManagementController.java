@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,7 +62,7 @@ public class LibraryManagementController {
 		BookTitle bt = null;
 		BookCopy bc = null;
 		if (bookId.length() == 4) {
-			bt = bookService.getBookTitle(bookId);
+			bt = bookService.getBookTitle(Integer.parseInt(bookId));
 			if (bt == null)
 				throw new TransactionException("Book Not Found");
 			ObjectNode objectNode = mapper.valueToTree(bt);
@@ -102,6 +103,11 @@ public class LibraryManagementController {
 	@PostMapping("/member")
 	public void addMember(@Valid @RequestBody Member member) {
 		memberService.addMember(member);
+	}
+
+	@PutMapping("/member")
+	public void updateMember(@Valid @RequestBody Member member) {
+		memberService.updateMember(member);
 	}
 
 	@DeleteMapping("/member/{id}")

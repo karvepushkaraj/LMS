@@ -8,7 +8,7 @@ public interface MemberService {
 
 	void addMember(Member member);
 
-//	void updateMember(Member member);
+	void updateMember(Member member);
 
 	boolean deleteMember(int memberId);
 

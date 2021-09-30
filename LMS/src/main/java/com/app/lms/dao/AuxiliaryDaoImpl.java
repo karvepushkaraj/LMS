@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,16 +14,9 @@ import com.app.lms.model.BookTransaction;
 @Repository("AuxiliaryDao")
 public class AuxiliaryDaoImpl implements AuxiliaryDao {
 
-//	@Autowired
-//	private SessionFactory sessionFactory;
-	
 	@Autowired
 	private EntityManager em;
 
-//	private Session getSession() {
-//		return sessionFactory.getCurrentSession();
-//	}
-	
 	private Session getSession() {
 		return em.unwrap(Session.class);
 	}

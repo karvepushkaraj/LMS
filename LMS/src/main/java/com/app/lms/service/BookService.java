@@ -7,7 +7,9 @@ public interface BookService {
 
 	void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy);
 
-	BookTitle getBookTitle(String titleId);
+	void addBookCopy(int titleId, BookCopy bookCopy);
+
+	BookTitle getBookTitle(int titleId);
 
 	BookCopy getBookCopy(String copyId);
 

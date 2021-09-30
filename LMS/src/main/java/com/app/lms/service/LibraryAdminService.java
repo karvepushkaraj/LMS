@@ -52,7 +52,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	@Override
 	public void updateLibrarySection(LibrarySection bookSection) {
 		LibrarySection bs = getLibrarySection(bookSection.getSectionId());
-		if(bs!=null)
+		if (bs != null)
 			bs.setSectionName(bookSection.getSectionName());
 	}
 
@@ -62,7 +62,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 		if (bs == null)
 			throw new TransactionException("Library Section not Found");
 		librarySectionDao.delete(bs);
-		if(getLibrarySection(id)==null)
+		if (getLibrarySection(id) == null)
 			return true;
 		return false;
 	}
@@ -73,7 +73,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 		for (String key : map.keySet()) {
 			LibrarySection ls = getLibrarySection(key);
 			if (ls == null)
-				throw new TransactionException("Invalid Section ID : "+ key);
+				throw new TransactionException("Invalid Section ID : " + key);
 			PackageSection pkgsec = new PackageSection(ls, pkg, map.get(key));
 			pkgSecDao.add(pkgsec);
 
@@ -91,7 +91,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 		if (pkg == null)
 			throw new TransactionException("Subscription Package not Found");
 		subscriptionPackageDao.delete(pkg);
-		if(getSubscriptionPackage(id)==null)
+		if (getSubscriptionPackage(id) == null)
 			return true;
 		return false;
 	}

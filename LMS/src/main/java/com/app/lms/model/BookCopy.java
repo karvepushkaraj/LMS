@@ -6,15 +6,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -23,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
 @Entity
-//@Table(name = "bookcopies")
 @IdClass(CopyId.class)
 public class BookCopy {
 
@@ -33,8 +28,6 @@ public class BookCopy {
 	private BookTitle title;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "copyIdSequence")
-	@SequenceGenerator(name = "copyIdSequence", initialValue = 1, allocationSize = 1)
 	private int copyId;
 
 	private float price;
@@ -65,6 +58,10 @@ public class BookCopy {
 
 	public int getCopyId() {
 		return copyId;
+	}
+
+	public void setCopyId(int copyId) {
+		this.copyId = copyId;
 	}
 
 	public BookTitle getTitle() {

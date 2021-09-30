@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
@@ -21,15 +20,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
-
 import com.app.lms.util.MemActStatusConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-//@Table(name = "members")
 public class Member {
 
 	@Id
@@ -41,11 +37,11 @@ public class Member {
 	@Length(max = 50)
 	@Column(length = 50)
 	private String name;
-	
-	@Pattern(regexp = "[0-9]{10}",message = "Invalid mobile number")
+
+	@Pattern(regexp = "[0-9]{10}", message = "Invalid mobile number")
 	@Column(length = 50)
 	private String mobileNumber;
-	
+
 	@Email(message = "Invalid email id")
 	@Column(length = 50)
 	private String emailId;
@@ -63,7 +59,6 @@ public class Member {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//	@JoinColumns({@JoinColumn(name = "titleId"), @JoinColumn(name = "copyId")})
 	private Set<BookCopy> books;
 
 	@JsonIgnore

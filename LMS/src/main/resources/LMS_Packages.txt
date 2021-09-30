@@ -1,0 +1,6 @@
+{ "package": { "packageName": "CHD1", "fees": "200" }, "sections": [{ "sectionId": "CHD", "noOfBooks": "1" }] }
+{ "package": { "packageName": "GEN1", "fees": "300" }, "sections": [{ "sectionId": "GEN", "noOfBooks": "1" }] }
+{ "package": { "packageName": "MAG1", "fees": "150" }, "sections": [{ "sectionId": "MAG", "noOfBooks": "1" }] }
+{ "package": { "packageName": "GEN2", "fees": "300" }, "sections": [{ "sectionId": "GEN", "noOfBooks": "2" }] }
+{ "package": { "packageName": "CB1", "fees": "400" }, "sections": [{ "sectionId": "CHD", "noOfBooks": "1" },{ "sectionId": "GEN", "noOfBooks": "1" }] }
+{ "package": { "packageName": "CB2", "fees": "400" }, "sections": [{ "sectionId": "GEN", "noOfBooks": "1" },{ "sectionId": "MAG", "noOfBooks": "1" }] }

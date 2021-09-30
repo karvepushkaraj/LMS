@@ -1,0 +1,211 @@
+SECTION_ID,TITLE,AUTHOR,PRICE
+GEN,The Complete Works,William Shakespeare,1180
+GEN,Twelfth Night,William Shakespeare,830
+GEN,Hamlet,William Shakespeare,2158
+GEN,Macbeth,William Shakespeare,957
+GEN,King Lear,William Shakespeare,1049
+GEN,Othello,William Shakespeare,2874
+GEN,As You Like It,William Shakespeare,2244
+GEN,Angels & Demons,Dan Brown,2926
+GEN,Deception Point,Dan Brown,2407
+GEN,The Da Vinci Code,Dan Brown,2733
+GEN,Inferno,Dan Brown,953
+GEN,Digital Fortress,Dan Brown,2457
+GEN,The Alchemist,Paulo Coelho,1680
+GEN,The Zahir,Paulo Coelho,1237
+GEN,The Valkyries,Paulo Coelho,2868
+GEN,Maktub,Paulo Coelho,1394
+GEN,The Fifth Mountain,Paulo Coelho,1591
+GEN,The Rainmaker,John Grisham,2320
+GEN,The Partner,John Grisham,2846
+GEN,The Street Lawyer,John Grisham,2060
+GEN,The Summons,John Grisham,2751
+GEN,The Brethren,John Grisham,1570
+GEN,Animal Farm,George Orwell,2156
+GEN,Homage to Catalonia,George Orwell,1810
+GEN,To Kill a Mockingbird,Harper Lee,1038
+GEN,The Monk Who Sold His Ferrari,Robin Sharma,950
+GEN,Who Will Cry When You Die,Robin Sharma,1039
+GEN,The Leader Who Had No Title,Robin Sharma,2048
+GEN,Fools Die,Mario Puzo,1116
+GEN,The Godfather,Mario Puzo,1994
+GEN,The Fortunate Pilgrim,Mario Puzo,2616
+GEN,War and Peace,Leo Tolstoy,2362
+GEN,Resurrection,Leo Tolstoy,711
+GEN,A Tale of Two Cities,Charles Dickens,1855
+GEN,David Copperfield,Charles Dickens,752
+GEN,A Christmas Carol,Charles Dickens,2541
+GEN,Oliver Twist,Charles Dickens,892
+GEN,Life of Pi,Yann Martel,2827
+GEN,The Kite Runner,Khaled Hosseini,1400
+GEN,A Thousand Splendid Suns,Khaled Hosseini,1920
+GEN,And the Mountains Echoed,Khaled Hosseini,2620
+GEN,Who Moved My Cheese?,Spencer Johnson,2429
+GEN,The One Minute Manager,Spencer Johnson,1526
+GEN,How to Win Friends and Influence People,Dale Carnegie,904
+GEN,The Story of My Experiments with Truth,Mohandas Gandhi,1280
+GEN,Mein Kampf,Adolf Hitler,1913
+GEN,The Discovery of India,Jawaharlal Nehru,1294
+GEN,Gitanjali,Rabindranath Tagore,2461
+GEN,The Diary Of a Young Girl,Anne Frank,1796
+GEN,A Walk to Remember,Nicholas Sparks,2209
+GEN,The Notebook,Nicholas Sparks,2328
+GEN,Safe Heaven,Nicholas Sparks,2988
+GEN,The Best of Me,Nicholas Sparks,1705
+GEN,Casino Royale,Ian Fleming,1085
+GEN,The Spy Who Loved Me,Ian Fleming,948
+GEN,Goldfinger,Ian Fleming,2644
+GEN,Diamonds are Forever,Ian Fleming,1673
+GEN,The Fault in Our Stars,John Green,1171
+GEN,Paper Towns,John Green,2428
+GEN,Looking for Alaska,John Green,1151
+GEN,Rich Dad Poor Dad,Robert Kiyosaki,1441
+GEN,Murder on the Orient Express,Agatha Christie,1067
+GEN,Death on the Nile,Agatha Christie,1454
+GEN,Peril at End House,Agatha Christie,2967
+GEN,Ten Little Niggers,Agatha Christie,902
+GEN,Murder at the Vicarage,Agatha Christie,1201
+GEN,The Man in the Brown Suit,Agatha Christie,1171
+GEN,The ABC Murders,Agatha Christie,2825
+GEN,Poirot Investigates,Agatha Christie,873
+GEN,Hercule Poirot's Christmas,Agatha Christie,2947
+GEN,Crooked House,Agatha Christie,1471
+GEN,Interpreter of Maladies,Jhumpa Lahiri,1095
+GEN,The Namesake,Jhumpa Lahiri,2086
+GEN,The Immortals of Meluha,Amish Tripathi,773
+GEN, The Secret of the Nagas,Amish Tripathi,1100
+GEN,The Oath of the Vayuputras,Amish Tripathi,723
+GEN,Scion of Ikshvaku,Amish Tripathi,2394
+GEN,Sita,Amish Tripathi,2207
+GEN,Ravana,Amish Tripathi,2899
+GEN,Gone Girl,Gillian Flynn,1808
+GEN,Fifty Shades of Grey,E.L. James,2593
+GEN,Fifty Shades Freed,E.L. James,1038
+GEN,Fifty Shades Darker,E.L. James,900
+GEN,The Girl on the Train,Paula Hawkins,2260
+GEN,The Perks of Being a Wallflower,Stephen Chbosky,789
+GEN,The Shining,Stephen King,2143
+GEN,The Host,Stephenie Meyer,2768
+GEN,The Maze Runner,James Dashner,2435
+GEN,Tuesdays with Morrie,Mitch Albom,1851
+GEN,Men Are from Mars Women Are from Venus,John Gray,1877
+CHD,Harry Potter and the Half-Blood Prince,J.K. Rowling,1526
+CHD,Harry Potter and the Order of the Phoenix,J.K. Rowling,1290
+CHD,Harry Potter and the Chamber of Secrets,J.K. Rowling,1585
+CHD,Harry Potter and the Prisoner of Azkaban,J.K. Rowling,1225
+CHD,Harry Potter and the Sorcerer's Stone,J.K. Rowling,2274
+CHD,Harry Potter and the Goblet of Fire,J.K. Rowling,2629
+CHD,Famous Five - Five on a Treasure Island,Enid Blyton,2105
+CHD,Famous Five - Five Go Adventuring Again,Enid Blyton,1946
+CHD,Famous Five - Five Run Away Together ,Enid Blyton,2624
+CHD,Famous Five - Five Go to Smuggler's Top,Enid Blyton,2532
+CHD,Famous Five - Five Go Off in a Caravan,Enid Blyton,2642
+CHD,Animorphs - The Extreme ,Katherine Applegate,1991
+CHD,Animorphs - The Illusion,Katherine Applegate,809
+CHD,Animorphs - The Test,Katherine Applegate,2780
+CHD,Animorphs - The Deception,Katherine Applegate,1707
+CHD,Animorphs - The Proposal ,Katherine Applegate,2946
+CHD,Alex Rider - Stormbreaker,Anthony Horowitz,2973
+CHD,Alex Rider - Ark Angel,Anthony Horowitz,2391
+CHD,Alex Rider - Scorpia,Anthony Horowitz,2983
+CHD,Alex Rider - Crocodile Tears,Anthony Horowitz,2362
+CHD,Alex Rider - Point Blanc,Anthony Horowitz,1654
+CHD,Wise And Otherwise,Sudha Murty,2647
+CHD,Mahashweta,Sudha Murty,2752
+CHD,Grandma’s Bag Of Stories,Sudha Murty,1962
+CHD,Panchatantra Stories,Vishnu Sharma,1874
+CHD,Saral Hitopadesh,Narayan Pandit,1989
+CHD,The Secret Seven - The Secret Seven ,Enid Blyton,2913
+CHD,The Secret Seven - Secret Seven Adventure,Enid Blyton,2666
+CHD,The Secret Seven - Well Done Secret Seven,Enid Blyton,2830
+CHD,The Secret Seven - Go Ahead Secret Seven,Enid Blyton,1361
+CHD,The Secret Seven - Three Cheers Secret Seven,Enid Blyton,1443
+CHD,The Chronicles of Narnia,C. S. Lewis,1470
+CHD,Diary of a Wimpy Kid,Jeff Kinney,2057
+CHD,Wings of Fire,A. P. J. Abdul Kalam,1107
+CHD,Ignited Minds,A. P. J. Abdul Kalam,2185
+CHD,India 2020,A. P. J. Abdul Kalam,2417
+CHD,Sherlock Holmes - A Study in Scarlet,Sir Arthur Conan Doyle,1049
+CHD,Sherlock Holmes - The Sign of the Four,Sir Arthur Conan Doyle,2889
+CHD,Sherlock Holmes - The Hound of the Baskervilles,Sir Arthur Conan Doyle,1475
+CHD,Sherlock Holmes - The Valley of Fear,Sir Arthur Conan Doyle,1396
+CHD,Swami and Friends,R. K. Narayan,2142
+CHD,The Ramayana,R. K. Narayan,1565
+CHD,The Mahabharata ,R. K. Narayan,840
+CHD,Malgudi Days,R. K. Narayan,1571
+CHD,Alice in Wonderland,Lewis Carroll,2063
+CHD,The Jungle Book,Rudyard Kipling,1127
+CHD,The Best of Tenali Raman,Rungeen Singh,914
+CHD,Akbar and Birbal,Amita Sarin,1297
+CHD,Shivaji: The Great Maratha,Ranjit Desai,973
+CHD,Vikram-Aditya Story - Ranthambore Adventure,Deepak Dalal,774
+CHD,Vikram-Aditya Story - Ladakh Adventure,Deepak Dalal,2084
+CHD,Lakshadweep Adventure,Deepak Dalal,1203
+CHD,Totto-Chan: The Little Girl at the Window,Tetsuko Kuroyanagi,1083
+CHD,Little Toys,Arvind Gupta,1900
+CHD,Thumbprints,Arvind Gupta,1165
+CHD,Brain Games for Clever Kids,Dr. Gareth Moore,2238
+CHD,The Hobbit and The Lord of the Rings,J.R.R. Tolkien,1167
+CHD, The Fellowship of the Ring,J.R.R. Tolkien,2589
+CHD,The Two Towers,J.R.R. Tolkien,2486
+CHD,The Return of the King,J.R.R. Tolkien,2304
+CHD,The Complete Fairy Tales,Hans Christian Andersen,2070
+CHD,Tales and Poems of Winnie-the-Pooh,A.A. Milne,1004
+CHD,Kimayagar,Achyut Godbole,2866
+CHD,The Return of Vaman,Jayant Narlikar,858
+CHD,Goosebumps: Welcome to Dead House,R.L. Stine,2196
+CHD,Goosebumps: Night of the Living Dummy,R.L. Stine,1434
+CHD,Goosebumps: Stay Out of the Basement,R.L. Stine,992
+CHD,The Arabian Nights,A.S. Byatt,1814
+CHD,Gulliver's Travels,Jonathan Swift,1342
+CHD,The Wonderful Wizard of Oz,L. Frank Baum,2399
+MAG,Archie's Double Digest - July09,null,206
+MAG,Archie's Double Digest - Aug09,null,359
+MAG,Archie's Double Digest - Sep09,null,306
+MAG,Archie's Double Digest - Oct09,null,375
+MAG,Archie's Double Digest - Nov09,null,168
+MAG,Archie Betty and Veronica: Friends Forever - Jan11,null,168
+MAG,Archie Betty and Veronica: Friends Forever - Feb11,null,138
+MAG,Archie Betty and Veronica: Friends Forever - Mar11,null,251
+MAG,Archie Betty and Veronica: Friends Forever - Apr11,null,310
+MAG,Archie Betty and Veronica: Friends Forever - May11,null,313
+MAG,Time Magazine - Jan08,null,219
+MAG,Time Magazine - Feb08,null,369
+MAG,Time Magazine - Mar08,null,216
+MAG,Time Magazine - Apr08,null,183
+MAG,Time Magazine - May08,null,102
+MAG,Time Magazine - Sep08,null,399
+MAG,Time Magazine - Dec08,null,290
+MAG,Business Today - Jun12,null,224
+MAG,Business Today - Jul12,null,346
+MAG,Business Today - Aug12,null,139
+MAG,Business Today - Sep12,null,158
+MAG,Business Today - Oct12,null,394
+MAG,The Week - Feb07,null,176
+MAG,The Week - Aug07,null,261
+MAG,The Week - Sep07,null,220
+MAG,The Week - Nov07,null,197
+MAG,The Week - Dec07,null,149
+MAG,Outlook - Sep13,null,166
+MAG,Outlook - Oct13,null,234
+MAG,Outlook - Nov13,null,360
+MAG,Outlook - Dec13,null,327
+MAG,Outlook - Jan14,null,239
+MAG,Reader's Digest - Mar10,null,301
+MAG,Reader's Digest - Apr10,null,332
+MAG,Reader's Digest - May10,null,209
+MAG,Reader's Digest - Jun10,null,222
+MAG,Reader's Digest - Jul10,null,212
+MAG,Reader's Digest - Aug10,null,344
+MAG,Digit - Dec14,null,172
+MAG,Digit - Jan15,null,132
+MAG,Digit - Mar15,null,261
+MAG,Digit - Apr15,null,134
+MAG,Filmfare - Feb15,null,347
+MAG,Filmfare - Mar15,null,108
+MAG,Filmfare - Apr15,null,113
+MAG,Filmfare - May15,null,343
+MAG,Filmfare - Jun15,null,126
+MAG,Vogue India - Jul07,null,101
+MAG,Vogue India - Aug07,null,216
+MAG,Vogue India - Sep07,null,213

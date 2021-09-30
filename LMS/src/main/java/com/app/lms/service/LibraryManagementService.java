@@ -1,7 +1,6 @@
 package com.app.lms.service;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -77,21 +76,34 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 			throw new TransactionException("Invalid section id");
 		bookTitle.setSection(librarySection);
 		bookTitleDao.add(bookTitle);
+		bookCopy.setCopyId(1);
 		bookCopy.setTitle(bookTitle);
 		bookCopyDao.add(bookCopy);
 	}
 
 	@Override
-	public BookTitle getBookTitle(String titleId) {
-		return bookTitleDao.getById(Integer.valueOf(titleId));
+	public void addBookCopy(int titleId, BookCopy bookCopy) {
+		BookTitle bookTitle = getBookTitle(titleId);
+		if (bookTitle == null)
+			throw new TransactionException("Invalid title id");
+		List<BookCopy> list = bookTitle.getBookCopies();
+		int copyId = list.get(list.size() - 1).getCopyId();
+		bookCopy.setCopyId(++copyId);
+		bookCopy.setTitle(bookTitle);
+		bookCopyDao.add(bookCopy);
 	}
 
 	@Override
-	public BookCopy getBookCopy(String copyId) {
-		BookTitle bt = getBookTitle(copyId.substring(0, 4));
+	public BookTitle getBookTitle(int titleId) {
+		return bookTitleDao.getById(titleId);
+	}
+
+	@Override
+	public BookCopy getBookCopy(String bookId) {
+		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
 		BookCopy bc = null;
 		if (bt != null) {
-			CopyId key = new CopyId(bt, Integer.valueOf(copyId.substring(4)));
+			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
 			bc = bookCopyDao.getById(key);
 		}
 		return bc;
@@ -99,7 +111,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public boolean deleteBook(String bookId) {
-		BookTitle bt = getBookTitle(bookId.substring(0, 4));
+		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
 		BookCopy bc = null;
 		if (bt == null)
 			throw new TransactionException("Book not found");
@@ -127,13 +139,15 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		memberDao.add(member);
 	}
 
-//	@Override
-//	public void updateMember(Member member) {
-//		// TODO Auto-generated method stub
-//		Member m1 = basicDao.getById(member.getMemberId());
-//		if(m1!=null)
-//			m1
-//	}
+	@Override
+	public void updateMember(Member member) {
+		Member m1 = memberDao.getById(member.getMemberId());
+		if (m1 == null)
+			throw new TransactionException("Member not found");
+		m1.setName(member.getName());
+		m1.setMobileNumber(member.getMobileNumber());
+		m1.setEmailId(member.getEmailId());
+	}
 
 	@Override
 	public boolean deleteMember(int memberId) {

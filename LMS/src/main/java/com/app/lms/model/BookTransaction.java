@@ -11,14 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.app.lms.util.TransactionStatusConverter;
 
 @Entity
-//@Table(name = "booktransactions")
 public class BookTransaction {
 
 	@Id
