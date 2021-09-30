@@ -55,7 +55,9 @@ public class LibraryManagementController {
 
 	/**
 	 * Add Book with new Book Title.
-	 * @param input {@link LibrarySection} id, {@link BookTitle} and {@link BookCopy}
+	 * 
+	 * @param input {@link LibrarySection} id, {@link BookTitle} and
+	 *              {@link BookCopy}
 	 * @throws JsonMappingException
 	 * @throws JsonProcessingException
 	 */
@@ -73,6 +75,7 @@ public class LibraryManagementController {
 
 	/**
 	 * Get single Book Title if id length is 4 or Book Copy if id length is 5.
+	 * 
 	 * @param bookId {@link BookTitle} id or {@link BookCopy} id
 	 * @return {@link BookTitle} or {@link BookCopy}
 	 * @throws JsonProcessingException
@@ -99,13 +102,19 @@ public class LibraryManagementController {
 			bc = bookService.getBookCopy(bookId);
 			if (bc == null)
 				throw new TransactionException("Book Not Found");
-			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(bc);
+			ObjectNode node = mapper.valueToTree(bc);
+			node.put("sectionId", bc.getTitle().getSection().getSectionId());
+			int memberId = bc.getMember() == null ? 0 : bc.getMember().getMemberId();
+			node.put("member", memberId);
+			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
 		}
 		throw new TransactionException("Invalid Request Parameter");
 	}
 
 	/**
-	 * Delete BookCopy. Also deletes Book Title if there are no Book Copies available.
+	 * Delete BookCopy. Also deletes Book Title if there are no Book Copies
+	 * available.
+	 * 
 	 * @param bookId {@link BookCopy} id
 	 * @return String message
 	 */
@@ -121,18 +130,26 @@ public class LibraryManagementController {
 
 	/**
 	 * Get Member.
+	 * 
 	 * @param memberId {@link Member} id
 	 * @return Member {@link Member}
+	 * @throws JsonProcessingException
 	 */
 	@GetMapping("/member")
-	public Member getMember(@RequestParam("id") int memberId) {
+	public String getMember(@RequestParam("id") int memberId) throws JsonProcessingException {
 		if (memberId < 10000)
 			throw new TransactionException("Invalid Request Parameter");
-		return memberService.getMember(memberId);
+		Member member = memberService.getMember(memberId);
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode node = mapper.valueToTree(member);
+		ArrayNode arrayNode = node.putArray("book");
+		member.getBook().stream().forEach(bc -> arrayNode.add("" + bc.getTitle().getTitleId() + bc.getCopyId()));
+		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
 	}
 
 	/**
 	 * Add new Member.
+	 * 
 	 * @param member {@link Member}
 	 */
 	@PostMapping("/member")
@@ -142,6 +159,7 @@ public class LibraryManagementController {
 
 	/**
 	 * Update existing Member details.
+	 * 
 	 * @param member {@link Member}
 	 */
 	@PutMapping("/member")
@@ -151,6 +169,7 @@ public class LibraryManagementController {
 
 	/**
 	 * Delete Member.
+	 * 
 	 * @param memberId {@link Member} id
 	 * @return String message
 	 */
@@ -166,6 +185,7 @@ public class LibraryManagementController {
 
 	/**
 	 * Add new Subscription of a Member to Subscription Package.
+	 * 
 	 * @param input {@link Member} id and {@link SubscriptionPackage} id
 	 * @throws JsonMappingException
 	 * @throws JsonProcessingException
@@ -178,6 +198,7 @@ public class LibraryManagementController {
 
 	/**
 	 * Issue Book Copy to Member.
+	 * 
 	 * @param input {@link Member} id and {@link BookCopy} id
 	 * @return String message
 	 * @throws JsonMappingException
@@ -194,6 +215,7 @@ public class LibraryManagementController {
 
 	/**
 	 * Return issued Book Copy from Member.
+	 * 
 	 * @param input {@link Member} id and {@link BookCopy} id
 	 * @return String message
 	 * @throws JsonMappingException

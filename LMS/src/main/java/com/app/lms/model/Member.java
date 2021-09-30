@@ -59,7 +59,7 @@ public class Member {
 	private MemberActivityStatus status;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<BookCopy> books;
 
 	@JsonIgnore

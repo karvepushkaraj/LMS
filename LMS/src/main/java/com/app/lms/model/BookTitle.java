@@ -26,6 +26,7 @@ public class BookTitle {
 	@Column(length = 50)
 	private String title, author, publication;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "sectionId")
 	private LibrarySection section;
