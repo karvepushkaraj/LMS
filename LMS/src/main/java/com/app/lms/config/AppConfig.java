@@ -17,8 +17,8 @@ import com.app.lms.dao.AuxiliaryDao;
 import com.app.lms.model.LibrarySection;
 
 /**
- * Adds dummy data for Library Sections, Subscription Packages and Books
- * in create mode.
+ * Adds dummy data for Library Sections, Subscription Packages and Books in
+ * create mode.
  * 
  * @author karve
  *
@@ -76,8 +76,8 @@ public class AppConfig {
 	private void addBooks() {
 		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LMS_Books.csv"))) {
 			String s;
-			br.readLine();
 			String json = "{ \"sectionId\": \"%s\", \"BookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"BookCopy\": { \"price\": \"%d\"} }";
+			br.readLine();
 			while ((s = br.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(s, ",");
 				String input = String.format(json, st.nextToken(), st.nextToken(), st.nextToken(),
