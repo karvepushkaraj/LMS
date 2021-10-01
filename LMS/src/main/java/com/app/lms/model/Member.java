@@ -39,6 +39,7 @@ public class Member {
 	@Column(length = 50)
 	private String name;
 
+	@NotBlank
 	@Pattern(regexp = "[0-9]{10}", message = "Invalid mobile number")
 	@Column(length = 50)
 	private String mobileNumber;

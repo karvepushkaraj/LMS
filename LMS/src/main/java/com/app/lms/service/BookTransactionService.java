@@ -10,6 +10,6 @@ public interface BookTransactionService {
 
 	int issueBook(String bookid, int memberid);
 
-	boolean returnBook(String bookid, int memberid);
+	int returnBook(String bookid, int memberid);
 
 }

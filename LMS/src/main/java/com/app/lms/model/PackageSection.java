@@ -1,5 +1,6 @@
 package com.app.lms.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -20,6 +21,7 @@ public class PackageSection {
 	@JoinColumn(name = "packageId")
 	private SubscriptionPackage pkg;
 
+	@Column(nullable = false)
 	private int numberOfBooks;
 
 	public PackageSection() {

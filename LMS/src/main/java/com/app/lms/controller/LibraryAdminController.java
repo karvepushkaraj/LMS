@@ -77,7 +77,13 @@ public class LibraryAdminController {
 	 */
 	@PutMapping("/section")
 	public void updateLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
-		librarySectionService.updateLibrarySection(librarySection);
+		try {
+			librarySectionService.updateLibrarySection(librarySection);
+		} catch (NullPointerException e) {
+			throw new TransactionException("Library Section does not exist");
+		} catch (RuntimeException e) {
+			throw new TransactionException("Invalid request");
+		}
 	}
 
 	/**
@@ -90,9 +96,13 @@ public class LibraryAdminController {
 	public String deleteLibrarySection(@PathVariable("id") String id) {
 		if (id.length() != 3)
 			throw new TransactionException("Invalid id : " + id);
-		boolean flag = librarySectionService.deleteLibrarySection(id);
-		if (flag)
-			return "Library Section deleted sucessfully";
+		try {
+			boolean flag = librarySectionService.deleteLibrarySection(id);
+			if (flag)
+				return "Library Section deleted sucessfully";
+		} catch (RuntimeException e) {
+			throw new TransactionException("Library Section does not exist");
+		}
 		return "Transaction Failed";
 	}
 
@@ -105,20 +115,24 @@ public class LibraryAdminController {
 	 * @throws JsonProcessingException
 	 */
 	@GetMapping("/package")
-	public String getSubscriptionPackage(@RequestParam("id") int id) throws JsonProcessingException {
+	public String getSubscriptionPackage(@RequestParam("id") int id) {
+		String result = null;
 		ObjectMapper mapper = new ObjectMapper();
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(id);
-		if (pkg == null)
+		try {
+			ObjectNode objectNode = mapper.valueToTree(pkg);
+			ArrayNode arrayNode = objectNode.putArray("sections");
+			for (PackageSection ps : pkg.getPackageSection()) {
+				ObjectNode node = mapper.createObjectNode();
+				node.put("sectionId", ps.getSection().getSectionId());
+				node.put("noOfBooks", ps.getNumberOfBooks());
+				arrayNode.add(node);
+			}
+			result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+		} catch (JsonProcessingException | IllegalArgumentException | ClassCastException e) {
 			throw new TransactionException("Package not found");
-		ObjectNode objectNode = mapper.valueToTree(pkg);
-		ArrayNode arrayNode = objectNode.putArray("sections");
-		for (PackageSection ps : pkg.getPackageSection()) {
-			ObjectNode node = mapper.createObjectNode();
-			node.put("sectionId", ps.getSection().getSectionId());
-			node.put("noOfBooks", ps.getNumberOfBooks());
-			arrayNode.add(node);
 		}
-		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+		return result;
 	}
 
 	/**
@@ -130,18 +144,26 @@ public class LibraryAdminController {
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/package")
-	public void addSubscriptionPackage(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+	public void addSubscriptionPackage(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
-		JsonNode jsonNode = mapper.readTree(input);
-		SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
-		Map<String, Integer> map = new HashMap<>();
-		ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
-		for (JsonNode node : arrayNode) {
-			map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
-		}
-		if (pkg == null || map.isEmpty())
+		SubscriptionPackage pkg = null;
+		Map<String, Integer> map = null;
+		try {
+			JsonNode jsonNode = mapper.readTree(input);
+			pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
+			map = new HashMap<>();
+			ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
+			for (JsonNode node : arrayNode) {
+				map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
+			}
+			if (map.isEmpty())
+				throw new NullPointerException();
+			subpkgService.addSubscriptionPackage(pkg, map);
+		} catch (JsonProcessingException e) {
 			throw new TransactionException("Invalid Request");
-		subpkgService.addSubscriptionPackage(pkg, map);
+		} catch (RuntimeException e) {
+			throw new TransactionException("Invalid package or section");
+		}
 	}
 
 	/**
@@ -152,7 +174,12 @@ public class LibraryAdminController {
 	 */
 	@DeleteMapping("/package/{id}")
 	public String deleteSubscriptionPackage(@PathVariable("id") int id) {
-		boolean flag = subpkgService.deleteSubscriptionPackage(id);
+		boolean flag = false;
+		try {
+			flag = subpkgService.deleteSubscriptionPackage(id);
+		} catch (RuntimeException e) {
+			throw new TransactionException("Subscription Package does not exist");
+		}
 		if (flag)
 			return "Subscription Package deleted sucessfully";
 		return "Transaction Failed";

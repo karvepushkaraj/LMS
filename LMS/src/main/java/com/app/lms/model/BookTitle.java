@@ -23,8 +23,11 @@ public class BookTitle {
 	@SequenceGenerator(name = "titleIdSequence", initialValue = 1000, allocationSize = 1)
 	private int titleId;
 
+	@Column(length = 50, nullable = false)
+	private String title;
+
 	@Column(length = 50)
-	private String title, author, publication;
+	private String author, publication;
 
 	@JsonIgnore
 	@ManyToOne

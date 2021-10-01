@@ -21,7 +21,7 @@ public class LibrarySection {
 	private String sectionId;
 
 	@Pattern(regexp = "[\\w ]{1,50}", message = "Invalid section Name")
-	@Column(length = 50)
+	@Column(length = 50, nullable = false)
 	private String sectionName;
 
 	@JsonIgnore

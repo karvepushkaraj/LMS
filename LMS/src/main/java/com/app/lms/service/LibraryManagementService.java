@@ -20,6 +20,7 @@ import com.app.lms.model.BookTransaction;
 import com.app.lms.model.CopyId;
 import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
+import com.app.lms.model.MemberActivityStatus;
 import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.model.TransactionStatus;
@@ -85,11 +86,15 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public BookCopy getBookCopy(String bookId) {
 		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-		BookCopy bc = null;
-		if (bt != null) {
-			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
-			bc = bookCopyDao.getById(key);
-		}
+//		BookCopy bc = null;
+//		if (bt != null) {
+//			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+//			bc = bookCopyDao.getById(key);
+//		}
+		if (bt == null)
+			throw new NullPointerException();
+		CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+		BookCopy bc = bookCopyDao.getById(key);
 		return bc;
 	}
 
@@ -97,7 +102,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	public void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) {
 		LibrarySection librarySection = librarySectionService.getLibrarySection(sectionId);
 		if (librarySection == null)
-			throw new TransactionException("Invalid section id");
+			throw new NullPointerException();
 		bookTitle.setSection(librarySection);
 		bookTitleDao.add(bookTitle);
 		bookCopy.setCopyId(1);
@@ -109,7 +114,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	public void addBookCopy(int titleId, BookCopy bookCopy) {
 		BookTitle bookTitle = getBookTitle(titleId);
 		if (bookTitle == null)
-			throw new TransactionException("Invalid title id");
+			throw new NullPointerException();
 		List<BookCopy> list = bookTitle.getBookCopies();
 		int copyId = list.get(list.size() - 1).getCopyId();
 		bookCopy.setCopyId(++copyId);
@@ -120,18 +125,17 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public boolean deleteBook(String bookId) {
 		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-		BookCopy bc = null;
-		if (bt == null)
-			throw new TransactionException("Book not found");
+//		BookCopy bc = null;
+//		if (bt == null)
+//			throw new NullPointerException();
 		CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
-		bc = bookCopyDao.getById(key);
-		if (bc == null)
-			throw new TransactionException("Book not found");
+		BookCopy bc = bookCopyDao.getById(key);
+//		if (bc == null)
+//			throw new NullPointerException();
 		bookCopyDao.delete(bc);
-
-		if (bt.getBookCopies().isEmpty()) {
+		if (bt.getBookCopies().isEmpty()) //{
 			bookTitleDao.delete(bt);
-		}
+//		}
 		if (getBookCopy(bookId) == null)
 			return true;
 		return false;
@@ -144,14 +148,16 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public void addMember(Member member) {
+		member.setEnrollmentDate(new Date(System.currentTimeMillis()));
+		member.setStatus(MemberActivityStatus.ACTIVE);
 		memberDao.add(member);
 	}
 
 	@Override
 	public void updateMember(Member member) {
 		Member m1 = memberDao.getById(member.getMemberId());
-		if (m1 == null)
-			throw new TransactionException("Member not found");
+//		if (m1 == null)
+//			throw new NullPointerException();
 		m1.setName(member.getName());
 		m1.setMobileNumber(member.getMobileNumber());
 		m1.setEmailId(member.getEmailId());
@@ -160,8 +166,8 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public boolean deleteMember(int memberId) {
 		Member m1 = memberDao.getById(memberId);
-		if (m1 == null)
-			throw new TransactionException("Member not found");
+//		if (m1 == null)
+//			throw new NullPointerException();
 		memberDao.delete(m1);
 		if (getMember(memberId) == null)
 			return true;
@@ -173,7 +179,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		Member member = getMember(memberId);
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
 		if (member == null || pkg == null)
-			throw new TransactionException("Invalid member id or package id");
+			throw new NullPointerException();
 		Subscription sub = new Subscription(member, pkg, new Date(System.currentTimeMillis()),
 				TransactionStatus.ACTIVE);
 		subscriptionDao.add(sub);
@@ -183,8 +189,10 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	public int issueBook(String bookid, int memberid) {
 		String freebksecid = auxiliaryDao.getFreeBookSection(bookid);
 		List<String> freememsecids = auxiliaryDao.getFreeMemberSections(memberid);
-		if (freebksecid == null || freememsecids == null || !freememsecids.contains(freebksecid))
-			return -1;
+//		if (freebksecid == null || freememsecids == null || !freememsecids.contains(freebksecid))
+//			return -1;
+		if (!freememsecids.contains(freebksecid))
+			throw new TransactionException("Member subscription does not exist");
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
 		Timestamp issueDate = new Timestamp(System.currentTimeMillis());
@@ -196,17 +204,17 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public boolean returnBook(String bookid, int memberid) {
+	public int returnBook(String bookid, int memberid) {
 		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid);
 		if (bktrans == null)
-			return false;
+			throw new TransactionException("Transaction does not exist");
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
 		bktrans.setStatus(TransactionStatus.EXPIRED);
 		bktrans.setReturnDate(new Timestamp(System.currentTimeMillis()));
 		bc.setMember(null);
 		m.removeBook(bc);
-		return true;
+		return bktrans.getTransactionId();
 	}
 
 }

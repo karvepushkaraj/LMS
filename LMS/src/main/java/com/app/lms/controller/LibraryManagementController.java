@@ -1,5 +1,7 @@
 package com.app.lms.controller;
 
+import java.io.IOException;
+
 import javax.validation.Valid;
 
 import org.hibernate.TransactionException;
@@ -61,34 +63,39 @@ public class LibraryManagementController {
 	 * @throws JsonProcessingException
 	 */
 	@GetMapping("/books")
-	public String getBook(@RequestParam("id") String bookId) throws JsonProcessingException {
+	public String getBook(@RequestParam("id") String bookId) {
 		ObjectMapper mapper = new ObjectMapper();
+		String result = null;
 		BookTitle bt = null;
 		BookCopy bc = null;
 		if (bookId.length() == 4) {
-			bt = bookService.getBookTitle(Integer.parseInt(bookId));
-			if (bt == null)
+			try {
+				bt = bookService.getBookTitle(Integer.parseInt(bookId));
+				ObjectNode objectNode = mapper.valueToTree(bt);
+				ArrayNode arrayNode = objectNode.putArray("bookCopies");
+				for (BookCopy bookCopy : bt.getBookCopies()) {
+					ObjectNode node = mapper.createObjectNode();
+					node.put("copyId", bookCopy.getCopyId());
+					node.put("price", bookCopy.getPrice());
+					arrayNode.add(node);
+				}
+				result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+			} catch (RuntimeException | JsonProcessingException e) {
 				throw new TransactionException("Book Not Found");
-			ObjectNode objectNode = mapper.valueToTree(bt);
-			ArrayNode arrayNode = objectNode.putArray("bookCopies");
-			for (BookCopy bookCopy : bt.getBookCopies()) {
-				ObjectNode node = mapper.createObjectNode();
-				node.put("copyId", bookCopy.getCopyId());
-				node.put("price", bookCopy.getPrice());
-				arrayNode.add(node);
 			}
-			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 		} else if (bookId.length() == 5) {
-			bc = bookService.getBookCopy(bookId);
-			if (bc == null)
+			try {
+				bc = bookService.getBookCopy(bookId);
+				ObjectNode node = mapper.valueToTree(bc);
+				node.put("sectionId", bc.getTitle().getSection().getSectionId());
+				int memberId = bc.getMember() == null ? 0 : bc.getMember().getMemberId();
+				node.put("member", memberId);
+				result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
+			} catch (RuntimeException | JsonProcessingException e) {
 				throw new TransactionException("Book Not Found");
-			ObjectNode node = mapper.valueToTree(bc);
-			node.put("sectionId", bc.getTitle().getSection().getSectionId());
-			int memberId = bc.getMember() == null ? 0 : bc.getMember().getMemberId();
-			node.put("member", memberId);
-			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
+			}
 		}
-		throw new TransactionException("Invalid Request Parameter");
+		return result;
 	}
 
 	/**
@@ -100,15 +107,22 @@ public class LibraryManagementController {
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/books")
-	public void addBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+	public void addBook(@RequestBody String input) {
+		String sectionId = null;
+		BookTitle bt = null;
+		BookCopy bc = null;
 		ObjectMapper mapper = new ObjectMapper();
-		JsonNode jsonNode = mapper.readTree(input);
-		String sectionId = jsonNode.get("sectionId").asText();
-		BookTitle bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
-		BookCopy bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
-		if (sectionId == null || bt == null || bc == null)
+		try {
+			JsonNode jsonNode = mapper.readTree(input);
+			sectionId = jsonNode.get("sectionId").asText();
+			bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
+			bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
+			bookService.addBook(sectionId, bt, bc);
+		} catch (JsonProcessingException | IllegalArgumentException e) {
 			throw new TransactionException("Invalid request");
-		bookService.addBook(sectionId, bt, bc);
+		} catch (NullPointerException e) {
+			throw new TransactionException("Invalid section id, Book Title or Book Copy");
+		}
 	}
 
 	/**
@@ -122,9 +136,13 @@ public class LibraryManagementController {
 	public String deleteBook(@PathVariable("id") String bookId) {
 		if (bookId.length() != 5)
 			throw new TransactionException("Invalid book Id");
-		boolean flag = bookService.deleteBook(bookId);
-		if (flag)
-			return "Book deleted sucessfully";
+		try {
+			boolean flag = bookService.deleteBook(bookId);
+			if (flag)
+				return "Book deleted sucessfully";
+		} catch (RuntimeException e) {
+			throw new TransactionException("Book does not exist");
+		}
 		return "Transaction Failed";
 	}
 
@@ -136,15 +154,21 @@ public class LibraryManagementController {
 	 * @throws JsonProcessingException
 	 */
 	@GetMapping("/member")
-	public String getMember(@RequestParam("id") int memberId) throws JsonProcessingException {
+	public String getMember(@RequestParam("id") int memberId) {
 		if (memberId < 10000)
 			throw new TransactionException("Invalid Request Parameter");
+		String result = null;
 		Member member = memberService.getMember(memberId);
-		ObjectMapper mapper = new ObjectMapper();
-		ObjectNode node = mapper.valueToTree(member);
-		ArrayNode arrayNode = node.putArray("book");
-		member.getBook().stream().forEach(bc -> arrayNode.add("" + bc.getTitle().getTitleId() + bc.getCopyId()));
-		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			ObjectNode node = mapper.valueToTree(member);
+			ArrayNode arrayNode = node.putArray("book");
+			member.getBook().stream().forEach(bc -> arrayNode.add("" + bc.getTitle().getTitleId() + bc.getCopyId()));
+			result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
+		} catch (JsonProcessingException | IllegalArgumentException | ClassCastException e) {
+			throw new TransactionException("Member not found");
+		}
+		return result;
 	}
 
 	/**
@@ -164,7 +188,11 @@ public class LibraryManagementController {
 	 */
 	@PutMapping("/member")
 	public void updateMember(@Valid @RequestBody Member member) {
-		memberService.updateMember(member);
+		try {
+			memberService.updateMember(member);
+		} catch (NullPointerException e) {
+			throw new TransactionException("Member does not exist");
+		}
 	}
 
 	/**
@@ -177,9 +205,13 @@ public class LibraryManagementController {
 	public String deleteMember(@PathVariable("id") int memberId) {
 		if (memberId < 10000)
 			throw new TransactionException("Invalid Request Parameter");
-		boolean flag = memberService.deleteMember(memberId);
-		if (flag)
-			return "Member deleted sucessfully";
+		try {
+			boolean flag = memberService.deleteMember(memberId);
+			if (flag)
+				return "Member deleted sucessfully";
+		} catch (RuntimeException e) {
+			throw new TransactionException("Member does not exist");
+		}
 		return "Transaction Failed";
 	}
 
@@ -191,9 +223,15 @@ public class LibraryManagementController {
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/subscribe")
-	public void addSubscription(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
-		JsonNode node = new ObjectMapper().readTree(input);
-		memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt());
+	public void addSubscription(@RequestBody String input) {
+		try {
+			JsonNode node = new ObjectMapper().readTree(input);
+			memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt());
+		} catch (JsonProcessingException e) {
+			throw new TransactionException("Invalid request");
+		} catch (NullPointerException e) {
+			throw new TransactionException("Invalid memberId or packageId");
+		}
 	}
 
 	/**
@@ -205,9 +243,16 @@ public class LibraryManagementController {
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/issue")
-	public String issueBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
-		JsonNode node = new ObjectMapper().readTree(input);
-		int response = bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
+	public String issueBook(@RequestBody String input) {
+		int response;
+		try {
+			JsonNode node = new ObjectMapper().readTree(input);
+			response = bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
+		} catch (JsonProcessingException e) {
+			throw new TransactionException("Invalid request");
+		} catch (NullPointerException e) {
+			throw new TransactionException("Member or Book is not free");
+		}
 		if (response > 0)
 			return "Transaction Sucessful. Transaction Id : " + response;
 		return "Transaction Failed";
@@ -222,12 +267,14 @@ public class LibraryManagementController {
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/return")
-	public String returnBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
-		JsonNode node = new ObjectMapper().readTree(input);
-		boolean flag = bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt());
-		if (flag)
-			return "Transaction Sucessful";
-		return "Transaction Failed";
+	public String returnBook(@RequestBody String input) {
+		try {
+			JsonNode node = new ObjectMapper().readTree(input);
+			int response = bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt());
+				return "Transaction Sucessful. Transaction Id : " + response;
+		} catch (JsonProcessingException e) {
+			throw new TransactionException("Exception occured");
+		}
 	}
 
 }

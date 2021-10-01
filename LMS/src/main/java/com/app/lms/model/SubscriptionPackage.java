@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -22,9 +23,10 @@ public class SubscriptionPackage {
 	@SequenceGenerator(name = "packageIdSequence", initialValue = 1, allocationSize = 1)
 	private int packageId;
 
-	@Column(length = 50)
+	@Column(length = 50, nullable = false)
 	private String packageName;
 
+	@Column(nullable = false)
 	private float fees;
 
 	@JsonIgnore
