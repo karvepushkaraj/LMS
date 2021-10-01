@@ -49,6 +49,7 @@ public class LibraryAdminController {
 
 	/**
 	 * Get single Library Section.
+	 * 
 	 * @param id {@link LibrarySection} id
 	 * @return {@link LibrarySection} or {@code null}
 	 */
@@ -61,6 +62,7 @@ public class LibraryAdminController {
 
 	/**
 	 * Add new Library Section.
+	 * 
 	 * @param librarySection {@link LibrarySection}
 	 */
 	@PostMapping("/section")
@@ -70,6 +72,7 @@ public class LibraryAdminController {
 
 	/**
 	 * Update existing Library Section.
+	 * 
 	 * @param librarySection {@link LibrarySection}
 	 */
 	@PutMapping("/section")
@@ -79,6 +82,7 @@ public class LibraryAdminController {
 
 	/**
 	 * Delete Library Section.
+	 * 
 	 * @param id {@link LibrarySection} id
 	 * @return String message
 	 */
@@ -94,6 +98,7 @@ public class LibraryAdminController {
 
 	/**
 	 * Add new Subscription Package.
+	 * 
 	 * @param input {@link SubscriptionPackage} id and array of {@link LibrarySection} id & no. of Books
 	 * @throws JsonMappingException
 	 * @throws JsonProcessingException
@@ -115,6 +120,7 @@ public class LibraryAdminController {
 
 	/**
 	 * Get single Subscription Package.
+	 * 
 	 * @param id {@link SubscriptionPackage} id
 	 * @return {@link SubscriptionPackage} and array of {@link LibrarySection} id & no. of Books
 	 * @throws JsonProcessingException
@@ -138,6 +144,7 @@ public class LibraryAdminController {
 
 	/**
 	 * Delete Subscription Package.
+	 * 
 	 * @param id {@link SubscriptionPackage} id
 	 * @return String message
 	 */

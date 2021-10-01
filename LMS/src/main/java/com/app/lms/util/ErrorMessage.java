@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 
 /**
  * Class defining custom Error message.
+ * 
  * @author karve
  *
  */
+
 public class ErrorMessage {
 
 	private Date timestamp;

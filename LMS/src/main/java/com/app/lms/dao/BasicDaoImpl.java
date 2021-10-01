@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Generic implementation of Basic Dao interface.
+ * 
  * @see BasicDao
  * @author karve
  *

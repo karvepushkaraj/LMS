@@ -7,6 +7,7 @@ import com.app.lms.model.MemberActivityStatus;
 
 /**
  * Converts {@link MemberActivityStatus} value to its status code and back.
+ * 
  * @author karve
  *
  */

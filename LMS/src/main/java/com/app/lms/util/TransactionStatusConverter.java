@@ -7,6 +7,7 @@ import com.app.lms.model.TransactionStatus;
 
 /**
  * Converts {@link TransactionStatus} value to its status code and back.
+ * 
  * @author karve
  *
  */
