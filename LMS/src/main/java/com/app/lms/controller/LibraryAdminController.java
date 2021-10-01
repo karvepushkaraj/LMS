@@ -97,32 +97,11 @@ public class LibraryAdminController {
 	}
 
 	/**
-	 * Add new Subscription Package.
-	 * 
-	 * @param input {@link SubscriptionPackage} id and array of {@link LibrarySection} id & no. of Books
-	 * @throws JsonMappingException
-	 * @throws JsonProcessingException
-	 */
-	@PostMapping("/package")
-	public void addSubscriptionPackage(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode jsonNode = mapper.readTree(input);
-		SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
-		Map<String, Integer> map = new HashMap<>();
-		ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
-		for (JsonNode node : arrayNode) {
-			map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
-		}
-		if (pkg == null || map.isEmpty())
-			throw new TransactionException("Invalid Request");
-		subpkgService.addSubscriptionPackage(pkg, map);
-	}
-
-	/**
 	 * Get single Subscription Package.
 	 * 
 	 * @param id {@link SubscriptionPackage} id
-	 * @return {@link SubscriptionPackage} and array of {@link LibrarySection} id & no. of Books
+	 * @return {@link SubscriptionPackage} and array of {@link LibrarySection} id &
+	 *         no. of Books
 	 * @throws JsonProcessingException
 	 */
 	@GetMapping("/package")
@@ -140,6 +119,29 @@ public class LibraryAdminController {
 			arrayNode.add(node);
 		}
 		return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+	}
+
+	/**
+	 * Add new Subscription Package.
+	 * 
+	 * @param input {@link SubscriptionPackage} id and array of
+	 *              {@link LibrarySection} id & no. of Books
+	 * @throws JsonMappingException
+	 * @throws JsonProcessingException
+	 */
+	@PostMapping("/package")
+	public void addSubscriptionPackage(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode jsonNode = mapper.readTree(input);
+		SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
+		Map<String, Integer> map = new HashMap<>();
+		ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
+		for (JsonNode node : arrayNode) {
+			map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
+		}
+		if (pkg == null || map.isEmpty())
+			throw new TransactionException("Invalid Request");
+		subpkgService.addSubscriptionPackage(pkg, map);
 	}
 
 	/**

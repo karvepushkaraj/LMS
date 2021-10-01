@@ -12,13 +12,13 @@ import com.app.lms.model.BookTitle;
 
 public interface BookService {
 
-	void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy);
-
-	void addBookCopy(int titleId, BookCopy bookCopy);
-
 	BookTitle getBookTitle(int titleId);
 
 	BookCopy getBookCopy(String copyId);
+
+	void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy);
+
+	void addBookCopy(int titleId, BookCopy bookCopy);
 
 	boolean deleteBook(String bookId);
 

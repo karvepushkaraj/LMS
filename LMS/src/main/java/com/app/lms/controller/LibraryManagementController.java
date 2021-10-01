@@ -54,26 +54,6 @@ public class LibraryManagementController {
 	private BookTransactionService bookTransactionService;
 
 	/**
-	 * Add Book with new Book Title.
-	 * 
-	 * @param input {@link LibrarySection} id, {@link BookTitle} and
-	 *              {@link BookCopy}
-	 * @throws JsonMappingException
-	 * @throws JsonProcessingException
-	 */
-	@PostMapping("/books")
-	public void addBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode jsonNode = mapper.readTree(input);
-		String sectionId = jsonNode.get("sectionId").asText();
-		BookTitle bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
-		BookCopy bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
-		if (sectionId == null || bt == null || bc == null)
-			throw new TransactionException("Invalid request");
-		bookService.addBook(sectionId, bt, bc);
-	}
-
-	/**
 	 * Get single Book Title if id length is 4 or Book Copy if id length is 5.
 	 * 
 	 * @param bookId {@link BookTitle} id or {@link BookCopy} id
@@ -109,6 +89,26 @@ public class LibraryManagementController {
 			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
 		}
 		throw new TransactionException("Invalid Request Parameter");
+	}
+
+	/**
+	 * Add Book with new Book Title.
+	 * 
+	 * @param input {@link LibrarySection} id, {@link BookTitle} and
+	 *              {@link BookCopy}
+	 * @throws JsonMappingException
+	 * @throws JsonProcessingException
+	 */
+	@PostMapping("/books")
+	public void addBook(@RequestBody String input) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode jsonNode = mapper.readTree(input);
+		String sectionId = jsonNode.get("sectionId").asText();
+		BookTitle bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
+		BookCopy bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
+		if (sectionId == null || bt == null || bc == null)
+			throw new TransactionException("Invalid request");
+		bookService.addBook(sectionId, bt, bc);
 	}
 
 	/**

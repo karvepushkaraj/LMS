@@ -17,7 +17,8 @@ import com.app.lms.model.PackageSectionId;
 import com.app.lms.model.SubscriptionPackage;
 
 /**
- * Implementation of {@link LibrarySectionService}, {@link SubscriptionPackageService}
+ * Implementation of {@link LibrarySectionService},
+ * {@link SubscriptionPackageService}
  * 
  * @author karve
  *
@@ -75,6 +76,11 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	}
 
 	@Override
+	public SubscriptionPackage getSubscriptionPackage(int id) {
+		return subscriptionPackageDao.getById(id);
+	}
+
+	@Override
 	public void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map) {
 		subscriptionPackageDao.add(pkg);
 		for (String key : map.keySet()) {
@@ -85,11 +91,6 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 			pkgSecDao.add(pkgsec);
 
 		}
-	}
-
-	@Override
-	public SubscriptionPackage getSubscriptionPackage(int id) {
-		return subscriptionPackageDao.getById(id);
 	}
 
 	@Override

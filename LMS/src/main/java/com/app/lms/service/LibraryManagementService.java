@@ -25,7 +25,8 @@ import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.model.TransactionStatus;
 
 /**
- * Implementation of {@link BookService}, {@link MemberService}, {@link BookTransactionService}
+ * Implementation of {@link BookService}, {@link MemberService},
+ * {@link BookTransactionService}
  * 
  * @author karve
  *
@@ -77,6 +78,22 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
+	public BookTitle getBookTitle(int titleId) {
+		return bookTitleDao.getById(titleId);
+	}
+
+	@Override
+	public BookCopy getBookCopy(String bookId) {
+		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
+		BookCopy bc = null;
+		if (bt != null) {
+			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+			bc = bookCopyDao.getById(key);
+		}
+		return bc;
+	}
+
+	@Override
 	public void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) {
 		LibrarySection librarySection = librarySectionService.getLibrarySection(sectionId);
 		if (librarySection == null)
@@ -98,22 +115,6 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		bookCopy.setCopyId(++copyId);
 		bookCopy.setTitle(bookTitle);
 		bookCopyDao.add(bookCopy);
-	}
-
-	@Override
-	public BookTitle getBookTitle(int titleId) {
-		return bookTitleDao.getById(titleId);
-	}
-
-	@Override
-	public BookCopy getBookCopy(String bookId) {
-		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-		BookCopy bc = null;
-		if (bt != null) {
-			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
-			bc = bookCopyDao.getById(key);
-		}
-		return bc;
 	}
 
 	@Override
@@ -206,7 +207,6 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		bc.setMember(null);
 		m.removeBook(bc);
 		return true;
-
 	}
 
 }

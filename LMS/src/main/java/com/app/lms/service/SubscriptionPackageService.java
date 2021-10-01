@@ -13,9 +13,9 @@ import com.app.lms.model.SubscriptionPackage;
 
 public interface SubscriptionPackageService {
 
-	void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map);
-
 	SubscriptionPackage getSubscriptionPackage(int id);
+
+	void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map);
 
 	boolean deleteSubscriptionPackage(int id);
 
