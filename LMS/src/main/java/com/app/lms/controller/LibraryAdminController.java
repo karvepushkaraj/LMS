@@ -21,6 +21,8 @@ import com.app.lms.model.PackageSection;
 import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.service.LibrarySectionService;
 import com.app.lms.service.SubscriptionPackageService;
+import com.app.lms.util.IllegalRequestException;
+import com.app.lms.util.InvalidBusinessCondition;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -55,9 +57,15 @@ public class LibraryAdminController {
 	 */
 	@GetMapping("/section")
 	public LibrarySection getLibrarySection(@RequestParam("id") String id) {
-		if (id.length() != 3)
-			throw new TransactionException("Invalid id : " + id);
-		return librarySectionService.getLibrarySection(id);
+		if (id.length() != 3) // fail fast
+			throw new IllegalRequestException("Invalid id : " + id);
+		LibrarySection ls = null;
+		try {
+			ls = librarySectionService.getLibrarySection(id);
+		} catch (InvalidBusinessCondition e) {
+			throw new IllegalRequestException(e.getMessage(), e);
+		}
+		return ls;
 	}
 
 	/**
@@ -67,7 +75,11 @@ public class LibraryAdminController {
 	 */
 	@PostMapping("/section")
 	public void addLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
-		librarySectionService.addLibrarySection(librarySection);
+		try {
+			librarySectionService.addLibrarySection(librarySection);
+		} catch (InvalidBusinessCondition e) {
+			throw new IllegalRequestException(e.getMessage(), e);
+		}
 	}
 
 	/**
@@ -79,10 +91,8 @@ public class LibraryAdminController {
 	public void updateLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
 		try {
 			librarySectionService.updateLibrarySection(librarySection);
-		} catch (NullPointerException e) {
-			throw new TransactionException("Library Section does not exist");
-		} catch (RuntimeException e) {
-			throw new TransactionException("Invalid request");
+		} catch (InvalidBusinessCondition e) {
+			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}
 
@@ -93,17 +103,14 @@ public class LibraryAdminController {
 	 * @return String message
 	 */
 	@DeleteMapping("/section/{id}")
-	public String deleteLibrarySection(@PathVariable("id") String id) {
-		if (id.length() != 3)
+	public void deleteLibrarySection(@PathVariable("id") String id) {
+		if (id.length() != 3) // fail fast
 			throw new TransactionException("Invalid id : " + id);
 		try {
-			boolean flag = librarySectionService.deleteLibrarySection(id);
-			if (flag)
-				return "Library Section deleted sucessfully";
-		} catch (RuntimeException e) {
-			throw new TransactionException("Library Section does not exist");
+			librarySectionService.deleteLibrarySection(id);
+		} catch (InvalidBusinessCondition e) {
+			throw new IllegalRequestException(e.getMessage(), e);
 		}
-		return "Transaction Failed";
 	}
 
 	/**
@@ -118,8 +125,8 @@ public class LibraryAdminController {
 	public String getSubscriptionPackage(@RequestParam("id") int id) {
 		String result = null;
 		ObjectMapper mapper = new ObjectMapper();
-		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(id);
 		try {
+			SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(id);
 			ObjectNode objectNode = mapper.valueToTree(pkg);
 			ArrayNode arrayNode = objectNode.putArray("sections");
 			for (PackageSection ps : pkg.getPackageSection()) {
@@ -129,8 +136,8 @@ public class LibraryAdminController {
 				arrayNode.add(node);
 			}
 			result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
-		} catch (JsonProcessingException | IllegalArgumentException | ClassCastException e) {
-			throw new TransactionException("Package not found");
+		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
+			throw new IllegalRequestException(e.getMessage(), e);
 		}
 		return result;
 	}
@@ -146,23 +153,16 @@ public class LibraryAdminController {
 	@PostMapping("/package")
 	public void addSubscriptionPackage(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
-		SubscriptionPackage pkg = null;
-		Map<String, Integer> map = null;
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
-			pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
-			map = new HashMap<>();
+			SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
+			Map<String, Integer> map = new HashMap<>();
 			ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
-			for (JsonNode node : arrayNode) {
+			for (JsonNode node : arrayNode)
 				map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
-			}
-			if (map.isEmpty())
-				throw new NullPointerException();
 			subpkgService.addSubscriptionPackage(pkg, map);
-		} catch (JsonProcessingException e) {
-			throw new TransactionException("Invalid Request");
-		} catch (RuntimeException e) {
-			throw new TransactionException("Invalid package or section");
+		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
+			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}
 
@@ -173,15 +173,11 @@ public class LibraryAdminController {
 	 * @return String message
 	 */
 	@DeleteMapping("/package/{id}")
-	public String deleteSubscriptionPackage(@PathVariable("id") int id) {
-		boolean flag = false;
+	public void deleteSubscriptionPackage(@PathVariable("id") int id) {
 		try {
-			flag = subpkgService.deleteSubscriptionPackage(id);
-		} catch (RuntimeException e) {
-			throw new TransactionException("Subscription Package does not exist");
+			subpkgService.deleteSubscriptionPackage(id);
+		} catch (InvalidBusinessCondition e) {
+			throw new IllegalRequestException(e.getMessage(), e);
 		}
-		if (flag)
-			return "Subscription Package deleted sucessfully";
-		return "Transaction Failed";
 	}
 }

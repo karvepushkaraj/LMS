@@ -1,6 +1,7 @@
 package com.app.lms.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTransaction;
@@ -20,7 +21,7 @@ public interface AuxiliaryDao {
 	 * @param bookid {@link BookCopy} id
 	 * @return {@link LibrarySection} id
 	 */
-	String getFreeBookSection(String bookid);
+	Optional<String> getFreeBookSection(String bookid);
 
 	/**
 	 * Get list of {@link LibrarySection} ids if the member is free 
@@ -36,6 +37,6 @@ public interface AuxiliaryDao {
 	 * @param memberid {@link Member} id
 	 * @return
 	 */
-	BookTransaction getActBkTrans(String bookid, int memberid);
+	Optional<BookTransaction> getActBkTrans(String bookid, int memberid);
 
 }

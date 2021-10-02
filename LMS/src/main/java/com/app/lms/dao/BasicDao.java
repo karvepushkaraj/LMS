@@ -1,6 +1,7 @@
 package com.app.lms.dao;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Generic Dao interface for basic CRUD operations.
@@ -22,18 +23,18 @@ public interface BasicDao<T, K extends Serializable> {
 	 * @param key
 	 * @return
 	 */
-	T getById(K key);
+	Optional<T> getById(K key);
 
 	/**
 	 * Add new record of model.
 	 * @param record
 	 */
-	void add(T record);
+	void add(Optional<T> record);
 
 	/**
 	 * Delete existing record of model.
 	 * @param record
 	 */
-	void delete(T record);
+	void delete(Optional<T> record);
 
 }

@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  */
 
 @ControllerAdvice
-public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
+public class LMSExceptionHandler extends ResponseEntityExceptionHandler {
 
 	/**
 	 * Handles {@link MethodArgumentNotValidException}
@@ -45,9 +45,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	/**
-	 * Handles {@link HibernateException}
+	 * Handles {@link IllegalRequestException}
 	 */
-	@ExceptionHandler(HibernateException.class)
+	@ExceptionHandler(IllegalRequestException.class)
 	protected ResponseEntity<Object> handleNonExistentRecord(HibernateException ex, WebRequest request) {
 		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), HttpStatus.BAD_REQUEST,
 				ex.getMessage());

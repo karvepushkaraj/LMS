@@ -1,6 +1,8 @@
 package com.app.lms.service;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -14,6 +16,7 @@ import com.app.lms.model.LibrarySection;
 import com.app.lms.model.PackageSection;
 import com.app.lms.model.PackageSectionId;
 import com.app.lms.model.SubscriptionPackage;
+import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Implementation of {@link LibrarySectionService},
@@ -47,55 +50,59 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	}
 
 	@Override
-	public LibrarySection getLibrarySection(String id) {
-		return librarySectionDao.getById(id);
+	public LibrarySection getLibrarySection(String id) throws InvalidBusinessCondition {
+		return librarySectionDao.getById(id)
+				.orElseThrow(() -> new InvalidBusinessCondition("Library Section does not exist"));
 	}
 
 	@Override
-	public void addLibrarySection(LibrarySection bookSection) {
-		librarySectionDao.add(bookSection);
+	public void addLibrarySection(LibrarySection bookSection) throws InvalidBusinessCondition {
+		try {
+			librarySectionDao.add(Optional.ofNullable(bookSection));
+		} catch (NoSuchElementException e) {
+			throw new InvalidBusinessCondition("Invalid Input");
+		}
 	}
 
 	@Override
-	public void updateLibrarySection(LibrarySection bookSection) {
+	public void updateLibrarySection(LibrarySection bookSection) throws InvalidBusinessCondition {
+		if (bookSection == null)
+			throw new InvalidBusinessCondition("Invalid Input");
 		LibrarySection bs = getLibrarySection(bookSection.getSectionId());
 		bs.setSectionName(bookSection.getSectionName());
 	}
 
 	@Override
-	public boolean deleteLibrarySection(String id) {
-		LibrarySection bs = getLibrarySection(id);
-		librarySectionDao.delete(bs);
-		if (getLibrarySection(id) == null)
-			return true;
-		return false;
+	public void deleteLibrarySection(String id) throws InvalidBusinessCondition {
+		librarySectionDao.delete(Optional.of(getLibrarySection(id)));
 	}
 
 	@Override
-	public SubscriptionPackage getSubscriptionPackage(int id) {
-		return subscriptionPackageDao.getById(id);
+	public SubscriptionPackage getSubscriptionPackage(int id) throws InvalidBusinessCondition {
+		return subscriptionPackageDao.getById(id)
+				.orElseThrow(() -> new InvalidBusinessCondition("Subscription Package does not exist"));
 	}
 
 	@Override
-	public void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map) {
-		subscriptionPackageDao.add(pkg);
+	public void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map)
+			throws InvalidBusinessCondition {
+		if (map == null || map.isEmpty())
+			throw new InvalidBusinessCondition("Library Section cannot be empty");
+		try {
+			subscriptionPackageDao.add(Optional.ofNullable(pkg));
+		} catch (NoSuchElementException e) {
+			throw new InvalidBusinessCondition("Invalid Input");
+		}
 		for (String key : map.keySet()) {
 			LibrarySection ls = getLibrarySection(key);
-			if (ls == null)
-				throw new NullPointerException();
 			PackageSection pkgsec = new PackageSection(ls, pkg, map.get(key));
-			pkgSecDao.add(pkgsec);
-
+			pkgSecDao.add(Optional.of(pkgsec));
 		}
 	}
 
 	@Override
-	public boolean deleteSubscriptionPackage(int id) {
-		SubscriptionPackage pkg = getSubscriptionPackage(id);
-		subscriptionPackageDao.delete(pkg);
-		if (getSubscriptionPackage(id) == null)
-			return true;
-		return false;
+	public void deleteSubscriptionPackage(int id) throws InvalidBusinessCondition {
+		subscriptionPackageDao.delete(Optional.of(getSubscriptionPackage(id)));
 	}
 
 }

@@ -3,6 +3,7 @@ package com.app.lms.service;
 import java.util.Map;
 
 import com.app.lms.model.SubscriptionPackage;
+import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Service interface for all operations related to Subscription Packages.
@@ -13,10 +14,10 @@ import com.app.lms.model.SubscriptionPackage;
 
 public interface SubscriptionPackageService {
 
-	SubscriptionPackage getSubscriptionPackage(int id);
+	SubscriptionPackage getSubscriptionPackage(int id) throws InvalidBusinessCondition;
 
-	void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map);
+	void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map) throws InvalidBusinessCondition;
 
-	boolean deleteSubscriptionPackage(int id);
+	void deleteSubscriptionPackage(int id) throws InvalidBusinessCondition;
 
 }

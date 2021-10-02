@@ -1,6 +1,7 @@
 package com.app.lms.dao;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -38,18 +39,18 @@ public class BasicDaoImpl<T, K extends Serializable> implements BasicDao<T, K> {
 	}
 
 	@Override
-	public T getById(K key) {
-		return getSession().get(clazz, key);
+	public Optional<T> getById(K key) {
+		return Optional.ofNullable(getSession().get(clazz, key));
 	}
 
 	@Override
-	public void add(T record) {
-		getSession().save(record);
+	public void add(Optional<T> record) {
+		getSession().save(record.orElseThrow());
 	}
 
 	@Override
-	public void delete(T record) {
-		getSession().delete(record);
+	public void delete(Optional<T> record) {
+		getSession().delete(record.orElseThrow());
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.app.lms.service;
 
+import com.app.lms.util.InvalidBusinessCondition;
+
 /**
  * Service interface for Book transactions.
  * 
@@ -8,8 +10,8 @@ package com.app.lms.service;
  */
 public interface BookTransactionService {
 
-	int issueBook(String bookid, int memberid);
+	int issueBook(String bookid, int memberid) throws InvalidBusinessCondition;
 
-	int returnBook(String bookid, int memberid);
+	int returnBook(String bookid, int memberid) throws InvalidBusinessCondition;
 
 }

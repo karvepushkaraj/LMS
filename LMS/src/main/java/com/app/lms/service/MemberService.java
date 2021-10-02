@@ -1,6 +1,7 @@
 package com.app.lms.service;
 
 import com.app.lms.model.Member;
+import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Service interface for all operations related to Members.
@@ -11,14 +12,14 @@ import com.app.lms.model.Member;
 
 public interface MemberService {
 
-	Member getMember(int memberId);
+	Member getMember(int memberId) throws InvalidBusinessCondition;
 
-	void addMember(Member member);
+	void addMember(Member member) throws InvalidBusinessCondition;
 
-	void updateMember(Member member);
+	void updateMember(Member member) throws InvalidBusinessCondition;
 
-	boolean deleteMember(int memberId);
+	void deleteMember(int memberId) throws InvalidBusinessCondition;
 
-	void addSubscription(int memberId, int pkgId);
+	void addSubscription(int memberId, int pkgId) throws InvalidBusinessCondition;
 
 }

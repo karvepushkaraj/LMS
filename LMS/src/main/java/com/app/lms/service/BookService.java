@@ -2,6 +2,7 @@ package com.app.lms.service;
 
 import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
+import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Service interface for all operations related to Books.
@@ -12,14 +13,14 @@ import com.app.lms.model.BookTitle;
 
 public interface BookService {
 
-	BookTitle getBookTitle(int titleId);
+	BookTitle getBookTitle(int titleId) throws InvalidBusinessCondition;
 
-	BookCopy getBookCopy(String copyId);
+	BookCopy getBookCopy(String copyId) throws InvalidBusinessCondition;
 
-	void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy);
+	void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) throws InvalidBusinessCondition;
 
-	void addBookCopy(int titleId, BookCopy bookCopy);
+	void addBookCopy(int titleId, BookCopy bookCopy) throws InvalidBusinessCondition;
 
-	boolean deleteBook(String bookId);
+	void deleteBook(String bookId) throws InvalidBusinessCondition;
 
 }

@@ -3,10 +3,10 @@ package com.app.lms.service;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
-import org.hibernate.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -24,6 +24,7 @@ import com.app.lms.model.MemberActivityStatus;
 import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.model.TransactionStatus;
+import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Implementation of {@link BookService}, {@link MemberService},
@@ -79,135 +80,109 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public BookTitle getBookTitle(int titleId) {
-		return bookTitleDao.getById(titleId);
+	public BookTitle getBookTitle(int titleId) throws InvalidBusinessCondition {
+		return bookTitleDao.getById(titleId).orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
 	}
 
 	@Override
-	public BookCopy getBookCopy(String bookId) {
+	public BookCopy getBookCopy(String bookId) throws InvalidBusinessCondition {
 		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-//		BookCopy bc = null;
-//		if (bt != null) {
-//			CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
-//			bc = bookCopyDao.getById(key);
-//		}
-		if (bt == null)
-			throw new NullPointerException();
 		CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
-		BookCopy bc = bookCopyDao.getById(key);
-		return bc;
+		return bookCopyDao.getById(key).orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
 	}
 
 	@Override
-	public void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) {
+	public void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) throws InvalidBusinessCondition {
+		if (bookTitle == null || bookCopy == null)
+			throw new InvalidBusinessCondition("Invalid Input");
 		LibrarySection librarySection = librarySectionService.getLibrarySection(sectionId);
-		if (librarySection == null)
-			throw new NullPointerException();
 		bookTitle.setSection(librarySection);
-		bookTitleDao.add(bookTitle);
+		bookTitleDao.add(Optional.of(bookTitle));
 		bookCopy.setCopyId(1);
 		bookCopy.setTitle(bookTitle);
-		bookCopyDao.add(bookCopy);
+		bookCopyDao.add(Optional.of(bookCopy));
 	}
 
 	@Override
-	public void addBookCopy(int titleId, BookCopy bookCopy) {
+	public void addBookCopy(int titleId, BookCopy bookCopy) throws InvalidBusinessCondition {
+		if (bookCopy == null)
+			throw new InvalidBusinessCondition("Invalid Input");
 		BookTitle bookTitle = getBookTitle(titleId);
-		if (bookTitle == null)
-			throw new NullPointerException();
 		List<BookCopy> list = bookTitle.getBookCopies();
-		int copyId = list.get(list.size() - 1).getCopyId();
-		bookCopy.setCopyId(++copyId);
+		bookCopy.setCopyId(list.get(list.size() - 1).getCopyId() + 1);
 		bookCopy.setTitle(bookTitle);
-		bookCopyDao.add(bookCopy);
+		bookCopyDao.add(Optional.of(bookCopy));
 	}
 
 	@Override
-	public boolean deleteBook(String bookId) {
+	public void deleteBook(String bookId) throws InvalidBusinessCondition {
 		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-//		BookCopy bc = null;
-//		if (bt == null)
-//			throw new NullPointerException();
 		CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
-		BookCopy bc = bookCopyDao.getById(key);
-//		if (bc == null)
-//			throw new NullPointerException();
-		bookCopyDao.delete(bc);
-		if (bt.getBookCopies().isEmpty()) //{
-			bookTitleDao.delete(bt);
-//		}
-		if (getBookCopy(bookId) == null)
-			return true;
-		return false;
+		BookCopy bc = bookCopyDao.getById(key).orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
+		bookCopyDao.delete(Optional.of(bc));
+		if (bt.getBookCopies().isEmpty())
+			bookTitleDao.delete(Optional.of(bt));
 	}
 
 	@Override
-	public Member getMember(int memberId) {
-		return memberDao.getById(memberId);
+	public Member getMember(int memberId) throws InvalidBusinessCondition {
+		return memberDao.getById(memberId).orElseThrow(() -> new InvalidBusinessCondition("Member does not exist"));
 	}
 
 	@Override
-	public void addMember(Member member) {
+	public void addMember(Member member) throws InvalidBusinessCondition {
+		if (member == null)
+			throw new InvalidBusinessCondition("Invalid Input");
 		member.setEnrollmentDate(new Date(System.currentTimeMillis()));
 		member.setStatus(MemberActivityStatus.ACTIVE);
-		memberDao.add(member);
+		memberDao.add(Optional.of(member));
 	}
 
 	@Override
-	public void updateMember(Member member) {
-		Member m1 = memberDao.getById(member.getMemberId());
-//		if (m1 == null)
-//			throw new NullPointerException();
+	public void updateMember(Member member) throws InvalidBusinessCondition {
+		Member m1 = getMember(member.getMemberId());
 		m1.setName(member.getName());
 		m1.setMobileNumber(member.getMobileNumber());
 		m1.setEmailId(member.getEmailId());
 	}
 
 	@Override
-	public boolean deleteMember(int memberId) {
-		Member m1 = memberDao.getById(memberId);
-//		if (m1 == null)
-//			throw new NullPointerException();
-		memberDao.delete(m1);
-		if (getMember(memberId) == null)
-			return true;
-		return false;
+	public void deleteMember(int memberId) throws InvalidBusinessCondition {
+		memberDao.delete(Optional.of(getMember(memberId)));
 	}
 
 	@Override
-	public void addSubscription(int memberId, int pkgId) {
+	public void addSubscription(int memberId, int pkgId) throws InvalidBusinessCondition {
 		Member member = getMember(memberId);
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
-		if (member == null || pkg == null)
-			throw new NullPointerException();
 		Subscription sub = new Subscription(member, pkg, new Date(System.currentTimeMillis()),
 				TransactionStatus.ACTIVE);
-		subscriptionDao.add(sub);
+		subscriptionDao.add(Optional.of(sub));
 	}
 
 	@Override
-	public int issueBook(String bookid, int memberid) {
-		String freebksecid = auxiliaryDao.getFreeBookSection(bookid);
+	public int issueBook(String bookid, int memberid) throws InvalidBusinessCondition {
+		String freebksecid = auxiliaryDao.getFreeBookSection(bookid)
+				.orElseThrow(() -> new InvalidBusinessCondition("Book is not free"));
 		List<String> freememsecids = auxiliaryDao.getFreeMemberSections(memberid);
-//		if (freebksecid == null || freememsecids == null || !freememsecids.contains(freebksecid))
-//			return -1;
 		if (!freememsecids.contains(freebksecid))
-			throw new TransactionException("Member subscription does not exist");
+			throw new InvalidBusinessCondition("Required subscription does not exist");
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
 		Timestamp issueDate = new Timestamp(System.currentTimeMillis());
 		BookTransaction bt = new BookTransaction(m, bc, issueDate, null, TransactionStatus.ACTIVE);
-		bookTransactionDao.add(bt);
+		bookTransactionDao.add(Optional.of(bt));
 		bc.setMember(m);
 		m.addBook(bc);
-		return auxiliaryDao.getActBkTrans(bookid, memberid).getTransactionId();
+		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid)
+				.orElseThrow(() -> new InvalidBusinessCondition("Transaction failed"));
+		return bktrans.getTransactionId();
 	}
 
 	@Override
-	public int returnBook(String bookid, int memberid) {
-		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid);
-		if (bktrans == null)
-			throw new TransactionException("Transaction does not exist");
+	public int returnBook(String bookid, int memberid) throws InvalidBusinessCondition {
+		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid)
+				.orElseThrow(() -> new InvalidBusinessCondition("Transaction failed"));
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
 		bktrans.setStatus(TransactionStatus.EXPIRED);

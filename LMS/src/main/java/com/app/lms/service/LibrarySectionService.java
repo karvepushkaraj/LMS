@@ -1,6 +1,7 @@
 package com.app.lms.service;
 
 import com.app.lms.model.LibrarySection;
+import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Service interface for all operations related to Library Sections.
@@ -11,12 +12,12 @@ import com.app.lms.model.LibrarySection;
 
 public interface LibrarySectionService {
 
-	LibrarySection getLibrarySection(String id);
+	LibrarySection getLibrarySection(String id) throws InvalidBusinessCondition;
 
-	void addLibrarySection(LibrarySection librarySection);
+	void addLibrarySection(LibrarySection librarySection) throws InvalidBusinessCondition;
 
-	void updateLibrarySection(LibrarySection librarySection);
+	void updateLibrarySection(LibrarySection librarySection) throws InvalidBusinessCondition;
 
-	boolean deleteLibrarySection(String id);
+	void deleteLibrarySection(String id) throws InvalidBusinessCondition;
 
 }
