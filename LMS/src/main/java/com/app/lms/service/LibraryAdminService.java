@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,16 +89,16 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	public void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map)
 			throws InvalidBusinessCondition {
 		if (map == null || map.isEmpty())
-			throw new InvalidBusinessCondition("Library Section cannot be empty");
+			throw new InvalidBusinessCondition("Library Sections cannot be empty");
 		try {
 			subscriptionPackageDao.add(Optional.ofNullable(pkg));
-		} catch (NoSuchElementException e) {
-			throw new InvalidBusinessCondition("Invalid Input");
-		}
-		for (String key : map.keySet()) {
-			@Valid
-			PackageSection pkgsec = new PackageSection(getLibrarySection(key), pkg, map.get(key));
-			pkgSecDao.add(Optional.of(pkgsec));
+			for (String key : map.keySet()) {
+				@Valid
+				PackageSection pkgsec = new PackageSection(getLibrarySection(key), pkg, map.get(key));
+				pkgSecDao.add(Optional.of(pkgsec));
+			}
+		} catch (NoSuchElementException | ConstraintViolationException e) {
+			throw new InvalidBusinessCondition("Invalid Input", e);
 		}
 	}
 

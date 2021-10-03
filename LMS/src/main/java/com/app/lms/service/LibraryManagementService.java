@@ -116,8 +116,14 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public void deleteBook(String bookId) throws InvalidBusinessCondition {
-		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-		CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+		BookTitle bt;
+		CopyId key;
+		try {
+			bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
+			key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+		} catch (NumberFormatException e) {
+			throw new InvalidBusinessCondition("Invalid Input", e);
+		}
 		BookCopy bc = bookCopyDao.getById(key).orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
 		bookCopyDao.delete(Optional.of(bc));
 		if (bt.getBookCopies().isEmpty())
@@ -166,7 +172,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 				.orElseThrow(() -> new InvalidBusinessCondition("Book is not free"));
 		List<String> freememsecids = auxiliaryDao.getFreeMemberSections(memberid);
 		if (!freememsecids.contains(freebksecid))
-			throw new InvalidBusinessCondition("Required subscription does not exist");
+			throw new InvalidBusinessCondition("Member Subscription does not exist");
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
 		Timestamp issueDate = new Timestamp(System.currentTimeMillis());
@@ -182,7 +188,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public int returnBook(String bookid, int memberid) throws InvalidBusinessCondition {
 		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid)
-				.orElseThrow(() -> new InvalidBusinessCondition("Transaction failed"));
+				.orElseThrow(() -> new InvalidBusinessCondition("Issue Transaction does not exist"));
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
 		bktrans.setStatus(TransactionStatus.EXPIRED);

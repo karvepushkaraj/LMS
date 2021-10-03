@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotBlank;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -23,7 +25,8 @@ public class BookTitle {
 	@SequenceGenerator(name = "titleIdSequence", initialValue = 1000, allocationSize = 1)
 	private int titleId;
 
-	@Column(length = 50, nullable = false)
+	@NotBlank
+	@Column(length = 50, nullable = false, unique = true)
 	private String title;
 
 	@Column(length = 50)

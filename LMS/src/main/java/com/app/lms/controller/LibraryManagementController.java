@@ -64,7 +64,6 @@ public class LibraryManagementController {
 	@GetMapping("/books")
 	public String getBook(@RequestParam("id") String bookId) {
 		ObjectMapper mapper = new ObjectMapper();
-		String result = null;
 		try {
 			if (bookId.length() == 4) {
 				BookTitle bt = bookService.getBookTitle(Integer.parseInt(bookId));
@@ -76,19 +75,19 @@ public class LibraryManagementController {
 					node.put("price", bookCopy.getPrice());
 					arrayNode.add(node);
 				}
-				result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+				return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 			} else if (bookId.length() == 5) {
 				BookCopy bc = bookService.getBookCopy(bookId);
 				ObjectNode objectNode = mapper.valueToTree(bc);
 				objectNode.put("sectionId", bc.getTitle().getSection().getSectionId());
-//				int memberId = bc.getMember() == null ? 0 : bc.getMember().getMemberId();
-				objectNode.put("member", bc.getMember().getMemberId());
-				result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
-			}
+				Member m = bc.getMember();
+				objectNode.put("member", m == null ? 0 : m.getMemberId());
+				return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+			} else
+				throw new IllegalRequestException("Invalid book Id");
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
-		return result;
 	}
 
 	/**
@@ -108,7 +107,8 @@ public class LibraryManagementController {
 			BookTitle bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
 			BookCopy bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
 			bookService.addBook(sectionId, bt, bc);
-		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
+		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
+				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}
@@ -211,7 +211,7 @@ public class LibraryManagementController {
 		try {
 			JsonNode node = new ObjectMapper().readTree(input);
 			memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt());
-		} catch (JsonProcessingException | InvalidBusinessCondition e) {
+		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}
@@ -230,7 +230,7 @@ public class LibraryManagementController {
 			JsonNode node = new ObjectMapper().readTree(input);
 			int response = bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
 			return "Transaction Sucessful. Transaction Id : " + response;
-		} catch (JsonProcessingException | InvalidBusinessCondition e) {
+		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}
@@ -249,7 +249,7 @@ public class LibraryManagementController {
 			JsonNode node = new ObjectMapper().readTree(input);
 			int response = bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt());
 			return "Transaction Sucessful. Transaction Id : " + response;
-		} catch (JsonProcessingException | InvalidBusinessCondition e) {
+		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}

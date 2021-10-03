@@ -57,7 +57,7 @@ public class LibraryAdminController {
 	 */
 	@GetMapping("/section")
 	public LibrarySection getLibrarySection(@RequestParam("id") String id) {
-		if (id.length() != 3) // fail fast
+		if (id.length() != 3)		// fail fast
 			throw new IllegalRequestException("Invalid id : " + id);
 		try {
 			return librarySectionService.getLibrarySection(id);
@@ -102,7 +102,7 @@ public class LibraryAdminController {
 	 */
 	@DeleteMapping("/section/{id}")
 	public void deleteLibrarySection(@PathVariable("id") String id) {
-		if (id.length() != 3) // fail fast
+		if (id.length() != 3)		// fail fast
 			throw new TransactionException("Invalid id : " + id);
 		try {
 			librarySectionService.deleteLibrarySection(id);
@@ -151,7 +151,8 @@ public class LibraryAdminController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
-			@Valid SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
+			@Valid
+			SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
 			Map<String, Integer> map = new HashMap<>();
 			ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
 			for (JsonNode node : arrayNode)

@@ -36,12 +36,12 @@ public class Member {
 
 	@NotBlank
 	@Length(max = 50)
-	@Column(length = 50)
+	@Column(length = 50, nullable = false)
 	private String name;
 
 	@NotBlank
 	@Pattern(regexp = "[0-9]{10}", message = "Invalid mobile number")
-	@Column(length = 50)
+	@Column(length = 50, nullable = false)
 	private String mobileNumber;
 
 	@Email(message = "Invalid email id")

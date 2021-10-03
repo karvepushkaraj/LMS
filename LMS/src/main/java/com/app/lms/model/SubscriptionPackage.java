@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,7 +27,7 @@ public class SubscriptionPackage {
 	private int packageId;
 
 	@NotBlank
-	@Column(length = 50)
+	@Column(length = 50, nullable = false, unique = true)
 	private String packageName;
 
 	@NotNull

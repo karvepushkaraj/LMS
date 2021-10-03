@@ -15,13 +15,11 @@ public class PackageSection {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "sectionId")
-	@NotNull
 	private LibrarySection section;
 
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "packageId")
-	@NotNull
 	private SubscriptionPackage pkg;
 
 	@NotNull

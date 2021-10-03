@@ -36,7 +36,11 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 		String queryString = "select section_id from free_book where book_id=?";
 		Query<String> query = getSession().createSQLQuery(queryString);
 		query.setParameter(1, bookid);
-		return Optional.ofNullable(query.list().get(0));
+		String sectionId = null;
+		List<String> list = query.list();
+		if (list.size()==1)
+			sectionId = list.get(0);
+		return Optional.ofNullable(sectionId);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -55,7 +59,11 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 		query.setParameter(1, memberid);
 		query.setParameter(2, bookid.substring(0, 4));
 		query.setParameter(3, bookid.substring(4));
-		return Optional.ofNullable(query.list().get(0));
+		BookTransaction bktrans = null;
+		List<BookTransaction> list = query.list();
+		if(list.size()==1)
+			bktrans = list.get(0);
+		return Optional.ofNullable(bktrans);
 	}
 
 }
