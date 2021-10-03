@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,12 +17,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class LibrarySection {
 
 	@Id
+	@NotBlank
 	@Pattern(regexp = "[\\w]{3}", message = "Invalid Section ID")
 	@Column(length = 3)
 	private String sectionId;
 
+	@NotBlank
 	@Pattern(regexp = "[\\w ]{1,50}", message = "Invalid section Name")
-	@Column(length = 50, nullable = false)
+	@Column(length = 50)
 	private String sectionName;
 
 	@JsonIgnore

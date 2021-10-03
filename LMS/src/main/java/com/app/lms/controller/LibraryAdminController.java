@@ -59,13 +59,11 @@ public class LibraryAdminController {
 	public LibrarySection getLibrarySection(@RequestParam("id") String id) {
 		if (id.length() != 3) // fail fast
 			throw new IllegalRequestException("Invalid id : " + id);
-		LibrarySection ls = null;
 		try {
-			ls = librarySectionService.getLibrarySection(id);
+			return librarySectionService.getLibrarySection(id);
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
-		return ls;
 	}
 
 	/**
@@ -123,7 +121,6 @@ public class LibraryAdminController {
 	 */
 	@GetMapping("/package")
 	public String getSubscriptionPackage(@RequestParam("id") int id) {
-		String result = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(id);
@@ -135,11 +132,10 @@ public class LibraryAdminController {
 				node.put("noOfBooks", ps.getNumberOfBooks());
 				arrayNode.add(node);
 			}
-			result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
+			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
-		return result;
 	}
 
 	/**
@@ -155,13 +151,14 @@ public class LibraryAdminController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
-			SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
+			@Valid SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
 			Map<String, Integer> map = new HashMap<>();
 			ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
 			for (JsonNode node : arrayNode)
 				map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
 			subpkgService.addSubscriptionPackage(pkg, map);
-		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
+		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition
+				| NullPointerException e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}

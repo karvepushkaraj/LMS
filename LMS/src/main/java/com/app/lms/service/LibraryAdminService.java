@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -94,8 +95,8 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 			throw new InvalidBusinessCondition("Invalid Input");
 		}
 		for (String key : map.keySet()) {
-			LibrarySection ls = getLibrarySection(key);
-			PackageSection pkgsec = new PackageSection(ls, pkg, map.get(key));
+			@Valid
+			PackageSection pkgsec = new PackageSection(getLibrarySection(key), pkg, map.get(key));
 			pkgSecDao.add(Optional.of(pkgsec));
 		}
 	}

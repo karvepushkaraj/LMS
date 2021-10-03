@@ -1,11 +1,12 @@
 package com.app.lms.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @IdClass(PackageSectionId.class)
@@ -14,14 +15,17 @@ public class PackageSection {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "sectionId")
+	@NotNull
 	private LibrarySection section;
 
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "packageId")
+	@NotNull
 	private SubscriptionPackage pkg;
 
-	@Column(nullable = false)
+	@NotNull
+	@Min(value = 1)
 	private int numberOfBooks;
 
 	public PackageSection() {

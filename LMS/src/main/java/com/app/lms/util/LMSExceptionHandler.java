@@ -2,6 +2,8 @@ package com.app.lms.util;
 
 import java.util.Date;
 
+import javax.validation.ConstraintViolationException;
+
 import org.hibernate.HibernateException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -48,7 +50,31 @@ public class LMSExceptionHandler extends ResponseEntityExceptionHandler {
 	 * Handles {@link IllegalRequestException}
 	 */
 	@ExceptionHandler(IllegalRequestException.class)
-	protected ResponseEntity<Object> handleNonExistentRecord(HibernateException ex, WebRequest request) {
+	protected ResponseEntity<Object> handleIllegalRequest(IllegalRequestException ex, WebRequest request) {
+		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), HttpStatus.BAD_REQUEST,
+				ex.getMessage());
+		return new ResponseEntity<Object>(error, new HttpHeaders(), error.getStatus());
+	}
+
+	/**
+	 * Handles {@link HibernateException}
+	 */
+	@ExceptionHandler(HibernateException.class)
+	protected ResponseEntity<Object> handleHibernateException(HibernateException ex, WebRequest request) {
+		StringBuilder sb = new StringBuilder(ex.getMessage());
+		Throwable t = ex.getCause();
+		if (t != null)
+			sb.append(t.getMessage());
+		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), HttpStatus.BAD_REQUEST,
+				sb.toString());
+		return new ResponseEntity<Object>(error, new HttpHeaders(), error.getStatus());
+	}
+
+	/**
+	 * Handles {@link ConstraintViolationException}
+	 */
+	@ExceptionHandler(ConstraintViolationException.class)
+	protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
 		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), HttpStatus.BAD_REQUEST,
 				ex.getMessage());
 		return new ResponseEntity<Object>(error, new HttpHeaders(), error.getStatus());

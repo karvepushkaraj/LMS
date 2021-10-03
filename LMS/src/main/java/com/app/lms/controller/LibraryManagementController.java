@@ -65,11 +65,9 @@ public class LibraryManagementController {
 	public String getBook(@RequestParam("id") String bookId) {
 		ObjectMapper mapper = new ObjectMapper();
 		String result = null;
-		BookTitle bt = null;
-		BookCopy bc = null;
 		try {
 			if (bookId.length() == 4) {
-				bt = bookService.getBookTitle(Integer.parseInt(bookId));
+				BookTitle bt = bookService.getBookTitle(Integer.parseInt(bookId));
 				ObjectNode objectNode = mapper.valueToTree(bt);
 				ArrayNode arrayNode = objectNode.putArray("bookCopies");
 				for (BookCopy bookCopy : bt.getBookCopies()) {
@@ -80,12 +78,12 @@ public class LibraryManagementController {
 				}
 				result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 			} else if (bookId.length() == 5) {
-				bc = bookService.getBookCopy(bookId);
-				ObjectNode node = mapper.valueToTree(bc);
-				node.put("sectionId", bc.getTitle().getSection().getSectionId());
-				int memberId = bc.getMember() == null ? 0 : bc.getMember().getMemberId();
-				node.put("member", memberId);
-				result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
+				BookCopy bc = bookService.getBookCopy(bookId);
+				ObjectNode objectNode = mapper.valueToTree(bc);
+				objectNode.put("sectionId", bc.getTitle().getSection().getSectionId());
+//				int memberId = bc.getMember() == null ? 0 : bc.getMember().getMemberId();
+				objectNode.put("member", bc.getMember().getMemberId());
+				result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 			}
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
@@ -144,18 +142,16 @@ public class LibraryManagementController {
 	public String getMember(@RequestParam("id") int memberId) {
 		if (memberId < 10000) // fail fast
 			throw new IllegalRequestException("Invalid Request Parameter");
-		String result = null;
 		try {
 			Member member = memberService.getMember(memberId);
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode node = mapper.valueToTree(member);
 			ArrayNode arrayNode = node.putArray("book");
 			member.getBook().stream().forEach(bc -> arrayNode.add("" + bc.getTitle().getTitleId() + bc.getCopyId()));
-			result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
+			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
-		return result;
 	}
 
 	/**
