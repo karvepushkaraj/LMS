@@ -2,6 +2,7 @@ package com.app.lms.controller;
 
 import javax.validation.Valid;
 
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
+import com.app.lms.model.Deposite;
+import com.app.lms.model.LateFee;
 import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
+import com.app.lms.model.SubscriptionFee;
 import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.service.BookService;
 import com.app.lms.service.BookTransactionService;
@@ -154,16 +158,35 @@ public class LibraryManagementController {
 		}
 	}
 
+//	/**
+//	 * Add new Member.
+//	 * 
+//	 * @param member {@link Member}
+//	 */
+//	@PostMapping("/member")
+//	public void addMember(@Valid @RequestBody Member member) {
+//		try {
+//			memberService.addMember(member);
+//		} catch (InvalidBusinessCondition e) {
+//			throw new IllegalRequestException(e.getMessage(), e);
+//		}
+//	}
+
 	/**
 	 * Add new Member.
 	 * 
 	 * @param member {@link Member}
 	 */
 	@PostMapping("/member")
-	public void addMember(@Valid @RequestBody Member member) {
+	public void addMember(@RequestBody String input) {
+		ObjectMapper mapper = new ObjectMapper();
 		try {
-			memberService.addMember(member);
-		} catch (InvalidBusinessCondition e) {
+			JsonNode node = mapper.readTree(input);
+			Member member = mapper.treeToValue(node.get("member"), Member.class);
+			Deposite deposite = mapper.treeToValue(node.get("deposite"), Deposite.class);
+			memberService.addMember(member, deposite);
+		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
+				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}
@@ -182,21 +205,42 @@ public class LibraryManagementController {
 		}
 	}
 
+//	/**
+//	 * Delete Member.
+//	 * 
+//	 * @param memberId {@link Member} id
+//	 * @return String message
+//	 */
+//	@DeleteMapping("/member/{id}")
+//	public void deleteMember(@PathVariable("id") int memberId) {
+//		if (memberId < 10000)		// fail fast
+//			throw new IllegalRequestException("Invalid Request Parameter");
+//		try {
+//			memberService.deleteMember(memberId);
+//		} catch (InvalidBusinessCondition e) {
+//			throw new IllegalRequestException(e.getMessage(), e);
+//		}
+//	}
+
 	/**
 	 * Delete Member.
 	 * 
 	 * @param memberId {@link Member} id
 	 * @return String message
 	 */
-	@DeleteMapping("/member/{id}")
-	public void deleteMember(@PathVariable("id") int memberId) {
-		if (memberId < 10000) // fail fast
-			throw new IllegalRequestException("Invalid Request Parameter");
+	@DeleteMapping("/member")
+	public void deleteMember(@RequestBody String input) {
+		ObjectMapper mapper = new ObjectMapper();
 		try {
-			memberService.deleteMember(memberId);
-		} catch (InvalidBusinessCondition e) {
+			JsonNode jsonNode = mapper.readTree(input);
+			int memberId = jsonNode.get("memberId").asInt();
+			Deposite deposite = mapper.treeToValue(jsonNode.get("deposite"), Deposite.class);
+			memberService.deleteMember(memberId, deposite);
+		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
+				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
+
 	}
 
 	/**
@@ -208,10 +252,13 @@ public class LibraryManagementController {
 	 */
 	@PostMapping("/subscribe")
 	public void addSubscription(@RequestBody String input) {
+		ObjectMapper mapper = new ObjectMapper();
 		try {
-			JsonNode node = new ObjectMapper().readTree(input);
-			memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt());
-		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
+			JsonNode node = mapper.readTree(input);
+			SubscriptionFee fee = mapper.treeToValue(node.get("subscriptionFee"), SubscriptionFee.class);
+			memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt(), fee);
+		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
+				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}
@@ -245,13 +292,18 @@ public class LibraryManagementController {
 	 */
 	@PostMapping("/return")
 	public String returnBook(@RequestBody String input) {
+		ObjectMapper mapper = new ObjectMapper();
 		try {
-			JsonNode node = new ObjectMapper().readTree(input);
-			int response = bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt());
+			JsonNode node = mapper.readTree(input);
+			LateFee fee = mapper.treeToValue(node.get("lateFee"), LateFee.class);
+			int response = bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt(),
+					fee);
 			return "Transaction Sucessful. Transaction Id : " + response;
-		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
+		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
+				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
+
 	}
 
 }

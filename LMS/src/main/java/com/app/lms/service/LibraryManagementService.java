@@ -1,9 +1,12 @@
 package com.app.lms.service;
 
+import java.io.Console;
 import java.sql.Timestamp;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -18,10 +21,13 @@ import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
 import com.app.lms.model.BookTransaction;
 import com.app.lms.model.CopyId;
+import com.app.lms.model.Deposite;
+import com.app.lms.model.LateFee;
 import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
 import com.app.lms.model.MemberActivityStatus;
 import com.app.lms.model.Subscription;
+import com.app.lms.model.SubscriptionFee;
 import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.model.TransactionStatus;
 import com.app.lms.util.InvalidBusinessCondition;
@@ -69,6 +75,10 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Autowired
 	@Qualifier("LibraryAdminService")
 	private SubscriptionPackageService subpkgService;
+
+	@Autowired
+	@Qualifier("LibraryAccountService")
+	private AccountService accountService;
 
 	@PostConstruct
 	public void setClazz() {
@@ -136,12 +146,14 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public void addMember(Member member) throws InvalidBusinessCondition {
+	public void addMember(Member member, Deposite deposite) throws InvalidBusinessCondition {
 		if (member == null)
 			throw new InvalidBusinessCondition("Invalid Input");
 		member.setEnrollmentDate(new Date(System.currentTimeMillis()));
-		member.setStatus(MemberActivityStatus.ACTIVE);
+		member.setStatus(MemberActivityStatus.INACTIVE);
 		memberDao.add(Optional.of(member));
+		accountService.addDeposite(member, deposite);
+		member.setStatus(MemberActivityStatus.ACTIVE);
 	}
 
 	@Override
@@ -153,17 +165,22 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public void deleteMember(int memberId) throws InvalidBusinessCondition {
-		memberDao.delete(Optional.of(getMember(memberId)));
+	public void deleteMember(int memberId, Deposite deposite) throws InvalidBusinessCondition {
+		Member member = getMember(memberId);
+		if (!member.getBook().isEmpty())
+			throw new InvalidBusinessCondition("Book issued to this member");
+		accountService.removeDeposite(member, deposite);
+		member.setStatus(MemberActivityStatus.INACTIVE);
 	}
 
 	@Override
-	public void addSubscription(int memberId, int pkgId) throws InvalidBusinessCondition {
+	public void addSubscription(int memberId, int pkgId, SubscriptionFee fee) throws InvalidBusinessCondition {
 		Member member = getMember(memberId);
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
 		Subscription sub = new Subscription(member, pkg, new Date(System.currentTimeMillis()),
 				TransactionStatus.ACTIVE);
 		subscriptionDao.add(Optional.of(sub));
+		accountService.addSubscriptionFee(sub, fee);
 	}
 
 	@Override
@@ -186,13 +203,18 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public int returnBook(String bookid, int memberid) throws InvalidBusinessCondition {
+	public int returnBook(String bookid, int memberid, LateFee fee) throws InvalidBusinessCondition {
 		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid)
 				.orElseThrow(() -> new InvalidBusinessCondition("Issue Transaction does not exist"));
+		Date returnDate = new Timestamp(System.currentTimeMillis());
+		long diffInMillis = returnDate.getTime() - bktrans.getIssueDate().getTime();
+		long bookReturnDuration = TimeUnit.MINUTES.convert(diffInMillis, TimeUnit.MILLISECONDS);
+		if (bookReturnDuration > BookTransaction.getLateReturnDuration())
+			accountService.addLateFee(bktrans, fee);
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
 		bktrans.setStatus(TransactionStatus.EXPIRED);
-		bktrans.setReturnDate(new Timestamp(System.currentTimeMillis()));
+		bktrans.setReturnDate(returnDate);
 		bc.setMember(null);
 		m.removeBook(bc);
 		return bktrans.getTransactionId();

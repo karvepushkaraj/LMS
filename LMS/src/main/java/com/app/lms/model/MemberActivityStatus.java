@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 public enum MemberActivityStatus {
 
-	ACTIVE(1), DORMANT(2), BLOCKED(3), DELETED(-1);
+	ACTIVE(1), DORMANT(2), BLOCKED(3), INACTIVE(-1);
 
 	private int statusCode;
 

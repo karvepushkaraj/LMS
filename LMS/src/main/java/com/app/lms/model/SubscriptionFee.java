@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class SubscriptionFee {
@@ -12,8 +13,9 @@ public class SubscriptionFee {
 	@Id
 	private int subscriptionId;
 
-	private float fees;
+	private int fees;
 
+	@NotBlank
 	@Column(length = 20)
 	private String receiptNumber;
 
@@ -25,7 +27,7 @@ public class SubscriptionFee {
 		super();
 	}
 
-	public SubscriptionFee(Subscription subscription, float fees, String receiptNumber) {
+	public SubscriptionFee(Subscription subscription, int fees, String receiptNumber) {
 		this.subscription = subscription;
 		this.fees = fees;
 		this.receiptNumber = receiptNumber;
@@ -35,12 +37,16 @@ public class SubscriptionFee {
 		return subscription;
 	}
 
-	public float getFees() {
+	public int getFees() {
 		return fees;
 	}
 
 	public String getReceiptNumber() {
 		return receiptNumber;
+	}
+	
+	public void setSubscription(Subscription subscription) {
+		this.subscription = subscription;
 	}
 
 	@Override

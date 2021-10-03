@@ -5,15 +5,20 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Deposite {
+	
+	private static int memberDespoite = 500;
 
 	@Id
+	@Column(length = 20)
 	private String transactionId;
 
-	private float deposite;
+	private int deposite;
 
+	@NotBlank
 	@Column(length = 20)
 	private String receiptNumber;
 
@@ -25,7 +30,7 @@ public class Deposite {
 		super();
 	}
 
-	public Deposite(String transactionId, float deposite, String receiptNumber, Member member) {
+	public Deposite(String transactionId, int deposite, String receiptNumber, Member member) {
 		this.transactionId = transactionId;
 		this.deposite = deposite;
 		this.receiptNumber = receiptNumber;
@@ -36,7 +41,7 @@ public class Deposite {
 		return transactionId;
 	}
 
-	public float getDeposite() {
+	public int getDeposite() {
 		return deposite;
 	}
 
@@ -46,6 +51,18 @@ public class Deposite {
 
 	public Member getMember() {
 		return member;
+	}
+	
+	public static int getMemberDespoite() {
+		return memberDespoite;
+	}
+	
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
 	}
 
 	@Override

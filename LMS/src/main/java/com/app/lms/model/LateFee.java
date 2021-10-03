@@ -5,15 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class LateFee {
 
+	private static int lateFeeAmount = 20;
+	
 	@Id
 	private int transactionId;
 
-	private float lateFees;
+	private int lateFees;
 
+	@NotBlank
 	@Column(length = 20)
 	private String receiptNumber;
 
@@ -25,7 +29,7 @@ public class LateFee {
 		super();
 	}
 
-	public LateFee(BookTransaction transaction, float lateFees, String receiptNumber) {
+	public LateFee(BookTransaction transaction, int lateFees, String receiptNumber) {
 		this.transaction = transaction;
 		this.lateFees = lateFees;
 		this.receiptNumber = receiptNumber;
@@ -35,12 +39,20 @@ public class LateFee {
 		return transaction;
 	}
 
-	public float getLateFees() {
+	public int getLateFees() {
 		return lateFees;
 	}
 
 	public String getReceiptNumber() {
 		return receiptNumber;
+	}
+	
+	public static int getLateFeeAmount() {
+		return lateFeeAmount;
+	}
+
+	public void setTransaction(BookTransaction transaction) {
+		this.transaction = transaction;
 	}
 
 	@Override

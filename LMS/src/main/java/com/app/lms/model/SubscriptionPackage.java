@@ -32,7 +32,7 @@ public class SubscriptionPackage {
 
 	@NotNull
 	@Min(value = 1)
-	private float fees;
+	private int fees;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -46,7 +46,7 @@ public class SubscriptionPackage {
 		super();
 	}
 
-	public SubscriptionPackage(int packageId, String packageName, float fees) {
+	public SubscriptionPackage(int packageId, String packageName, int fees) {
 		this.packageId = packageId;
 		this.packageName = packageName;
 		this.fees = fees;
@@ -64,11 +64,11 @@ public class SubscriptionPackage {
 		this.packageName = packageName;
 	}
 
-	public float getFees() {
+	public int getFees() {
 		return fees;
 	}
 
-	public void setFees(float fees) {
+	public void setFees(int fees) {
 		this.fees = fees;
 	}
 

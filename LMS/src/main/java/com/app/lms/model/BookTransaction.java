@@ -18,6 +18,8 @@ import com.app.lms.util.TransactionStatusConverter;
 
 @Entity
 public class BookTransaction {
+	
+	private static int lateReturnDuration = 1;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookTransSequence")
@@ -83,6 +85,10 @@ public class BookTransaction {
 
 	public void setStatus(TransactionStatus status) {
 		this.status = status;
+	}
+	
+	public static int getLateReturnDuration() {
+		return lateReturnDuration;
 	}
 
 	@Override
