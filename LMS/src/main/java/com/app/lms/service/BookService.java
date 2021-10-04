@@ -17,9 +17,9 @@ public interface BookService {
 
 	BookCopy getBookCopy(String copyId) throws InvalidBusinessCondition;
 
-	void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) throws InvalidBusinessCondition;
+	String addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) throws InvalidBusinessCondition;
 
-	void addBookCopy(int titleId, BookCopy bookCopy) throws InvalidBusinessCondition;
+	String addBookCopy(int titleId, BookCopy bookCopy) throws InvalidBusinessCondition;
 
 	void deleteBook(String bookId) throws InvalidBusinessCondition;
 

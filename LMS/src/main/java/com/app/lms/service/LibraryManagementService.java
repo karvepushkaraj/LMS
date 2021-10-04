@@ -97,7 +97,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public void addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) throws InvalidBusinessCondition {
+	public String addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) throws InvalidBusinessCondition {
 		if (bookTitle == null || bookCopy == null)
 			throw new InvalidBusinessCondition("Invalid Input");
 		LibrarySection librarySection = librarySectionService.getLibrarySection(sectionId);
@@ -106,10 +106,11 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		bookCopy.setCopyId(1);
 		bookCopy.setTitle(bookTitle);
 		bookCopyDao.add(Optional.of(bookCopy));
+		return "" + bookTitle.getTitleId() + bookCopy.getCopyId();
 	}
 
 	@Override
-	public void addBookCopy(int titleId, BookCopy bookCopy) throws InvalidBusinessCondition {
+	public String addBookCopy(int titleId, BookCopy bookCopy) throws InvalidBusinessCondition {
 		if (bookCopy == null)
 			throw new InvalidBusinessCondition("Invalid Input");
 		BookTitle bookTitle = getBookTitle(titleId);
@@ -117,6 +118,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		bookCopy.setCopyId(list.get(list.size() - 1).getCopyId() + 1);
 		bookCopy.setTitle(bookTitle);
 		bookCopyDao.add(Optional.of(bookCopy));
+		return "" + bookTitle.getTitleId() + bookCopy.getCopyId();
 	}
 
 	@Override
@@ -143,7 +145,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public void addMember(Member member, Deposite deposite) throws InvalidBusinessCondition {
+	public int addMember(Member member, Deposite deposite) throws InvalidBusinessCondition {
 		if (member == null)
 			throw new InvalidBusinessCondition("Invalid Input");
 		member.setEnrollmentDate(new Date(System.currentTimeMillis()));
@@ -151,6 +153,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		memberDao.add(Optional.of(member));
 		accountService.addDeposite(member, deposite);
 		member.setStatus(ActivityStatus.ACTIVE);
+		return member.getMemberId();
 	}
 
 	@Override
@@ -171,12 +174,13 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@Override
-	public void addSubscription(int memberId, int pkgId, SubscriptionFee fee) throws InvalidBusinessCondition {
+	public int addSubscription(int memberId, int pkgId, SubscriptionFee fee) throws InvalidBusinessCondition {
 		Member member = getMember(memberId);
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
 		Subscription sub = new Subscription(member, pkg, new Date(System.currentTimeMillis()), ActivityStatus.ACTIVE);
 		subscriptionDao.add(Optional.of(sub));
 		accountService.addSubscriptionFee(sub, fee);
+		return sub.getSubscriptionId();
 	}
 
 	@Override

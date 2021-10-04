@@ -103,14 +103,15 @@ public class LibraryManagementController {
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/books")
-	public void addBook(@RequestBody String input) {
+	public String addBook(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
 			String sectionId = jsonNode.get("sectionId").asText();
 			BookTitle bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
 			BookCopy bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
-			bookService.addBook(sectionId, bt, bc);
+			String bookId = bookService.addBook(sectionId, bt, bc);
+			return "Book added sucessfully. Book Id : " + bookId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
@@ -158,33 +159,20 @@ public class LibraryManagementController {
 		}
 	}
 
-//	/**
-//	 * Add new Member.
-//	 * 
-//	 * @param member {@link Member}
-//	 */
-//	@PostMapping("/member")
-//	public void addMember(@Valid @RequestBody Member member) {
-//		try {
-//			memberService.addMember(member);
-//		} catch (InvalidBusinessCondition e) {
-//			throw new IllegalRequestException(e.getMessage(), e);
-//		}
-//	}
-
 	/**
 	 * Add new Member.
 	 * 
 	 * @param member {@link Member}
 	 */
 	@PostMapping("/member")
-	public void addMember(@RequestBody String input) {
+	public String addMember(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode node = mapper.readTree(input);
 			Member member = mapper.treeToValue(node.get("member"), Member.class);
 			Deposite deposite = mapper.treeToValue(node.get("deposite"), Deposite.class);
-			memberService.addMember(member, deposite);
+			int memberId = memberService.addMember(member, deposite);
+			return "Member added sucessfully. Member Id : " + memberId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
@@ -251,12 +239,13 @@ public class LibraryManagementController {
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/subscribe")
-	public void addSubscription(@RequestBody String input) {
+	public String addSubscription(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode node = mapper.readTree(input);
 			SubscriptionFee fee = mapper.treeToValue(node.get("subscriptionFee"), SubscriptionFee.class);
-			memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt(), fee);
+			int subId = memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt(), fee);
+			return "Subscription added successfully. Subscription Id : " + subId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);

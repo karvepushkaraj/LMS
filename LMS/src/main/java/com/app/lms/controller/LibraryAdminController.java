@@ -149,7 +149,7 @@ public class LibraryAdminController {
 	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/package")
-	public void addSubscriptionPackage(@RequestBody String input) {
+	public String addSubscriptionPackage(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
@@ -159,7 +159,8 @@ public class LibraryAdminController {
 			ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
 			for (JsonNode node : arrayNode)
 				map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
-			subpkgService.addSubscriptionPackage(pkg, map);
+			int pkgId = subpkgService.addSubscriptionPackage(pkg, map);
+			return "Package added sucessfully.Package Id : " + pkgId;
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition
 				| NullPointerException e) {
 			throw new IllegalRequestException(e.getMessage(), e);

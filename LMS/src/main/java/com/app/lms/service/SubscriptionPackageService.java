@@ -16,7 +16,7 @@ public interface SubscriptionPackageService {
 
 	SubscriptionPackage getSubscriptionPackage(int id) throws InvalidBusinessCondition;
 
-	void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map) throws InvalidBusinessCondition;
+	int addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map) throws InvalidBusinessCondition;
 
 	void deleteSubscriptionPackage(int id) throws InvalidBusinessCondition;
 

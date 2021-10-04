@@ -16,13 +16,13 @@ public interface MemberService {
 
 	Member getMember(int memberId) throws InvalidBusinessCondition;
 
-	void addMember(Member member, Deposite deposite) throws InvalidBusinessCondition;
+	int addMember(Member member, Deposite deposite) throws InvalidBusinessCondition;
 
 	void updateMember(Member member) throws InvalidBusinessCondition;
 
 	void deleteMember(int memberId, Deposite deposite) throws InvalidBusinessCondition;
 
-	void addSubscription(int memberId, int pkgId, SubscriptionFee fee) throws InvalidBusinessCondition;
+	int addSubscription(int memberId, int pkgId, SubscriptionFee fee) throws InvalidBusinessCondition;
 
 	void expireSubscription();
 

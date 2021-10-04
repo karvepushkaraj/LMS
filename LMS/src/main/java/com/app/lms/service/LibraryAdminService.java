@@ -88,7 +88,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	}
 
 	@Override
-	public void addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map)
+	public int addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map)
 			throws InvalidBusinessCondition {
 		if (map == null || map.isEmpty())
 			throw new InvalidBusinessCondition("Library Sections cannot be empty");
@@ -99,6 +99,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 				PackageSection pkgsec = new PackageSection(getLibrarySection(key), pkg, map.get(key));
 				pkgSecDao.add(Optional.of(pkgsec));
 			}
+			return pkg.getPackageId();
 		} catch (NoSuchElementException | ConstraintViolationException e) {
 			throw new InvalidBusinessCondition("Invalid Input", e);
 		}
