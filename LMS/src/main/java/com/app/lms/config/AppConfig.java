@@ -82,7 +82,7 @@ public class AppConfig {
 				lac.addLibrarySection(ls);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -92,7 +92,7 @@ public class AppConfig {
 			while ((s = br.readLine()) != null)
 				lac.addSubscriptionPackage(s);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -108,7 +108,7 @@ public class AppConfig {
 				lmc.addBook(input);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 

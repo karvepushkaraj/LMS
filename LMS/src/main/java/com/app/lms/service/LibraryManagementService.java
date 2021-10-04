@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.lms.dao.AuxiliaryDao;
@@ -37,7 +38,7 @@ import com.app.lms.util.InvalidBusinessCondition;
  */
 
 @Service("LibraryManagementService")
-@Transactional(rollbackFor = InvalidBusinessCondition.class)
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = InvalidBusinessCondition.class)
 public class LibraryManagementService implements BookService, MemberService, BookTransactionService {
 
 	private final BasicDao<BookTitle, Integer> bookTitleDao;

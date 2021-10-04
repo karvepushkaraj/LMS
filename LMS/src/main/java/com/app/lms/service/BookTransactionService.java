@@ -9,6 +9,7 @@ import com.app.lms.util.InvalidBusinessCondition;
  * @author karve
  *
  */
+
 public interface BookTransactionService {
 
 	int issueBook(String bookid, int memberid) throws InvalidBusinessCondition;
