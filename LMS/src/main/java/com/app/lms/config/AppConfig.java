@@ -3,18 +3,27 @@ package com.app.lms.config;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.StringTokenizer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import com.app.lms.controller.LibraryAdminController;
 import com.app.lms.controller.LibraryManagementController;
 import com.app.lms.dao.AuxiliaryDao;
 import com.app.lms.model.LibrarySection;
+import com.app.lms.model.Subscription;
+import com.app.lms.model.TransactionStatus;
+import com.app.lms.service.LibraryManagementService;
+import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Adds dummy data for Library Sections, Subscription Packages and Books in
@@ -25,6 +34,7 @@ import com.app.lms.model.LibrarySection;
  */
 
 @Configuration
+@EnableScheduling
 public class AppConfig {
 
 	@Autowired
@@ -35,10 +45,22 @@ public class AppConfig {
 
 	@Autowired
 	LibraryManagementController lmc;
-
+	
 	@Autowired
-	@Qualifier("AuxiliaryDao")
-	private AuxiliaryDao auxiliaryDao;
+	LibraryManagementService lms;
+
+//	@Autowired
+//	@Qualifier("AuxiliaryDao")
+//	private AuxiliaryDao auxiliaryDao;
+	
+	private Logger logger = LoggerFactory.getLogger(AppConfig.class);
+	
+	@Scheduled(fixedDelay = 180000)
+	public void updateExpiredSubscriptions() {
+		logger.info("Cron Job Started");
+			lms.expireSubscription();
+		logger.info("Cron Job Finished");
+	}
 
 	@Bean
 	public void addDummyData() {
