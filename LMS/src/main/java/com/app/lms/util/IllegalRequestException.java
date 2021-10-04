@@ -1,5 +1,12 @@
 package com.app.lms.util;
 
+/**
+ * Class for Illegal Request Exception which is thrown by the Controller.
+ * 
+ * @author karve
+ *
+ */
+
 public class IllegalRequestException extends RuntimeException {
 
 	private static final long serialVersionUID = 7301153743585171305L;

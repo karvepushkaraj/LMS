@@ -6,7 +6,7 @@ import javax.persistence.Converter;
 import com.app.lms.model.ActivityStatus;
 
 /**
- * Converts {@link TransactionStatus} value to its status code and back.
+ * Converts {@link ActivityStatus} value to its status code and back.
  * 
  * @author karve
  *
