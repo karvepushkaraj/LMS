@@ -8,14 +8,21 @@ import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionFee;
 import com.app.lms.util.InvalidBusinessCondition;
 
+/**
+ * Service interface for all operations related to Accounts.
+ * 
+ * @author karve
+ *
+ */
+
 public interface AccountService {
-		
+
 	void addDeposite(Member member, Deposite deposite) throws InvalidBusinessCondition;
-	
+
 	void removeDeposite(Member member, Deposite deposite) throws InvalidBusinessCondition;
-	
+
 	void addSubscriptionFee(Subscription subscription, SubscriptionFee fee) throws InvalidBusinessCondition;
-	
+
 	void addLateFee(BookTransaction transaction, LateFee fee) throws InvalidBusinessCondition;
 
 }

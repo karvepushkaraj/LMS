@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Deposite {
-	
+
 	private static int memberDespoite = 500;
 
 	@Id
@@ -52,11 +52,11 @@ public class Deposite {
 	public Member getMember() {
 		return member;
 	}
-	
+
 	public static int getMemberDespoite() {
 		return memberDespoite;
 	}
-	
+
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}

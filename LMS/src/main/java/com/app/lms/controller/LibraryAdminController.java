@@ -57,7 +57,7 @@ public class LibraryAdminController {
 	 */
 	@GetMapping("/section")
 	public LibrarySection getLibrarySection(@RequestParam("id") String id) {
-		if (id.length() != 3)		// fail fast
+		if (id.length() != 3) // fail fast
 			throw new IllegalRequestException("Invalid id : " + id);
 		try {
 			return librarySectionService.getLibrarySection(id);
@@ -102,7 +102,7 @@ public class LibraryAdminController {
 	 */
 	@DeleteMapping("/section/{id}")
 	public void deleteLibrarySection(@PathVariable("id") String id) {
-		if (id.length() != 3)		// fail fast
+		if (id.length() != 3) // fail fast
 			throw new TransactionException("Invalid id : " + id);
 		try {
 			librarySectionService.deleteLibrarySection(id);

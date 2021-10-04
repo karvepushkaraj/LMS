@@ -47,7 +47,7 @@ public class Subscription {
 	private TransactionStatus status;
 
 	@JsonIgnore
-	@OneToOne(mappedBy = "subscription",cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "subscription", cascade = CascadeType.ALL)
 	private SubscriptionFee subscriptionFee;
 
 	public Subscription() {

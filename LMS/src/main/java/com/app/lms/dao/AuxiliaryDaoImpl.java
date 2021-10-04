@@ -26,7 +26,7 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 
 	@Autowired
 	private EntityManager em;
-	
+
 	private Session getSession() {
 		return em.unwrap(Session.class);
 	}
@@ -39,7 +39,7 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 		query.setParameter(1, bookid);
 		String sectionId = null;
 		List<String> list = query.list();
-		if (list.size()==1)
+		if (list.size() == 1)
 			sectionId = list.get(0);
 		return Optional.ofNullable(sectionId);
 	}
@@ -62,7 +62,7 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 		query.setParameter(3, bookid.substring(4));
 		BookTransaction bktrans = null;
 		List<BookTransaction> list = query.list();
-		if(list.size()==1)
+		if (list.size() == 1)
 			bktrans = list.get(0);
 		return Optional.ofNullable(bktrans);
 	}

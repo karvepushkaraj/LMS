@@ -44,11 +44,11 @@ public class SubscriptionFee {
 	public String getReceiptNumber() {
 		return receiptNumber;
 	}
-	
+
 	public void setSubscription(Subscription subscription) {
 		this.subscription = subscription;
 	}
-	
+
 	public void setSubscriptionId(int subscriptionId) {
 		this.subscriptionId = subscriptionId;
 	}

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 public class LateFee {
 
 	private static int lateFeeAmount = 20;
-	
+
 	@Id
 	private int transactionId;
 
@@ -46,7 +46,7 @@ public class LateFee {
 	public String getReceiptNumber() {
 		return receiptNumber;
 	}
-	
+
 	public static int getLateFeeAmount() {
 		return lateFeeAmount;
 	}

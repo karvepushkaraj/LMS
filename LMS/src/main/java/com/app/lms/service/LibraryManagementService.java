@@ -1,8 +1,6 @@
 package com.app.lms.service;
 
-import java.io.Console;
 import java.sql.Timestamp;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -126,7 +124,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public void deleteBook(String bookId) throws InvalidBusinessCondition {
-		BookTitle bt;
+		BookTitle bt = null;
 		CopyId key;
 		try {
 			bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
@@ -135,6 +133,8 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 			throw new InvalidBusinessCondition("Invalid Input", e);
 		}
 		BookCopy bc = bookCopyDao.getById(key).orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
+		if (bc.getMember() != null)
+			throw new InvalidBusinessCondition("Book is issued");
 		bookCopyDao.delete(Optional.of(bc));
 		if (bt.getBookCopies().isEmpty())
 			bookTitleDao.delete(Optional.of(bt));
@@ -223,7 +223,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public void expireSubscription() {
 		List<Subscription> list = auxiliaryDao.getActSubscriptions();
-		list.forEach((sub)->sub.setStatus(TransactionStatus.EXPIRED));
+		list.forEach((sub) -> sub.setStatus(TransactionStatus.EXPIRED));
 	}
 
 }

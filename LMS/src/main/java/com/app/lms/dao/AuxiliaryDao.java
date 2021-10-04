@@ -11,6 +11,7 @@ import com.app.lms.model.Subscription;
 
 /**
  * Auxiliary Dao for application specific implementations.
+ * 
  * @author karve
  *
  */
@@ -18,28 +19,38 @@ import com.app.lms.model.Subscription;
 public interface AuxiliaryDao {
 
 	/**
-	 * Get {@link LibrarySection} id if the book is free i.e. not issued to {@link Member}
+	 * Get {@link LibrarySection} id if the book is free i.e. not issued to
+	 * {@link Member}
+	 * 
 	 * @param bookid {@link BookCopy} id
 	 * @return {@link LibrarySection} id
 	 */
 	Optional<String> getFreeBookSection(String bookid);
 
 	/**
-	 * Get list of {@link LibrarySection} ids if the member is free 
-	 * i.e book is not issued to the member of section to which member has subscribed. 
+	 * Get list of {@link LibrarySection} ids if the member is free i.e book is not
+	 * issued to the member of section to which member has subscribed.
+	 * 
 	 * @param memberid
 	 * @return List of {@link LibrarySection} ids
 	 */
 	List<String> getFreeMemberSections(int memberid);
 
 	/**
-	 * Get active book transaction i.e. transaction where book is not returned by the member.
-	 * @param bookid {@link BookCopy} id
+	 * Get active book transaction i.e. transaction where book is not returned by
+	 * the member.
+	 * 
+	 * @param bookid   {@link BookCopy} id
 	 * @param memberid {@link Member} id
-	 * @return
+	 * @return {@link Optional} of {@link BookTransaction}
 	 */
 	Optional<BookTransaction> getActBkTrans(String bookid, int memberid);
-	
+
+	/**
+	 * Get list of active Subscriptions.
+	 * 
+	 * @return {@link List} of {@link Subscription}
+	 */
 	List<Subscription> getActSubscriptions();
 
 }
