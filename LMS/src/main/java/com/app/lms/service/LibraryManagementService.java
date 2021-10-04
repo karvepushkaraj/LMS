@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,39 +41,30 @@ import com.app.lms.util.InvalidBusinessCondition;
 public class LibraryManagementService implements BookService, MemberService, BookTransactionService {
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<BookTitle, Integer> bookTitleDao;
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<BookCopy, CopyId> bookCopyDao;
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<Member, Integer> memberDao;
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<Subscription, Integer> subscriptionDao;
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<BookTransaction, Integer> bookTransactionDao;
 
 	@Autowired
-	@Qualifier("AuxiliaryDao")
 	private AuxiliaryDao auxiliaryDao;
 
 	@Autowired
-	@Qualifier("LibraryAdminService")
 	private LibrarySectionService librarySectionService;
 
 	@Autowired
-	@Qualifier("LibraryAdminService")
 	private SubscriptionPackageService subpkgService;
 
 	@Autowired
-	@Qualifier("LibraryAccountService")
 	private AccountService accountService;
 
 	@PostConstruct

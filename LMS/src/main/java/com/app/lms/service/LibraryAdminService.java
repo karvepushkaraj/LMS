@@ -9,7 +9,6 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,15 +32,12 @@ import com.app.lms.util.InvalidBusinessCondition;
 public class LibraryAdminService implements LibrarySectionService, SubscriptionPackageService {
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<LibrarySection, String> librarySectionDao;
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<SubscriptionPackage, Integer> subscriptionPackageDao;
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<PackageSection, PackageSectionId> pkgSecDao;
 
 	@PostConstruct

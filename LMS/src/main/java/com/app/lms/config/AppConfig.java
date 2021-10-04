@@ -20,8 +20,7 @@ import com.app.lms.model.LibrarySection;
 import com.app.lms.service.LibraryManagementService;
 
 /**
- * Adds dummy data for Library Sections, Subscription Packages and Books in
- * create mode.
+ * Configuration class for the application.
  * 
  * @author karve
  *
@@ -45,6 +44,9 @@ public class AppConfig {
 
 	private Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
+	/**
+	 * Cron job to update the expired subscription. Runs every 5 mins.
+	 */
 	@Scheduled(fixedDelay = 300000)
 	public void updateExpiredSubscriptions() {
 		logger.info("Cron Job Started");
@@ -52,6 +54,10 @@ public class AppConfig {
 		logger.info("Cron Job Finished");
 	}
 
+	/**
+	 * Adds dummy data to the database if the spring.jpa.hibernate.ddl-auto property
+	 * is 'create'.
+	 */
 	@Bean
 	public void addDummyData() {
 		if (!env.getRequiredProperty("spring.jpa.hibernate.ddl-auto").equals("create"))

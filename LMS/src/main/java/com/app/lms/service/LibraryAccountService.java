@@ -5,7 +5,6 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +23,12 @@ import com.app.lms.util.InvalidBusinessCondition;
 public class LibraryAccountService implements AccountService {
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<Deposite, String> depositeDao;
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<SubscriptionFee, Integer> subscriptionFeeDao;
 
 	@Autowired
-	@Qualifier("BasicDao")
 	private BasicDao<LateFee, Integer> lateFeeDao;
 
 	@PostConstruct

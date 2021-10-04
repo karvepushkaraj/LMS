@@ -3,7 +3,6 @@ package com.app.lms.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,15 +45,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class LibraryManagementController {
 
 	@Autowired
-	@Qualifier("LibraryManagementService")
 	private BookService bookService;
 
 	@Autowired
-	@Qualifier("LibraryManagementService")
 	private MemberService memberService;
 
 	@Autowired
-	@Qualifier("LibraryManagementService")
 	private BookTransactionService bookTransactionService;
 
 	/**
