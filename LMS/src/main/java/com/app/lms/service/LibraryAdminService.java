@@ -21,7 +21,7 @@ import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Implementation of {@link LibrarySectionService},
- * {@link SubscriptionPackageService}
+ * {@link SubscriptionPackageService} interfaces.
  * 
  * @author karve
  *

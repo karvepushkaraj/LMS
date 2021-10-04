@@ -27,7 +27,6 @@ import com.app.lms.service.MemberService;
 import com.app.lms.util.IllegalRequestException;
 import com.app.lms.util.InvalidBusinessCondition;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -62,8 +61,7 @@ public class LibraryManagementController {
 	 * Get single Book Title if id length is 4 or Book Copy if id length is 5.
 	 * 
 	 * @param bookId {@link BookTitle} id or {@link BookCopy} id
-	 * @return {@link BookTitle} or {@link BookCopy}
-	 * @throws JsonProcessingException
+	 * @return String of {@link BookTitle} or {@link BookCopy}
 	 */
 	@GetMapping("/books")
 	public String getBook(@RequestParam("id") String bookId) {
@@ -99,8 +97,7 @@ public class LibraryManagementController {
 	 * 
 	 * @param input {@link LibrarySection} id, {@link BookTitle} and
 	 *              {@link BookCopy}
-	 * @throws JsonMappingException
-	 * @throws JsonProcessingException
+	 * @return String message
 	 */
 	@PostMapping("/books")
 	public String addBook(@RequestBody String input) {
@@ -111,7 +108,7 @@ public class LibraryManagementController {
 			BookTitle bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
 			BookCopy bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
 			String bookId = bookService.addBook(sectionId, bt, bc);
-			return "Book added sucessfully. Book Id : " + bookId;
+			return "Book added successfully. Book Id : " + bookId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
@@ -126,11 +123,12 @@ public class LibraryManagementController {
 	 * @return String message
 	 */
 	@DeleteMapping("/books/{id}")
-	public void deleteBook(@PathVariable("id") String bookId) {
+	public String deleteBook(@PathVariable("id") String bookId) {
 		if (bookId.length() != 5) // fail fast
 			throw new IllegalRequestException("Invalid book Id");
 		try {
 			bookService.deleteBook(bookId);
+			return "Book deleted successfully";
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
@@ -140,8 +138,7 @@ public class LibraryManagementController {
 	 * Get Member.
 	 * 
 	 * @param memberId {@link Member} id
-	 * @return Member {@link Member}
-	 * @throws JsonProcessingException
+	 * @return String of {@link Member}
 	 */
 	@GetMapping("/member")
 	public String getMember(@RequestParam("id") int memberId) {
@@ -163,6 +160,7 @@ public class LibraryManagementController {
 	 * Add new Member.
 	 * 
 	 * @param member {@link Member}
+	 * @return String message
 	 */
 	@PostMapping("/member")
 	public String addMember(@RequestBody String input) {
@@ -172,7 +170,7 @@ public class LibraryManagementController {
 			Member member = mapper.treeToValue(node.get("member"), Member.class);
 			Deposite deposite = mapper.treeToValue(node.get("deposite"), Deposite.class);
 			int memberId = memberService.addMember(member, deposite);
-			return "Member added sucessfully. Member Id : " + memberId;
+			return "Member added successfully. Member Id : " + memberId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
@@ -183,32 +181,17 @@ public class LibraryManagementController {
 	 * Update existing Member details.
 	 * 
 	 * @param member {@link Member}
+	 * @return String message
 	 */
 	@PutMapping("/member")
-	public void updateMember(@Valid @RequestBody Member member) {
+	public String updateMember(@Valid @RequestBody Member member) {
 		try {
 			memberService.updateMember(member);
+			return "Member updated successfully";
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
 	}
-
-//	/**
-//	 * Delete Member.
-//	 * 
-//	 * @param memberId {@link Member} id
-//	 * @return String message
-//	 */
-//	@DeleteMapping("/member/{id}")
-//	public void deleteMember(@PathVariable("id") int memberId) {
-//		if (memberId < 10000)		// fail fast
-//			throw new IllegalRequestException("Invalid Request Parameter");
-//		try {
-//			memberService.deleteMember(memberId);
-//		} catch (InvalidBusinessCondition e) {
-//			throw new IllegalRequestException(e.getMessage(), e);
-//		}
-//	}
 
 	/**
 	 * Delete Member.
@@ -217,26 +200,25 @@ public class LibraryManagementController {
 	 * @return String message
 	 */
 	@DeleteMapping("/member")
-	public void deleteMember(@RequestBody String input) {
+	public String deleteMember(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
 			int memberId = jsonNode.get("memberId").asInt();
 			Deposite deposite = mapper.treeToValue(jsonNode.get("deposite"), Deposite.class);
 			memberService.deleteMember(memberId, deposite);
+			return "Member deleted successfully";
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
-
 	}
 
 	/**
 	 * Add new Subscription of a Member to Subscription Package.
 	 * 
 	 * @param input {@link Member} id and {@link SubscriptionPackage} id
-	 * @throws JsonMappingException
-	 * @throws JsonProcessingException
+	 * @return String message
 	 */
 	@PostMapping("/subscribe")
 	public String addSubscription(@RequestBody String input) {
@@ -257,15 +239,13 @@ public class LibraryManagementController {
 	 * 
 	 * @param input {@link Member} id and {@link BookCopy} id
 	 * @return String message
-	 * @throws JsonMappingException
-	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/issue")
 	public String issueBook(@RequestBody String input) {
 		try {
 			JsonNode node = new ObjectMapper().readTree(input);
 			int response = bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
-			return "Transaction Sucessful. Transaction Id : " + response;
+			return "Transaction Successful. Transaction Id : " + response;
 		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
@@ -276,8 +256,6 @@ public class LibraryManagementController {
 	 * 
 	 * @param input {@link Member} id and {@link BookCopy} id
 	 * @return String message
-	 * @throws JsonMappingException
-	 * @throws JsonProcessingException
 	 */
 	@PostMapping("/return")
 	public String returnBook(@RequestBody String input) {
@@ -287,12 +265,11 @@ public class LibraryManagementController {
 			LateFee fee = mapper.treeToValue(node.get("lateFee"), LateFee.class);
 			int response = bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt(),
 					fee);
-			return "Transaction Sucessful. Transaction Id : " + response;
+			return "Transaction Successful. Transaction Id : " + response;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
-
 	}
 
 }

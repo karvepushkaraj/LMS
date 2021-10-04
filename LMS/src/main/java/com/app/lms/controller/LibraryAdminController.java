@@ -23,7 +23,6 @@ import com.app.lms.service.SubscriptionPackageService;
 import com.app.lms.util.IllegalRequestException;
 import com.app.lms.util.InvalidBusinessCondition;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -72,11 +71,13 @@ public class LibraryAdminController {
 	 * Add new Library Section.
 	 * 
 	 * @param librarySection {@link LibrarySection}
+	 * @return String message
 	 */
 	@PostMapping("/section")
-	public void addLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
+	public String addLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
 		try {
 			librarySectionService.addLibrarySection(librarySection);
+			return "Library Section added successfully";
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
@@ -86,11 +87,13 @@ public class LibraryAdminController {
 	 * Update existing Library Section.
 	 * 
 	 * @param librarySection {@link LibrarySection}
+	 * @return String message
 	 */
 	@PutMapping("/section")
-	public void updateLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
+	public String updateLibrarySection(@Valid @RequestBody LibrarySection librarySection) {
 		try {
 			librarySectionService.updateLibrarySection(librarySection);
+			return "Library Section updated successfully";
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
@@ -103,11 +106,12 @@ public class LibraryAdminController {
 	 * @return String message
 	 */
 	@DeleteMapping("/section/{id}")
-	public void deleteLibrarySection(@PathVariable("id") String id) {
+	public String deleteLibrarySection(@PathVariable("id") String id) {
 		if (id.length() != 3) // fail fast
 			throw new TransactionException("Invalid id : " + id);
 		try {
 			librarySectionService.deleteLibrarySection(id);
+			return "Library Section deleted successfully";
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}
@@ -117,9 +121,8 @@ public class LibraryAdminController {
 	 * Get single Subscription Package.
 	 * 
 	 * @param id {@link SubscriptionPackage} id
-	 * @return {@link SubscriptionPackage} and array of {@link LibrarySection} id &
-	 *         no. of Books
-	 * @throws JsonProcessingException
+	 * @return String of {@link SubscriptionPackage} and array of
+	 *         {@link LibrarySection} id and no. of Books
 	 */
 	@GetMapping("/package")
 	public String getSubscriptionPackage(@RequestParam("id") int id) {
@@ -145,8 +148,7 @@ public class LibraryAdminController {
 	 * 
 	 * @param input {@link SubscriptionPackage} id and array of
 	 *              {@link LibrarySection} id & no. of Books
-	 * @throws JsonMappingException
-	 * @throws JsonProcessingException
+	 * @return String message
 	 */
 	@PostMapping("/package")
 	public String addSubscriptionPackage(@RequestBody String input) {
@@ -160,7 +162,7 @@ public class LibraryAdminController {
 			for (JsonNode node : arrayNode)
 				map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
 			int pkgId = subpkgService.addSubscriptionPackage(pkg, map);
-			return "Package added sucessfully.Package Id : " + pkgId;
+			return "Package added successfully. Package Id : " + pkgId;
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition
 				| NullPointerException e) {
 			throw new IllegalRequestException(e.getMessage(), e);
@@ -174,9 +176,10 @@ public class LibraryAdminController {
 	 * @return String message
 	 */
 	@DeleteMapping("/package/{id}")
-	public void deleteSubscriptionPackage(@PathVariable("id") int id) {
+	public String deleteSubscriptionPackage(@PathVariable("id") int id) {
 		try {
 			subpkgService.deleteSubscriptionPackage(id);
+			return "Subscription Package deleted successfully";
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}

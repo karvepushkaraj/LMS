@@ -11,6 +11,7 @@ import java.util.Optional;
  * @param <T> model
  * @param <K> key
  */
+
 public interface BasicDao<T, K extends Serializable> {
 
 	/**

@@ -11,9 +11,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 /**
- * Generic implementation of Basic Dao interface.
+ * Generic implementation of {@link BasicDao} interface.
  * 
- * @see BasicDao
  * @author karve
  *
  * @param <T> model

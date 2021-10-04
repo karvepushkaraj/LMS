@@ -30,7 +30,7 @@ import com.app.lms.util.InvalidBusinessCondition;
 
 /**
  * Implementation of {@link BookService}, {@link MemberService},
- * {@link BookTransactionService}
+ * {@link BookTransactionService} interfaces.
  * 
  * @author karve
  *

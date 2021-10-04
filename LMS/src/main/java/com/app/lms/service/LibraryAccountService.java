@@ -18,6 +18,13 @@ import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionFee;
 import com.app.lms.util.InvalidBusinessCondition;
 
+/**
+ * Implementation of {@link AccountService} interface.
+ * 
+ * @author karve
+ *
+ */
+
 @Service("LibraryAccountService")
 @Transactional
 public class LibraryAccountService implements AccountService {
@@ -76,8 +83,8 @@ public class LibraryAccountService implements AccountService {
 
 	@Override
 	public void addLateFee(BookTransaction transaction, LateFee fee) throws InvalidBusinessCondition {
-		if (fee == null || fee.getLateFees() != LateFee.getLateFeeAmount())
-			throw new InvalidBusinessCondition("Late Fee should be Rs." + LateFee.getLateFeeAmount());
+		if (fee == null || fee.getLateFees() != LateFee.LATE_FEE)
+			throw new InvalidBusinessCondition("Late Fee should be Rs." + LateFee.LATE_FEE);
 		fee.setTransactionId(transaction.getTransactionId());
 		lateFeeDao.add(Optional.of(fee));
 	}

@@ -14,9 +14,8 @@ import com.app.lms.model.BookTransaction;
 import com.app.lms.model.Subscription;
 
 /**
- * Implementation of Auxiliary Dao interface.
+ * Implementation of {@link AuxiliaryDao} interface.
  * 
- * @see AuxiliaryDao
  * @author karve
  *
  */

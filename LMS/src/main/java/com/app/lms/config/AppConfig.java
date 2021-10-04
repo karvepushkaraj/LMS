@@ -50,7 +50,7 @@ public class AppConfig {
 	}
 
 	/**
-	 * Cron job to update the expired subscription. Runs every 5 mins.
+	 * Cron job to update the expired subscriptions. Runs every 5 mins.
 	 */
 	@Scheduled(fixedDelay = 300000)
 	public void updateExpiredSubscriptions() {
