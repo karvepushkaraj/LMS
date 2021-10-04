@@ -18,6 +18,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
+/**
+ * Entity class for Book Copy with TitleId & CopyID as primary keys.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 @IdClass(CopyId.class)
 public class BookCopy {

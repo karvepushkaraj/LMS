@@ -2,6 +2,13 @@ package com.app.lms.model;
 
 import java.io.Serializable;
 
+/**
+ * Id class for Book Copy.
+ * 
+ * @author karve
+ *
+ */
+
 public class CopyId implements Serializable {
 
 	private static final long serialVersionUID = 6689703140013128948L;

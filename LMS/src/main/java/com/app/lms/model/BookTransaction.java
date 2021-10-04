@@ -16,10 +16,17 @@ import javax.persistence.TemporalType;
 
 import com.app.lms.util.ActivityStatusConverter;
 
+/**
+ * Entity class for Book Transaction with TransactionId as primary key.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 public class BookTransaction {
 
-	private static int lateReturnDuration = 1;
+	public static final int LATE_RETURN_DAYS = 1;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookTransSequence")
@@ -85,10 +92,6 @@ public class BookTransaction {
 
 	public void setStatus(ActivityStatus status) {
 		this.status = status;
-	}
-
-	public static int getLateReturnDuration() {
-		return lateReturnDuration;
 	}
 
 	@Override

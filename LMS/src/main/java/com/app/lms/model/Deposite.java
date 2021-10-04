@@ -7,6 +7,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Entity class for Deposite with TransactionId as primary key.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 public class Deposite {
 

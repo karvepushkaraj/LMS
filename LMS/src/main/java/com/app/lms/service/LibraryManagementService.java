@@ -207,7 +207,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		Date returnDate = new Timestamp(System.currentTimeMillis());
 		long diffInMillis = returnDate.getTime() - bktrans.getIssueDate().getTime();
 		long bookReturnDuration = TimeUnit.MINUTES.convert(diffInMillis, TimeUnit.MILLISECONDS);
-		if (bookReturnDuration > BookTransaction.getLateReturnDuration())
+		if (bookReturnDuration > BookTransaction.LATE_RETURN_DAYS)
 			accountService.addLateFee(bktrans, fee);
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);

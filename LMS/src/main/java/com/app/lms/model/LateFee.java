@@ -7,6 +7,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Entity class for Late Fees with TransactionId as primary key.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 public class LateFee {
 

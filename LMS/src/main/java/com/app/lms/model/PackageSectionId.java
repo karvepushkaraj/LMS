@@ -2,6 +2,13 @@ package com.app.lms.model;
 
 import java.io.Serializable;
 
+/**
+ * Id class for join table class PackageSection.
+ * 
+ * @author karve
+ *
+ */
+
 public class PackageSectionId implements Serializable {
 
 	private static final long serialVersionUID = -7759046928604702040L;

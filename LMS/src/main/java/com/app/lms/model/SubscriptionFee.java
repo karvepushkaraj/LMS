@@ -7,6 +7,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Entity class for Subscription Fees with SubscriptionId as primary key.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 public class SubscriptionFee {
 

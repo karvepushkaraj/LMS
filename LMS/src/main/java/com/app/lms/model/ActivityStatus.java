@@ -2,6 +2,13 @@ package com.app.lms.model;
 
 import java.util.stream.Stream;
 
+/**
+ * Activity Status Enum
+ * 
+ * @author karve
+ *
+ */
+
 public enum ActivityStatus {
 
 	ACTIVE(1), EXPIRED(0);

@@ -21,6 +21,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 
+/**
+ * Entity class for Subscription with SubscriptionId as primary key.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 public class Subscription {
 

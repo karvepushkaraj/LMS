@@ -27,6 +27,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Entity class for Member with MemberId as primary key.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 public class Member {
 

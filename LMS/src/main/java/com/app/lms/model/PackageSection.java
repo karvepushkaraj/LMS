@@ -8,6 +8,13 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Join Table class for Subscription Package and Library Section.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 @IdClass(PackageSectionId.class)
 public class PackageSection {

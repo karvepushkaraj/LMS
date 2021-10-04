@@ -18,6 +18,12 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Entity class for Subscription Package with PackageId as primary key.
+ * 
+ * @author karve
+ *
+ */
 @Entity
 public class SubscriptionPackage {
 

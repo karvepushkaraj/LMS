@@ -17,6 +17,13 @@ import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Entity class for Book Title with TitleId as primary key.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 public class BookTitle {
 

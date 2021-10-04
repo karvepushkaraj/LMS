@@ -13,6 +13,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Entity class for Library Section with SectionId as primary key.
+ * 
+ * @author karve
+ *
+ */
+
 @Entity
 public class LibrarySection {
 
