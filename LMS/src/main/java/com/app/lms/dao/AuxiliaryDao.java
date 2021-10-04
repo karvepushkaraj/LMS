@@ -7,6 +7,7 @@ import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTransaction;
 import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
+import com.app.lms.model.Subscription;
 
 /**
  * Auxiliary Dao for application specific implementations.
@@ -38,5 +39,7 @@ public interface AuxiliaryDao {
 	 * @return
 	 */
 	Optional<BookTransaction> getActBkTrans(String bookid, int memberid);
+	
+	List<Subscription> getActSubscriptions();
 
 }

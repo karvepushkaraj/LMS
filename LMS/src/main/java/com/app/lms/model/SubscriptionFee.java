@@ -16,7 +16,7 @@ public class SubscriptionFee {
 	private int fees;
 
 	@NotBlank
-	@Column(length = 20)
+	@Column(length = 20, nullable = false, unique = true)
 	private String receiptNumber;
 
 	@OneToOne
@@ -47,6 +47,32 @@ public class SubscriptionFee {
 	
 	public void setSubscription(Subscription subscription) {
 		this.subscription = subscription;
+	}
+	
+	public void setSubscriptionId(int subscriptionId) {
+		this.subscriptionId = subscriptionId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + subscriptionId;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SubscriptionFee other = (SubscriptionFee) obj;
+		if (subscriptionId != other.subscriptionId)
+			return false;
+		return true;
 	}
 
 	@Override

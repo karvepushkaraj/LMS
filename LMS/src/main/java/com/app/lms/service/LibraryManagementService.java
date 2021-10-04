@@ -41,7 +41,7 @@ import com.app.lms.util.InvalidBusinessCondition;
  */
 
 @Service("LibraryManagementService")
-@Transactional
+@Transactional(rollbackFor = InvalidBusinessCondition.class)
 public class LibraryManagementService implements BookService, MemberService, BookTransactionService {
 
 	@Autowired
@@ -218,6 +218,12 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		bc.setMember(null);
 		m.removeBook(bc);
 		return bktrans.getTransactionId();
+	}
+
+	@Override
+	public void expireSubscription() {
+		List<Subscription> list = auxiliaryDao.getActSubscriptions();
+		list.forEach((sub)->sub.setStatus(TransactionStatus.EXPIRED));
 	}
 
 }

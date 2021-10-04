@@ -69,7 +69,7 @@ public class LibraryAccountService implements AccountService {
 		if (fee == null || fee.getFees() != subscription.getSubscriptionPackage().getFees())
 			throw new InvalidBusinessCondition(
 					"Subscription Fee should be Rs." + subscription.getSubscriptionPackage().getFees());
-		fee.setSubscription(subscription);
+		fee.setSubscriptionId(subscription.getSubscriptionId());
 		subscriptionFeeDao.add(Optional.of(fee));
 	}
 
@@ -77,7 +77,7 @@ public class LibraryAccountService implements AccountService {
 	public void addLateFee(BookTransaction transaction, LateFee fee) throws InvalidBusinessCondition {
 		if (fee == null || fee.getLateFees() != LateFee.getLateFeeAmount())
 			throw new InvalidBusinessCondition("Late Fee should be Rs." + LateFee.getLateFeeAmount());
-		fee.setTransaction(transaction);
+		fee.setTransactionId(transaction.getTransactionId());
 		lateFeeDao.add(Optional.of(fee));
 	}
 

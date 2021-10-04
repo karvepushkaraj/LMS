@@ -19,7 +19,7 @@ public class Deposite {
 	private int deposite;
 
 	@NotBlank
-	@Column(length = 20)
+	@Column(length = 20, nullable = false, unique = true)
 	private String receiptNumber;
 
 	@ManyToOne

@@ -2,6 +2,7 @@ package com.app.lms.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -46,7 +47,7 @@ public class Subscription {
 	private TransactionStatus status;
 
 	@JsonIgnore
-	@OneToOne(mappedBy = "subscription")
+	@OneToOne(mappedBy = "subscription",cascade = CascadeType.ALL)
 	private SubscriptionFee subscriptionFee;
 
 	public Subscription() {
@@ -58,6 +59,7 @@ public class Subscription {
 		this.pkg = pkg;
 		this.startDate = startDate;
 		this.status = status;
+//		this.subscriptionFee = fee;
 	}
 
 	public int getSubscriptionId() {

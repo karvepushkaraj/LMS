@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.app.lms.model.BookTransaction;
+import com.app.lms.model.Subscription;
 
 /**
  * Implementation of Auxiliary Dao interface.
@@ -64,6 +65,13 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 		if(list.size()==1)
 			bktrans = list.get(0);
 		return Optional.ofNullable(bktrans);
+	}
+
+	@Override
+	public List<Subscription> getActSubscriptions() {
+		String queryString = "from Subscription where status=1";
+		Query<Subscription> query = getSession().createQuery(queryString, Subscription.class);
+		return query.getResultList();
 	}
 
 }

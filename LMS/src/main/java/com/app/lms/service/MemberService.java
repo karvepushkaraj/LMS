@@ -1,7 +1,10 @@
 package com.app.lms.service;
 
+import java.util.List;
+
 import com.app.lms.model.Deposite;
 import com.app.lms.model.Member;
+import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionFee;
 import com.app.lms.util.InvalidBusinessCondition;
 
@@ -23,5 +26,7 @@ public interface MemberService {
 	void deleteMember(int memberId, Deposite deposite) throws InvalidBusinessCondition;
 
 	void addSubscription(int memberId, int pkgId, SubscriptionFee fee) throws InvalidBusinessCondition;
+	
+	void expireSubscription();
 
 }

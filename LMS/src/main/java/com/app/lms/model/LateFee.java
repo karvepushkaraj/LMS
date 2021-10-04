@@ -18,7 +18,7 @@ public class LateFee {
 	private int lateFees;
 
 	@NotBlank
-	@Column(length = 20)
+	@Column(length = 20, nullable = false, unique = true)
 	private String receiptNumber;
 
 	@OneToOne
@@ -51,8 +51,8 @@ public class LateFee {
 		return lateFeeAmount;
 	}
 
-	public void setTransaction(BookTransaction transaction) {
-		this.transaction = transaction;
+	public void setTransactionId(int transactionId) {
+		this.transactionId = transactionId;
 	}
 
 	@Override
