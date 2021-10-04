@@ -22,14 +22,19 @@ import com.app.lms.util.InvalidBusinessCondition;
 @Transactional
 public class LibraryAccountService implements AccountService {
 
-	@Autowired
-	private BasicDao<Deposite, String> depositeDao;
+	private final BasicDao<Deposite, String> depositeDao;
+
+	private final BasicDao<SubscriptionFee, Integer> subscriptionFeeDao;
+
+	private final BasicDao<LateFee, Integer> lateFeeDao;
 
 	@Autowired
-	private BasicDao<SubscriptionFee, Integer> subscriptionFeeDao;
-
-	@Autowired
-	private BasicDao<LateFee, Integer> lateFeeDao;
+	public LibraryAccountService(BasicDao<Deposite, String> depositeDao,
+			BasicDao<SubscriptionFee, Integer> subscriptionFeeDao, BasicDao<LateFee, Integer> lateFeeDao) {
+		this.depositeDao = depositeDao;
+		this.subscriptionFeeDao = subscriptionFeeDao;
+		this.lateFeeDao = lateFeeDao;
+	}
 
 	@PostConstruct
 	public void SetClazz() {

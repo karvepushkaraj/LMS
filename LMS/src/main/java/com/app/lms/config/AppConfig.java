@@ -30,19 +30,24 @@ import com.app.lms.service.LibraryManagementService;
 @EnableScheduling
 public class AppConfig {
 
-	@Autowired
-	private Environment env;
+	private final Environment env;
+
+	private final LibraryAdminController lac;
+
+	private final LibraryManagementController lmc;
+
+	private final LibraryManagementService lms;
+
+	private final Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
 	@Autowired
-	LibraryAdminController lac;
-
-	@Autowired
-	LibraryManagementController lmc;
-
-	@Autowired
-	LibraryManagementService lms;
-
-	private Logger logger = LoggerFactory.getLogger(AppConfig.class);
+	public AppConfig(Environment env, LibraryAdminController lac, LibraryManagementController lmc,
+			LibraryManagementService lms) {
+		this.env = env;
+		this.lac = lac;
+		this.lmc = lmc;
+		this.lms = lms;
+	}
 
 	/**
 	 * Cron job to update the expired subscription. Runs every 5 mins.

@@ -31,14 +31,20 @@ import com.app.lms.util.InvalidBusinessCondition;
 @Transactional
 public class LibraryAdminService implements LibrarySectionService, SubscriptionPackageService {
 
-	@Autowired
-	private BasicDao<LibrarySection, String> librarySectionDao;
+	private final BasicDao<LibrarySection, String> librarySectionDao;
+
+	private final BasicDao<SubscriptionPackage, Integer> subscriptionPackageDao;
+
+	private final BasicDao<PackageSection, PackageSectionId> pkgSecDao;
 
 	@Autowired
-	private BasicDao<SubscriptionPackage, Integer> subscriptionPackageDao;
-
-	@Autowired
-	private BasicDao<PackageSection, PackageSectionId> pkgSecDao;
+	public LibraryAdminService(BasicDao<LibrarySection, String> librarySectionDao,
+			BasicDao<SubscriptionPackage, Integer> subscriptionPackageDao,
+			BasicDao<PackageSection, PackageSectionId> pkgSecDao) {
+		this.librarySectionDao = librarySectionDao;
+		this.subscriptionPackageDao = subscriptionPackageDao;
+		this.pkgSecDao = pkgSecDao;
+	}
 
 	@PostConstruct
 	public void setClazz() {
