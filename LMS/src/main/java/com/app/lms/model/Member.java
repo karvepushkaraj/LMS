@@ -21,7 +21,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
-import com.app.lms.util.MemActStatusConverter;
+
+import com.app.lms.util.ActivityStatusConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -56,8 +57,8 @@ public class Member {
 	@Temporal(TemporalType.DATE)
 	private Date exitDate;
 
-	@Convert(converter = MemActStatusConverter.class)
-	private MemberActivityStatus status;
+	@Convert(converter = ActivityStatusConverter.class)
+	private ActivityStatus status;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -80,7 +81,7 @@ public class Member {
 	}
 
 	public Member(int memberId, String name, String mobileNumber, String emailId, Date enrollmentDate, Date exitDate,
-			MemberActivityStatus status) {
+			ActivityStatus status) {
 		this.memberId = memberId;
 		this.name = name;
 		this.mobileNumber = mobileNumber;
@@ -126,11 +127,11 @@ public class Member {
 		this.enrollmentDate = enrollmentDate;
 	}
 
-	public MemberActivityStatus getStatus() {
+	public ActivityStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(MemberActivityStatus status) {
+	public void setStatus(ActivityStatus status) {
 		this.status = status;
 	}
 

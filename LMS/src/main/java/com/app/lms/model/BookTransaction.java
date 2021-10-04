@@ -14,7 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.app.lms.util.TransactionStatusConverter;
+import com.app.lms.util.ActivityStatusConverter;
 
 @Entity
 public class BookTransaction {
@@ -40,7 +40,7 @@ public class BookTransaction {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date returnDate;
 
-	@Convert(converter = TransactionStatusConverter.class)
+	@Convert(converter = ActivityStatusConverter.class)
 	private ActivityStatus status;
 
 	public BookTransaction() {

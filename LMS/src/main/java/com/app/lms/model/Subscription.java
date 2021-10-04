@@ -16,7 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.app.lms.util.TransactionStatusConverter;
+import com.app.lms.util.ActivityStatusConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
@@ -43,7 +43,7 @@ public class Subscription {
 	@Temporal(TemporalType.DATE)
 	private Date startDate;
 
-	@Convert(converter = TransactionStatusConverter.class)
+	@Convert(converter = ActivityStatusConverter.class)
 	private ActivityStatus status;
 
 	@JsonIgnore

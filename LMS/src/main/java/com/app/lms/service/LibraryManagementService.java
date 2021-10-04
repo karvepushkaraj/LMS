@@ -24,7 +24,6 @@ import com.app.lms.model.Deposite;
 import com.app.lms.model.LateFee;
 import com.app.lms.model.LibrarySection;
 import com.app.lms.model.Member;
-import com.app.lms.model.MemberActivityStatus;
 import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionFee;
 import com.app.lms.model.SubscriptionPackage;
@@ -150,10 +149,10 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		if (member == null)
 			throw new InvalidBusinessCondition("Invalid Input");
 		member.setEnrollmentDate(new Date(System.currentTimeMillis()));
-		member.setStatus(MemberActivityStatus.INACTIVE);
+		member.setStatus(ActivityStatus.EXPIRED);
 		memberDao.add(Optional.of(member));
 		accountService.addDeposite(member, deposite);
-		member.setStatus(MemberActivityStatus.ACTIVE);
+		member.setStatus(ActivityStatus.ACTIVE);
 	}
 
 	@Override
@@ -170,7 +169,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		if (!member.getBook().isEmpty())
 			throw new InvalidBusinessCondition("Book issued to this member");
 		accountService.removeDeposite(member, deposite);
-		member.setStatus(MemberActivityStatus.INACTIVE);
+		member.setStatus(ActivityStatus.EXPIRED);
 	}
 
 	@Override

@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.app.lms.dao.BasicDao;
+import com.app.lms.model.ActivityStatus;
 import com.app.lms.model.BookTransaction;
 import com.app.lms.model.Deposite;
 import com.app.lms.model.LateFee;
 import com.app.lms.model.Member;
-import com.app.lms.model.MemberActivityStatus;
 import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionFee;
 import com.app.lms.util.InvalidBusinessCondition;
@@ -46,7 +46,7 @@ public class LibraryAccountService implements AccountService {
 	public void addDeposite(Member member, Deposite deposite) throws InvalidBusinessCondition {
 		if (deposite == null || deposite.getDeposite() != Deposite.getMemberDespoite())
 			throw new InvalidBusinessCondition("Deposite should be Rs." + Deposite.getMemberDespoite());
-		if (!member.getStatus().equals(MemberActivityStatus.INACTIVE))
+		if (!member.getStatus().equals(ActivityStatus.EXPIRED))
 			throw new InvalidBusinessCondition("Member is not Inactive");
 		deposite.setMember(member);
 		deposite.setTransactionId(member.getMemberId() + "D");
@@ -57,7 +57,7 @@ public class LibraryAccountService implements AccountService {
 	public void removeDeposite(Member member, Deposite deposite) throws InvalidBusinessCondition {
 		if (deposite == null || deposite.getDeposite() != Deposite.getMemberDespoite())
 			throw new InvalidBusinessCondition("Deposite should be Rs." + Deposite.getMemberDespoite());
-		if (member.getStatus().equals(MemberActivityStatus.INACTIVE))
+		if (member.getStatus().equals(ActivityStatus.EXPIRED))
 			throw new InvalidBusinessCondition("Member is Inactive");
 		deposite.setMember(member);
 		deposite.setTransactionId(member.getMemberId() + "R");
