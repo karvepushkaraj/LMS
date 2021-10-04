@@ -44,7 +44,7 @@ public class Subscription {
 	private Date startDate;
 
 	@Convert(converter = TransactionStatusConverter.class)
-	private TransactionStatus status;
+	private ActivityStatus status;
 
 	@JsonIgnore
 	@OneToOne(mappedBy = "subscription", cascade = CascadeType.ALL)
@@ -54,12 +54,11 @@ public class Subscription {
 		super();
 	}
 
-	public Subscription(Member member, SubscriptionPackage pkg, Date startDate, TransactionStatus status) {
+	public Subscription(Member member, SubscriptionPackage pkg, Date startDate, ActivityStatus status) {
 		this.member = member;
 		this.pkg = pkg;
 		this.startDate = startDate;
 		this.status = status;
-//		this.subscriptionFee = fee;
 	}
 
 	public int getSubscriptionId() {
@@ -78,11 +77,11 @@ public class Subscription {
 		return startDate;
 	}
 
-	public TransactionStatus getStatus() {
+	public ActivityStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(TransactionStatus status) {
+	public void setStatus(ActivityStatus status) {
 		this.status = status;
 	}
 

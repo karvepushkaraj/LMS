@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.app.lms.dao.AuxiliaryDao;
 import com.app.lms.dao.BasicDao;
+import com.app.lms.model.ActivityStatus;
 import com.app.lms.model.BookCopy;
 import com.app.lms.model.BookTitle;
 import com.app.lms.model.BookTransaction;
@@ -27,7 +28,6 @@ import com.app.lms.model.MemberActivityStatus;
 import com.app.lms.model.Subscription;
 import com.app.lms.model.SubscriptionFee;
 import com.app.lms.model.SubscriptionPackage;
-import com.app.lms.model.TransactionStatus;
 import com.app.lms.util.InvalidBusinessCondition;
 
 /**
@@ -177,8 +177,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	public void addSubscription(int memberId, int pkgId, SubscriptionFee fee) throws InvalidBusinessCondition {
 		Member member = getMember(memberId);
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
-		Subscription sub = new Subscription(member, pkg, new Date(System.currentTimeMillis()),
-				TransactionStatus.ACTIVE);
+		Subscription sub = new Subscription(member, pkg, new Date(System.currentTimeMillis()), ActivityStatus.ACTIVE);
 		subscriptionDao.add(Optional.of(sub));
 		accountService.addSubscriptionFee(sub, fee);
 	}
@@ -193,7 +192,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
 		Timestamp issueDate = new Timestamp(System.currentTimeMillis());
-		BookTransaction bt = new BookTransaction(m, bc, issueDate, null, TransactionStatus.ACTIVE);
+		BookTransaction bt = new BookTransaction(m, bc, issueDate, null, ActivityStatus.ACTIVE);
 		bookTransactionDao.add(Optional.of(bt));
 		bc.setMember(m);
 		m.addBook(bc);
@@ -213,7 +212,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 			accountService.addLateFee(bktrans, fee);
 		BookCopy bc = getBookCopy(bookid);
 		Member m = getMember(memberid);
-		bktrans.setStatus(TransactionStatus.EXPIRED);
+		bktrans.setStatus(ActivityStatus.EXPIRED);
 		bktrans.setReturnDate(returnDate);
 		bc.setMember(null);
 		m.removeBook(bc);
@@ -223,7 +222,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public void expireSubscription() {
 		List<Subscription> list = auxiliaryDao.getActSubscriptions();
-		list.forEach((sub) -> sub.setStatus(TransactionStatus.EXPIRED));
+		list.forEach((sub) -> sub.setStatus(ActivityStatus.EXPIRED));
 	}
 
 }

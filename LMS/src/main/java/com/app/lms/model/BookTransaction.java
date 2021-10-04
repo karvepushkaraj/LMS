@@ -41,13 +41,13 @@ public class BookTransaction {
 	private Date returnDate;
 
 	@Convert(converter = TransactionStatusConverter.class)
-	private TransactionStatus status;
+	private ActivityStatus status;
 
 	public BookTransaction() {
 		super();
 	}
 
-	public BookTransaction(Member member, BookCopy book, Date issueDate, Date returnDate, TransactionStatus status) {
+	public BookTransaction(Member member, BookCopy book, Date issueDate, Date returnDate, ActivityStatus status) {
 		this.member = member;
 		this.book = book;
 		this.issueDate = issueDate;
@@ -79,11 +79,11 @@ public class BookTransaction {
 		this.returnDate = returnDate;
 	}
 
-	public TransactionStatus getStatus() {
+	public ActivityStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(TransactionStatus status) {
+	public void setStatus(ActivityStatus status) {
 		this.status = status;
 	}
 
