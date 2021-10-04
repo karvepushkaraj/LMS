@@ -17,7 +17,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 public class Deposite {
 
-	private static int memberDespoite = 500;
+	public static final int MEMBER_DEPOSITE = 500;
 
 	@Id
 	@Column(length = 20)
@@ -58,10 +58,6 @@ public class Deposite {
 
 	public Member getMember() {
 		return member;
-	}
-
-	public static int getMemberDespoite() {
-		return memberDespoite;
 	}
 
 	public void setTransactionId(String transactionId) {

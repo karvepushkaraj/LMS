@@ -44,8 +44,8 @@ public class LibraryAccountService implements AccountService {
 
 	@Override
 	public void addDeposite(Member member, Deposite deposite) throws InvalidBusinessCondition {
-		if (deposite == null || deposite.getDeposite() != Deposite.getMemberDespoite())
-			throw new InvalidBusinessCondition("Deposite should be Rs." + Deposite.getMemberDespoite());
+		if (deposite == null || deposite.getDeposite() != Deposite.MEMBER_DEPOSITE)
+			throw new InvalidBusinessCondition("Deposite should be Rs." + Deposite.MEMBER_DEPOSITE);
 		if (!member.getStatus().equals(ActivityStatus.EXPIRED))
 			throw new InvalidBusinessCondition("Member is not Inactive");
 		deposite.setMember(member);
@@ -55,8 +55,8 @@ public class LibraryAccountService implements AccountService {
 
 	@Override
 	public void removeDeposite(Member member, Deposite deposite) throws InvalidBusinessCondition {
-		if (deposite == null || deposite.getDeposite() != Deposite.getMemberDespoite())
-			throw new InvalidBusinessCondition("Deposite should be Rs." + Deposite.getMemberDespoite());
+		if (deposite == null || deposite.getDeposite() != Deposite.MEMBER_DEPOSITE)
+			throw new InvalidBusinessCondition("Deposite should be Rs." + Deposite.MEMBER_DEPOSITE);
 		if (member.getStatus().equals(ActivityStatus.EXPIRED))
 			throw new InvalidBusinessCondition("Member is Inactive");
 		deposite.setMember(member);
