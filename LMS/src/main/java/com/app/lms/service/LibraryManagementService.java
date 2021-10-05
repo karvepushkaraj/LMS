@@ -125,7 +125,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public void deleteBook(String bookId) throws InvalidBusinessCondition {
 		BookTitle bt = null;
-		CopyId key;
+		CopyId key = null;
 		try {
 			bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
 			key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
@@ -223,8 +223,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public void expireSubscription() {
-		List<Subscription> list = auxiliaryDao.getActSubscriptions();
-		list.forEach((sub) -> sub.setStatus(ActivityStatus.EXPIRED));
+		auxiliaryDao.getActSubscriptions().forEach((sub) -> sub.setStatus(ActivityStatus.EXPIRED));
 	}
 
 }

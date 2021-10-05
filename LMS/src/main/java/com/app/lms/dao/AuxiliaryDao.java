@@ -32,7 +32,7 @@ public interface AuxiliaryDao {
 	 * issued to the member of section to which member has subscribed.
 	 * 
 	 * @param memberid
-	 * @return List of {@link LibrarySection} ids
+	 * @return {@link List} of {@link LibrarySection} ids
 	 */
 	List<String> getFreeMemberSections(int memberid);
 

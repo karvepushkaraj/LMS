@@ -74,8 +74,8 @@ public class AppConfig {
 
 	private void addLibrarySections() {
 		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LMS_Sections.csv"))) {
-			String s;
-			br.readLine();
+			String s = null;
+			br.readLine(); // skip headings
 			while ((s = br.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(s, ",");
 				LibrarySection ls = new LibrarySection(st.nextToken(), st.nextToken());
@@ -88,7 +88,7 @@ public class AppConfig {
 
 	private void addSubscriptionPackages() {
 		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LMS_Packages.txt"))) {
-			String s;
+			String s = null;
 			while ((s = br.readLine()) != null)
 				lac.addSubscriptionPackage(s);
 		} catch (IOException e) {
@@ -98,9 +98,9 @@ public class AppConfig {
 
 	private void addBooks() {
 		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LMS_Books.csv"))) {
-			String s;
+			String s = null;
 			String json = "{ \"sectionId\": \"%s\", \"BookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"BookCopy\": { \"price\": \"%d\"} }";
-			br.readLine();
+			br.readLine(); // skip headings
 			while ((s = br.readLine()) != null) {
 				StringTokenizer st = new StringTokenizer(s, ",");
 				String input = String.format(json, st.nextToken(), st.nextToken(), st.nextToken(),
