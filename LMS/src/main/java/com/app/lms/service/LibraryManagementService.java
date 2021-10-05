@@ -93,7 +93,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public BookCopy getBookCopy(String bookId) throws InvalidBusinessCondition {
 		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-		CopyId key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+		CopyId key = new CopyId(bt, Integer.parseInt(bookId.substring(4)));
 		return bookCopyDao.getById(key).orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
 	}
 
@@ -128,7 +128,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		CopyId key = null;
 		try {
 			bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-			key = new CopyId(bt, Integer.valueOf(bookId.substring(4)));
+			key = new CopyId(bt, Integer.parseInt(bookId.substring(4)));
 		} catch (NumberFormatException e) {
 			throw new InvalidBusinessCondition("Invalid Input", e);
 		}
