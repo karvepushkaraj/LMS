@@ -45,7 +45,7 @@ public class SubscriptionPackage {
 	private Set<PackageSection> packageSection;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "pkg", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Subscription> subscriptions;
 
 	public SubscriptionPackage() {
