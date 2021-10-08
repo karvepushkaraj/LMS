@@ -22,6 +22,7 @@ import com.app.lms.service.LibrarySectionService;
 import com.app.lms.service.SubscriptionPackageService;
 import com.app.lms.util.IllegalRequestException;
 import com.app.lms.util.InvalidBusinessCondition;
+import com.app.lms.util.LMSExceptionHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +30,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Controller for Library Admin Operations.
+ * Controller for Library Admin Operations. 
+ * Note : Exceptions of this class are handled by {@link LMSExceptionHandler}
  * 
  * @author karve
  *
