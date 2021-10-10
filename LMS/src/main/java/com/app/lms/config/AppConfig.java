@@ -96,10 +96,7 @@ public class AppConfig {
 		String json = "{ \"sectionId\": \"%s\", \"BookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"BookCopy\": { \"price\": \"%s\"} }";
 		try (Stream<String> stream = Files
 				.lines(Paths.get("src/main/resources/LMS_Books.csv"), StandardCharsets.ISO_8859_1).skip(1)) {
-			stream.map(line -> {
-				String[] sarr = line.split(",");
-				return String.format(json, sarr[0], sarr[1], sarr[2], sarr[3]);
-			}).forEach(lmc::addBook);
+			stream.map(line -> String.format(json, (Object[]) line.split(","))).forEach(lmc::addBook);
 		}
 	}
 
