@@ -38,7 +38,7 @@ public class AppConfig {
 
 	private final LibraryManagementService lms;
 
-	private final Logger logger = LoggerFactory.getLogger(AppConfig.class);
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	public AppConfig(Environment env, LibraryAdminController lac, LibraryManagementController lmc,
