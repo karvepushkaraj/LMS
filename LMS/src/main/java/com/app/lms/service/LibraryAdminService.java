@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.app.lms.dao.BasicDao;
 import com.app.lms.model.LibrarySection;
@@ -90,7 +91,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	@Override
 	public int addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map)
 			throws InvalidBusinessCondition {
-		if (map == null || map.isEmpty())
+		if (CollectionUtils.isEmpty(map))
 			throw new InvalidBusinessCondition("Library Sections cannot be empty");
 		try {
 			subscriptionPackageDao.add(Optional.ofNullable(pkg));

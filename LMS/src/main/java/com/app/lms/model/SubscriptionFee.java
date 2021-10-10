@@ -60,6 +60,10 @@ public class SubscriptionFee {
 		this.subscriptionId = subscriptionId;
 	}
 
+	public boolean isCorrect(Subscription subscription) {
+		return this.getFees() == subscription.getSubscriptionPackage().getFees();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

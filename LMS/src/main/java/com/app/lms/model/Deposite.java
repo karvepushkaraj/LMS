@@ -68,6 +68,35 @@ public class Deposite {
 		this.member = member;
 	}
 
+	public static boolean isInvalid(Deposite deposite) {
+		return deposite == null || deposite.getDeposite() != MEMBER_DEPOSITE;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((transactionId == null) ? 0 : transactionId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Deposite other = (Deposite) obj;
+		if (transactionId == null) {
+			if (other.transactionId != null)
+				return false;
+		} else if (!transactionId.equals(other.transactionId))
+			return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		return "Deposite [transactionId=" + transactionId + ", deposite=" + deposite + ", receiptNumber="

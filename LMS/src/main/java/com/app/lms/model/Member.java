@@ -174,6 +174,10 @@ public class Member {
 		books.remove(book);
 	}
 
+	public boolean isActive() {
+		return status == ActivityStatus.ACTIVE;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
