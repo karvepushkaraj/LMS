@@ -1,9 +1,10 @@
 package com.app.lms.config;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.StringTokenizer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,48 +68,38 @@ public class AppConfig {
 	public void addDummyData() {
 		if (!env.getRequiredProperty("spring.jpa.hibernate.ddl-auto").equals("create"))
 			return;
-		addLibrarySections();
-		addSubscriptionPackages();
-		addBooks();
-	}
-
-	private void addLibrarySections() {
-		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LMS_Sections.csv"))) {
-			String s = null;
-			br.readLine(); // skip headings
-			while ((s = br.readLine()) != null) {
-				StringTokenizer st = new StringTokenizer(s, ",");
-				LibrarySection ls = new LibrarySection(st.nextToken(), st.nextToken());
-				lac.addLibrarySection(ls);
-			}
+		try {
+			addLibrarySections();
+			addSubscriptionPackages();
+			addBooks();
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
 	}
 
-	private void addSubscriptionPackages() {
-		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LMS_Packages.txt"))) {
-			String s = null;
-			while ((s = br.readLine()) != null)
-				lac.addSubscriptionPackage(s);
-		} catch (IOException e) {
-			logger.error(e.getMessage());
+	private void addLibrarySections() throws IOException {
+		try (Stream<String> stream = Files.lines(Paths.get("src/main/resources/LMS_Sections.csv")).skip(1)) {
+			stream.map(line -> {
+				String[] sarr = line.split(",");
+				return new LibrarySection(sarr[0], sarr[1]);
+			}).forEach(lac::addLibrarySection);
 		}
 	}
 
-	private void addBooks() {
-		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LMS_Books.csv"))) {
-			String s = null;
-			String json = "{ \"sectionId\": \"%s\", \"BookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"BookCopy\": { \"price\": \"%d\"} }";
-			br.readLine(); // skip headings
-			while ((s = br.readLine()) != null) {
-				StringTokenizer st = new StringTokenizer(s, ",");
-				String input = String.format(json, st.nextToken(), st.nextToken(), st.nextToken(),
-						Integer.parseInt(st.nextToken()));
-				lmc.addBook(input);
-			}
-		} catch (IOException e) {
-			logger.error(e.getMessage());
+	private void addSubscriptionPackages() throws IOException {
+		try (Stream<String> stream = Files.lines(Paths.get("src/main/resources/LMS_Packages.txt"))) {
+			stream.forEach(lac::addSubscriptionPackage);
+		}
+	}
+
+	private void addBooks() throws IOException {
+		String json = "{ \"sectionId\": \"%s\", \"BookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"BookCopy\": { \"price\": \"%s\"} }";
+		try (Stream<String> stream = Files
+				.lines(Paths.get("src/main/resources/LMS_Books.csv"), StandardCharsets.ISO_8859_1).skip(1)) {
+			stream.map(line -> {
+				String[] sarr = line.split(",");
+				return String.format(json, sarr[0], sarr[1], sarr[2], sarr[3]);
+			}).forEach(lmc::addBook);
 		}
 	}
 
