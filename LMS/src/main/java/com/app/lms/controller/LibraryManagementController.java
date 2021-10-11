@@ -34,8 +34,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Controller for Library Management Operations.
- * Note : Exceptions of this class are handled by {@link LMSExceptionHandler}
+ * Controller for Library Management Operations. Note : Exceptions of this class
+ * are handled by {@link LMSExceptionHandler}
  * 
  * @author karve
  *
@@ -69,23 +69,24 @@ public class LibraryManagementController {
 	public String getBook(@RequestParam("id") String bookId) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			if (bookId.length() == 4) {
-				BookTitle bt = bookService.getBookTitle(Integer.parseInt(bookId));
-				ObjectNode objectNode = mapper.valueToTree(bt);
-				ArrayNode arrayNode = objectNode.putArray("bookCopies");
-				for (BookCopy bookCopy : bt.getBookCopies()) {
+			if (bookId.length() == 4) { // return BookTitle if bookId length is 4
+				BookTitle bookTitle = bookService.getBookTitle(Integer.parseInt(bookId));
+				ObjectNode objectNode = mapper.valueToTree(bookTitle); // add BookTitle
+				ArrayNode arrayNode = objectNode.putArray("bookCopies"); // create array named bookCopies
+				for (BookCopy bookCopy : bookTitle.getBookCopies()) {
 					ObjectNode node = mapper.createObjectNode();
 					node.put("copyId", bookCopy.getCopyId());
 					node.put("price", bookCopy.getPrice());
-					arrayNode.add(node);
+					arrayNode.add(node); // add BookCopy to array
 				}
 				return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
-			} else if (bookId.length() == 5) {
-				BookCopy bc = bookService.getBookCopy(bookId);
-				ObjectNode objectNode = mapper.valueToTree(bc);
-				objectNode.put("sectionId", bc.getTitle().getSection().getSectionId());
-				Member m = bc.getMember();
-				objectNode.put("member", m == null ? 0 : m.getMemberId());
+			} else if (bookId.length() == 5) { // return BookCopy if bookId length is 5
+				BookCopy bookCopy = bookService.getBookCopy(bookId);
+				ObjectNode objectNode = mapper.valueToTree(bookCopy); // add BookCopy
+				objectNode.put("sectionId", bookCopy.getTitle().getSection().getSectionId()); // add sectionId
+				Member member = bookCopy.getMember();
+				objectNode.put("member", member == null ? 0 : member.getMemberId()); // put memberId or 0 if member does
+																						// not exist
 				return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 			} else
 				throw new IllegalRequestException("Invalid book Id");
@@ -106,10 +107,10 @@ public class LibraryManagementController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
-			String sectionId = jsonNode.get("sectionId").asText();
-			BookTitle bt = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class);
-			BookCopy bc = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class);
-			String bookId = bookService.addBook(sectionId, bt, bc);
+			String sectionId = jsonNode.get("sectionId").asText(); // read sectionId
+			BookTitle bookTitle = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class); // read BookTitle
+			BookCopy bookCopy = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class); // read BookCopy
+			String bookId = bookService.addBook(sectionId, bookTitle, bookCopy);
 			return "Book added successfully. Book Id : " + bookId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
@@ -149,8 +150,9 @@ public class LibraryManagementController {
 		try {
 			Member member = memberService.getMember(memberId);
 			ObjectMapper mapper = new ObjectMapper();
-			ObjectNode node = mapper.valueToTree(member);
-			ArrayNode arrayNode = node.putArray("book");
+			ObjectNode node = mapper.valueToTree(member); // add member
+			ArrayNode arrayNode = node.putArray("book"); // create array named book
+			// add bookIds of books subscribed by the member to array
 			member.getBook().stream().forEach(bc -> arrayNode.add("" + bc.getTitle().getTitleId() + bc.getCopyId()));
 			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
@@ -169,8 +171,8 @@ public class LibraryManagementController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode node = mapper.readTree(input);
-			Member member = mapper.treeToValue(node.get("member"), Member.class);
-			Deposite deposite = mapper.treeToValue(node.get("deposite"), Deposite.class);
+			Member member = mapper.treeToValue(node.get("member"), Member.class); // read member
+			Deposite deposite = mapper.treeToValue(node.get("deposite"), Deposite.class); // read deposite
 			int memberId = memberService.addMember(member, deposite);
 			return "Member added successfully. Member Id : " + memberId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
@@ -206,8 +208,8 @@ public class LibraryManagementController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
-			int memberId = jsonNode.get("memberId").asInt();
-			Deposite deposite = mapper.treeToValue(jsonNode.get("deposite"), Deposite.class);
+			int memberId = jsonNode.get("memberId").asInt(); // read memberId
+			Deposite deposite = mapper.treeToValue(jsonNode.get("deposite"), Deposite.class); // read deposite
 			memberService.deleteMember(memberId, deposite);
 			return "Member deleted successfully";
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
@@ -227,8 +229,11 @@ public class LibraryManagementController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode node = mapper.readTree(input);
+			int memberId = node.get("memberId").asInt(); // read memberId
+			int packageId = node.get("packageId").asInt(); // read packageId
+			// read SubscriptionFee
 			SubscriptionFee fee = mapper.treeToValue(node.get("subscriptionFee"), SubscriptionFee.class);
-			int subId = memberService.addSubscription(node.get("memberId").asInt(), node.get("packageId").asInt(), fee);
+			int subId = memberService.addSubscription(memberId, packageId, fee);
 			return "Subscription added successfully. Subscription Id : " + subId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
@@ -246,7 +251,9 @@ public class LibraryManagementController {
 	public String issueBook(@RequestBody String input) {
 		try {
 			JsonNode node = new ObjectMapper().readTree(input);
-			int response = bookTransactionService.issueBook(node.get("bookid").asText(), node.get("memberid").asInt());
+			String bookId = node.get("bookid").asText(); // read bookId
+			int memberId = node.get("memberid").asInt(); // read memberId
+			int response = bookTransactionService.issueBook(bookId, memberId);
 			return "Transaction Successful. Transaction Id : " + response;
 		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
@@ -264,9 +271,10 @@ public class LibraryManagementController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode node = mapper.readTree(input);
-			LateFee fee = mapper.treeToValue(node.get("lateFee"), LateFee.class);
-			int response = bookTransactionService.returnBook(node.get("bookid").asText(), node.get("memberid").asInt(),
-					fee);
+			String bookId = node.get("bookid").asText(); // read bookId
+			int memberId = node.get("memberid").asInt(); // read memberId
+			LateFee fee = mapper.treeToValue(node.get("lateFee"), LateFee.class); // read LateFee
+			int response = bookTransactionService.returnBook(bookId, memberId, fee);
 			return "Transaction Successful. Transaction Id : " + response;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {

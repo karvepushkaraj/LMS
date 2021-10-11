@@ -52,5 +52,5 @@ public interface AuxiliaryDao {
 	 * @return {@link List} of {@link Subscription}
 	 */
 	List<Subscription> getActSubscriptions();
-
+	
 }

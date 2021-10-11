@@ -30,8 +30,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * Controller for Library Admin Operations. 
- * Note : Exceptions of this class are handled by {@link LMSExceptionHandler}
+ * Controller for Library Admin Operations. Note : Exceptions of this class are
+ * handled by {@link LMSExceptionHandler}
  * 
  * @author karve
  *
@@ -131,13 +131,13 @@ public class LibraryAdminController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(id);
-			ObjectNode objectNode = mapper.valueToTree(pkg);
-			ArrayNode arrayNode = objectNode.putArray("sections");
+			ObjectNode objectNode = mapper.valueToTree(pkg); // add pkg to ObjectNode
+			ArrayNode arrayNode = objectNode.putArray("sections"); // add array named sections
 			for (PackageSection ps : pkg.getPackageSection()) {
 				ObjectNode node = mapper.createObjectNode();
 				node.put("sectionId", ps.getSection().getSectionId());
 				node.put("noOfBooks", ps.getNumberOfBooks());
-				arrayNode.add(node);
+				arrayNode.add(node); // add node to ArrayNode
 			}
 			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
@@ -157,11 +157,11 @@ public class LibraryAdminController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
-			@Valid
+			@Valid // read & validate node named package
 			SubscriptionPackage pkg = mapper.treeToValue(jsonNode.get("package"), SubscriptionPackage.class);
 			Map<String, Integer> map = new HashMap<>();
-			ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections");
-			for (JsonNode node : arrayNode)
+			ArrayNode arrayNode = (ArrayNode) jsonNode.withArray("sections"); // read array named sections
+			for (JsonNode node : arrayNode) // put array elements in map
 				map.put(node.get("sectionId").asText(), node.get("noOfBooks").asInt());
 			int pkgId = subpkgService.addSubscriptionPackage(pkg, map);
 			return "Package added successfully. Package Id : " + pkgId;

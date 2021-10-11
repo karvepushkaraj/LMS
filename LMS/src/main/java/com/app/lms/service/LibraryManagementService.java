@@ -92,8 +92,8 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public BookCopy getBookCopy(String bookId) throws InvalidBusinessCondition {
-		BookTitle bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-		CopyId key = new CopyId(bt, Integer.parseInt(bookId.substring(4)));
+		BookTitle bookTitle = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
+		CopyId key = new CopyId(bookTitle, Integer.parseInt(bookId.substring(4)));
 		return bookCopyDao.getById(key).orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
 	}
 
@@ -124,20 +124,21 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public void deleteBook(String bookId) throws InvalidBusinessCondition {
-		BookTitle bt = null;
+		BookTitle bookTitle = null;
 		CopyId key = null;
 		try {
-			bt = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-			key = new CopyId(bt, Integer.parseInt(bookId.substring(4)));
+			bookTitle = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
+			key = new CopyId(bookTitle, Integer.parseInt(bookId.substring(4)));
 		} catch (NumberFormatException e) {
 			throw new InvalidBusinessCondition("Invalid Input", e);
 		}
-		BookCopy bc = bookCopyDao.getById(key).orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
-		if (bc.getMember() != null)
+		BookCopy bookCopy = bookCopyDao.getById(key)
+				.orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
+		if (bookCopy.getMember() != null)
 			throw new InvalidBusinessCondition("Book is issued");
-		bookCopyDao.delete(Optional.of(bc));
-		if (bt.getBookCopies().isEmpty())
-			bookTitleDao.delete(Optional.of(bt));
+		bookCopyDao.delete(Optional.of(bookCopy));
+		if (bookTitle.getBookCopies().isEmpty())
+			bookTitleDao.delete(Optional.of(bookTitle));
 	}
 
 	@Override
@@ -191,15 +192,13 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		List<String> freememsecids = auxiliaryDao.getFreeMemberSections(memberid);
 		if (!freememsecids.contains(freebksecid))
 			throw new InvalidBusinessCondition("Member Subscription does not exist");
-		BookCopy bc = getBookCopy(bookid);
-		Member m = getMember(memberid);
+		BookCopy bookCopy = getBookCopy(bookid);
+		Member member = getMember(memberid);
 		Timestamp issueDate = new Timestamp(System.currentTimeMillis());
-		BookTransaction bt = new BookTransaction(m, bc, issueDate, null, ActivityStatus.ACTIVE);
-		bookTransactionDao.add(Optional.of(bt));
-		bc.setMember(m);
-		m.addBook(bc);
-		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid)
-				.orElseThrow(() -> new InvalidBusinessCondition("Transaction failed"));
+		BookTransaction bktrans = new BookTransaction(member, bookCopy, issueDate, null, ActivityStatus.ACTIVE);
+		bookTransactionDao.add(Optional.of(bktrans));
+		bookCopy.setMember(member);
+		member.addBook(bookCopy);
 		return bktrans.getTransactionId();
 	}
 
@@ -208,16 +207,18 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		BookTransaction bktrans = auxiliaryDao.getActBkTrans(bookid, memberid)
 				.orElseThrow(() -> new InvalidBusinessCondition("Issue Transaction does not exist"));
 		Date returnDate = new Timestamp(System.currentTimeMillis());
-		long diffInMillis = returnDate.getTime() - bktrans.getIssueDate().getTime();
+		long diffInMillis = returnDate.getTime() - bktrans.getIssueDate().getTime(); // get return duration in millisec
+		// convert millisec to minutes
 		long bookReturnDuration = TimeUnit.MINUTES.convert(diffInMillis, TimeUnit.MILLISECONDS);
+		// late return period is compared to minutes i.e. 1 day = 1 min
 		if (bookReturnDuration > BookTransaction.LATE_RETURN_DAYS)
 			accountService.addLateFee(bktrans, fee);
-		BookCopy bc = getBookCopy(bookid);
-		Member m = getMember(memberid);
+		BookCopy bookCopy = getBookCopy(bookid);
+		Member member = getMember(memberid);
 		bktrans.setStatus(ActivityStatus.EXPIRED);
 		bktrans.setReturnDate(returnDate);
-		bc.setMember(null);
-		m.removeBook(bc);
+		bookCopy.setMember(null);
+		member.removeBook(bookCopy);
 		return bktrans.getTransactionId();
 	}
 
