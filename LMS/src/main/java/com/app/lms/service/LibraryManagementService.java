@@ -172,6 +172,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		if (!member.getBook().isEmpty())
 			throw new InvalidBusinessCondition("Book issued to this member");
 		accountService.removeDeposite(member, deposite);
+		member.setExitDate(new Date(System.currentTimeMillis()));
 		member.setStatus(ActivityStatus.EXPIRED);
 	}
 
