@@ -225,7 +225,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public void expireSubscription() {
-		auxiliaryDao.getActSubscriptions().forEach((sub) -> sub.setStatus(ActivityStatus.EXPIRED));
+		auxiliaryDao.getActSubscriptions().forEach(sub -> sub.setStatus(ActivityStatus.EXPIRED));
 	}
 
 }
