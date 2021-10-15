@@ -85,8 +85,8 @@ public class LibraryManagementController {
 				ObjectNode objectNode = mapper.valueToTree(bookCopy); // add BookCopy
 				objectNode.put("sectionId", bookCopy.getTitle().getSection().getSectionId()); // add sectionId
 				Member member = bookCopy.getMember();
-				objectNode.put("member", member == null ? 0 : member.getMemberId()); // put memberId or 0 if member does
-																						// not exist
+				// put memberId or 0 if member does not exist
+				objectNode.put("member", member == null ? 0 : member.getMemberId());
 				return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 			} else
 				throw new IllegalRequestException("Invalid book Id");
