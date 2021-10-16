@@ -100,6 +100,10 @@ public class BookTitle {
 		return Collections.unmodifiableList(bookCopies);
 	}
 
+	public boolean removeBookCopy(BookCopy bookCopy) {
+		return bookCopies.remove(bookCopy);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
