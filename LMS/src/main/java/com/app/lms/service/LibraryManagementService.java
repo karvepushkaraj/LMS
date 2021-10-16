@@ -124,19 +124,11 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 
 	@Override
 	public void deleteBook(String bookId) throws InvalidBusinessCondition {
-		BookTitle bookTitle = null;
-		CopyId key = null;
-		try {
-			bookTitle = getBookTitle(Integer.parseInt(bookId.substring(0, 4)));
-			key = new CopyId(bookTitle, Integer.parseInt(bookId.substring(4)));
-		} catch (NumberFormatException e) {
-			throw new InvalidBusinessCondition("Invalid Input", e);
-		}
-		BookCopy bookCopy = bookCopyDao.getById(key)
-				.orElseThrow(() -> new InvalidBusinessCondition("Book does not exist"));
+		BookCopy bookCopy = getBookCopy(bookId);
 		if (bookCopy.getMember() != null)
 			throw new InvalidBusinessCondition("Book is issued");
 		bookCopyDao.delete(Optional.of(bookCopy));
+		BookTitle bookTitle = bookCopy.getTitle();
 		if (bookTitle.getBookCopies().isEmpty())
 			bookTitleDao.delete(Optional.of(bookTitle));
 	}
