@@ -18,6 +18,4 @@ public interface LibrarySectionService {
 
 	void updateLibrarySection(LibrarySection librarySection) throws InvalidBusinessCondition;
 
-	void deleteLibrarySection(String id) throws InvalidBusinessCondition;
-
 }

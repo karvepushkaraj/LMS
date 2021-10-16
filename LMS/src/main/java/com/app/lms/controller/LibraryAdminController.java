@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.validation.Valid;
 
-import org.hibernate.TransactionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,24 +95,6 @@ public class LibraryAdminController {
 		try {
 			librarySectionService.updateLibrarySection(librarySection);
 			return "Library Section updated successfully";
-		} catch (InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * Delete Library Section.
-	 * 
-	 * @param id {@link LibrarySection} id
-	 * @return String message
-	 */
-	@DeleteMapping("/section/{id}")
-	public String deleteLibrarySection(@PathVariable("id") String id) {
-		if (id.length() != 3) // fail fast
-			throw new TransactionException("Invalid id : " + id);
-		try {
-			librarySectionService.deleteLibrarySection(id);
-			return "Library Section deleted successfully";
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e.getMessage(), e);
 		}

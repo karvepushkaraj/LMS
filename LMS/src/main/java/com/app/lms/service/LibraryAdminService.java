@@ -73,13 +73,8 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	public void updateLibrarySection(LibrarySection bookSection) throws InvalidBusinessCondition {
 		if (bookSection == null)
 			throw new InvalidBusinessCondition("Invalid Input");
-		LibrarySection bs = getLibrarySection(bookSection.getSectionId());
-		bs.setSectionName(bookSection.getSectionName());
-	}
-
-	@Override
-	public void deleteLibrarySection(String id) throws InvalidBusinessCondition {
-		librarySectionDao.delete(Optional.of(getLibrarySection(id)));
+		LibrarySection ls = getLibrarySection(bookSection.getSectionId());
+		ls.setSectionName(bookSection.getSectionName());
 	}
 
 	@Override
