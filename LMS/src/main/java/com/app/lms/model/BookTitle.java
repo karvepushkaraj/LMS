@@ -45,7 +45,7 @@ public class BookTitle {
 	private LibrarySection section;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "title", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "title", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<BookCopy> bookCopies;
 
 	public BookTitle() {

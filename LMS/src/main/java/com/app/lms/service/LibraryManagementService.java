@@ -129,7 +129,6 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		if (bookCopy.getMember() != null)
 			throw new InvalidBusinessCondition("Book is issued");
 		bookTitle.removeBookCopy(bookCopy);
-		bookCopyDao.delete(Optional.of(bookCopy));
 		if (bookTitle.getBookCopies().isEmpty())
 			bookTitleDao.delete(Optional.of(bookTitle));
 	}
