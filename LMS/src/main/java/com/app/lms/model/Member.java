@@ -166,12 +166,12 @@ public class Member {
 		return Collections.unmodifiableSet(books);
 	}
 
-	public void addBook(BookCopy book) {
-		books.add(book);
+	public boolean addBook(BookCopy book) {
+		return books.add(book);
 	}
 
-	public void removeBook(BookCopy book) {
-		books.remove(book);
+	public boolean removeBook(BookCopy book) {
+		return books.remove(book);
 	}
 
 	public boolean isActive() {
