@@ -64,7 +64,7 @@ public class LibraryAdminController {
 		try {
 			return librarySectionService.getLibrarySection(id);
 		} catch (InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class LibraryAdminController {
 			librarySectionService.addLibrarySection(librarySection);
 			return "Library Section added successfully";
 		} catch (InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -96,7 +96,7 @@ public class LibraryAdminController {
 			librarySectionService.updateLibrarySection(librarySection);
 			return "Library Section updated successfully";
 		} catch (InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class LibraryAdminController {
 			}
 			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -148,7 +148,7 @@ public class LibraryAdminController {
 			return "Package added successfully. Package Id : " + pkgId;
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition
 				| NullPointerException e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -164,7 +164,7 @@ public class LibraryAdminController {
 			subpkgService.deleteSubscriptionPackage(id);
 			return "Subscription Package deleted successfully";
 		} catch (InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 

@@ -91,7 +91,7 @@ public class LibraryManagementController {
 			} else
 				throw new IllegalRequestException("Invalid book Id");
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class LibraryManagementController {
 			return "Book added successfully. Book Id : " + bookId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class LibraryManagementController {
 			bookService.deleteBook(bookId);
 			return "Book deleted successfully";
 		} catch (InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -156,7 +156,7 @@ public class LibraryManagementController {
 			member.getBook().stream().forEach(bc -> arrayNode.add("" + bc.getTitle().getTitleId() + bc.getCopyId()));
 			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(node);
 		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -177,7 +177,7 @@ public class LibraryManagementController {
 			return "Member added successfully. Member Id : " + memberId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -193,7 +193,7 @@ public class LibraryManagementController {
 			memberService.updateMember(member);
 			return "Member updated successfully";
 		} catch (InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -214,7 +214,7 @@ public class LibraryManagementController {
 			return "Member deleted successfully";
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -237,7 +237,7 @@ public class LibraryManagementController {
 			return "Subscription added successfully. Subscription Id : " + subId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -256,7 +256,7 @@ public class LibraryManagementController {
 			int response = bookTransactionService.issueBook(bookId, memberId);
 			return "Transaction Successful. Transaction Id : " + response;
 		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
@@ -278,7 +278,7 @@ public class LibraryManagementController {
 			return "Transaction Successful. Transaction Id : " + response;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
 				| InvalidBusinessCondition e) {
-			throw new IllegalRequestException(e.getMessage(), e);
+			throw new IllegalRequestException(e);
 		}
 	}
 
