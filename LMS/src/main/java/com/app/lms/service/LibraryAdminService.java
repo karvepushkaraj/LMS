@@ -48,7 +48,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	}
 
 	@PostConstruct
-	public void setClazz() {
+	private void setClazz() {
 		librarySectionDao.setClazz(LibrarySection.class);
 		subscriptionPackageDao.setClazz(SubscriptionPackage.class);
 		pkgSecDao.setClazz(PackageSection.class);

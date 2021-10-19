@@ -77,7 +77,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	}
 
 	@PostConstruct
-	public void setClazz() {
+	private void setClazz() {
 		bookTitleDao.setClazz(BookTitle.class);
 		bookCopyDao.setClazz(BookCopy.class);
 		memberDao.setClazz(Member.class);

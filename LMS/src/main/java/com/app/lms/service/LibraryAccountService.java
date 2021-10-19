@@ -43,7 +43,7 @@ public class LibraryAccountService implements AccountService {
 	}
 
 	@PostConstruct
-	public void SetClazz() {
+	private void SetClazz() {
 		depositeDao.setClazz(Deposite.class);
 		subscriptionFeeDao.setClazz(SubscriptionFee.class);
 		lateFeeDao.setClazz(LateFee.class);
