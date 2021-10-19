@@ -72,6 +72,7 @@ public class LibraryManagementController {
 			if (bookId.length() == 4) { // return BookTitle if bookId length is 4
 				BookTitle bookTitle = bookService.getBookTitle(Integer.parseInt(bookId));
 				ObjectNode objectNode = mapper.valueToTree(bookTitle); // add BookTitle
+				objectNode.put("sectionId", bookTitle.getSection().getSectionId()); // add sectionId
 				ArrayNode arrayNode = objectNode.putArray("bookCopies"); // create array named bookCopies
 				for (BookCopy bookCopy : bookTitle.getBookCopies()) {
 					ObjectNode node = mapper.createObjectNode();
