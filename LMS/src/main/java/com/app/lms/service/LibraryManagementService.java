@@ -101,6 +101,8 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	public String addBook(String sectionId, BookTitle bookTitle, BookCopy bookCopy) throws InvalidBusinessCondition {
 		if (bookTitle == null || bookCopy == null)
 			throw new InvalidBusinessCondition("Invalid Input");
+		if (bookTitle.getTitleId() != 0)
+			return addBookCopy(bookTitle.getTitleId(), bookCopy);
 		LibrarySection librarySection = librarySectionService.getLibrarySection(sectionId);
 		bookTitle.setSection(librarySection);
 		bookTitleDao.add(Optional.of(bookTitle));
