@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.app.lms.controller.LibraryAdminController;
 import com.app.lms.controller.LibraryManagementController;
 import com.app.lms.model.LibrarySection;
@@ -59,6 +60,21 @@ public class AppConfig {
 		logger.info("Cron Job Started");
 		lms.expireSubscription();
 		logger.info("Cron Job Finished");
+	}
+
+	/**
+	 * CORS Configuration.
+	 * 
+	 * @return {@link WebMvcConfigurer}
+	 */
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+			}
+		};
 	}
 
 	/**
