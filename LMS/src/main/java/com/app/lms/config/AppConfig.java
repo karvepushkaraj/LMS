@@ -3,7 +3,7 @@ package com.app.lms.config;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -95,7 +95,7 @@ public class AppConfig {
 	}
 
 	private void addLibrarySections() throws IOException {
-		try (Stream<String> stream = Files.lines(Paths.get("src/main/resources/LMS_Sections.csv")).skip(1)) {
+		try (Stream<String> stream = Files.lines(Path.of("src/main/resources/LMS_Sections.csv")).skip(1)) {
 			stream.map(line -> {
 				String[] sarr = line.split(",");
 				return new LibrarySection(sarr[0], sarr[1]);
@@ -104,7 +104,7 @@ public class AppConfig {
 	}
 
 	private void addSubscriptionPackages() throws IOException {
-		try (Stream<String> stream = Files.lines(Paths.get("src/main/resources/LMS_Packages.txt"))) {
+		try (Stream<String> stream = Files.lines(Path.of("src/main/resources/LMS_Packages.txt"))) {
 			stream.forEach(lac::addSubscriptionPackage);
 		}
 	}
@@ -112,7 +112,7 @@ public class AppConfig {
 	private void addBooks() throws IOException {
 		final String json = "{ \"sectionId\": \"%s\", \"BookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"BookCopy\": { \"price\": \"%s\"} }";
 		try (Stream<String> stream = Files
-				.lines(Paths.get("src/main/resources/LMS_Books.csv"), StandardCharsets.ISO_8859_1).skip(1)) {
+				.lines(Path.of("src/main/resources/LMS_Books.csv"), StandardCharsets.ISO_8859_1).skip(1)) {
 			stream.parallel().map(line -> String.format(json, (Object[]) line.split(","))).forEach(lmc::addBook);
 		}
 	}
