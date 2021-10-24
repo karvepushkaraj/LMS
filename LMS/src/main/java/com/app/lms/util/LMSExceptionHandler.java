@@ -58,7 +58,7 @@ public class LMSExceptionHandler extends ResponseEntityExceptionHandler {
 			sb.append(t.getMessage());
 		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), HttpStatus.BAD_REQUEST,
 				sb.toString());
-		return new ResponseEntity<ErrorMessage>(error, new HttpHeaders(), error.getStatus());
+		return new ResponseEntity<>(error, new HttpHeaders(), error.getStatus());
 	}
 
 }
