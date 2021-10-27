@@ -117,7 +117,7 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 		if (bookCopy == null)
 			throw new InvalidBusinessCondition("Invalid Input");
 		BookTitle bookTitle = getBookTitle(titleId);
-		synchronized (bookCopy) {
+		synchronized (bookTitle) {
 			List<BookCopy> list = bookTitle.getBookCopies();
 			bookCopy.setCopyId(list.get(list.size() - 1).getCopyId() + 1);
 			bookCopy.setTitle(bookTitle);
