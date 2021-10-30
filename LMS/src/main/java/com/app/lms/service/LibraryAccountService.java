@@ -28,19 +28,22 @@ import com.app.lms.util.InvalidBusinessCondition;
 @Transactional
 public class LibraryAccountService implements AccountService {
 
-	private final BasicDao<Deposite, String> depositeDao;
-
-	private final BasicDao<SubscriptionFee, Integer> subscriptionFeeDao;
-
-	private final BasicDao<LateFee, Integer> lateFeeDao;
+	@Autowired
+	private BasicDao<Deposite, String> depositeDao;
 
 	@Autowired
-	public LibraryAccountService(BasicDao<Deposite, String> depositeDao,
-			BasicDao<SubscriptionFee, Integer> subscriptionFeeDao, BasicDao<LateFee, Integer> lateFeeDao) {
-		this.depositeDao = depositeDao;
-		this.subscriptionFeeDao = subscriptionFeeDao;
-		this.lateFeeDao = lateFeeDao;
-	}
+	private BasicDao<SubscriptionFee, Integer> subscriptionFeeDao;
+
+	@Autowired
+	private BasicDao<LateFee, Integer> lateFeeDao;
+
+//	@Autowired
+//	public LibraryAccountService(BasicDao<Deposite, String> depositeDao,
+//			BasicDao<SubscriptionFee, Integer> subscriptionFeeDao, BasicDao<LateFee, Integer> lateFeeDao) {
+//		this.depositeDao = depositeDao;
+//		this.subscriptionFeeDao = subscriptionFeeDao;
+//		this.lateFeeDao = lateFeeDao;
+//	}
 
 	@PostConstruct
 	private void SetClazz() {

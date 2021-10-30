@@ -23,14 +23,15 @@ import org.springframework.stereotype.Repository;
 @Scope("prototype")
 public class BasicDaoImpl<T, K extends Serializable> implements BasicDao<T, K> {
 
-	private final EntityManager em;
+	@Autowired
+	private EntityManager em;
 
 	private Class<T> clazz;
 
-	@Autowired
-	public BasicDaoImpl(EntityManager em) {
-		this.em = em;
-	}
+//	@Autowired
+//	public BasicDaoImpl(EntityManager em) {
+//		this.em = em;
+//	}
 
 	@Override
 	public void setClazz(Class<T> clazz) {

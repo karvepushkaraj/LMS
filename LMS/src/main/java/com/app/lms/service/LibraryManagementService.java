@@ -41,40 +41,49 @@ import com.app.lms.util.InvalidBusinessCondition;
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = InvalidBusinessCondition.class)
 public class LibraryManagementService implements BookService, MemberService, BookTransactionService {
 
-	private final BasicDao<BookTitle, Integer> bookTitleDao;
-
-	private final BasicDao<BookCopy, CopyId> bookCopyDao;
-
-	private final BasicDao<Member, Integer> memberDao;
-
-	private final BasicDao<Subscription, Integer> subscriptionDao;
-
-	private final BasicDao<BookTransaction, Integer> bookTransactionDao;
-
-	private final AuxiliaryDao auxiliaryDao;
-
-	private final LibrarySectionService librarySectionService;
-
-	private final SubscriptionPackageService subpkgService;
-
-	private final AccountService accountService;
+	@Autowired
+	private BasicDao<BookTitle, Integer> bookTitleDao;
 
 	@Autowired
-	public LibraryManagementService(BasicDao<BookTitle, Integer> bookTitleDao, BasicDao<BookCopy, CopyId> bookCopyDao,
-			BasicDao<Member, Integer> memberDao, BasicDao<Subscription, Integer> subscriptionDao,
-			BasicDao<BookTransaction, Integer> bookTransactionDao, AuxiliaryDao auxiliaryDao,
-			LibrarySectionService librarySectionService, SubscriptionPackageService subpkgService,
-			AccountService accountService) {
-		this.bookTitleDao = bookTitleDao;
-		this.bookCopyDao = bookCopyDao;
-		this.memberDao = memberDao;
-		this.subscriptionDao = subscriptionDao;
-		this.bookTransactionDao = bookTransactionDao;
-		this.auxiliaryDao = auxiliaryDao;
-		this.librarySectionService = librarySectionService;
-		this.subpkgService = subpkgService;
-		this.accountService = accountService;
-	}
+	private BasicDao<BookCopy, CopyId> bookCopyDao;
+
+	@Autowired
+	private BasicDao<Member, Integer> memberDao;
+
+	@Autowired
+	private BasicDao<Subscription, Integer> subscriptionDao;
+
+	@Autowired
+	private BasicDao<BookTransaction, Integer> bookTransactionDao;
+
+	@Autowired
+	private AuxiliaryDao auxiliaryDao;
+
+	@Autowired
+	private LibrarySectionService librarySectionService;
+
+	@Autowired
+	private SubscriptionPackageService subpkgService;
+
+	@Autowired
+	private AccountService accountService;
+
+//	@Autowired
+//	public LibraryManagementService(BasicDao<BookTitle, Integer> bookTitleDao, BasicDao<BookCopy, CopyId> bookCopyDao,
+//			BasicDao<Member, Integer> memberDao, BasicDao<Subscription, Integer> subscriptionDao,
+//			BasicDao<BookTransaction, Integer> bookTransactionDao, AuxiliaryDao auxiliaryDao,
+//			LibrarySectionService librarySectionService, SubscriptionPackageService subpkgService,
+//			AccountService accountService) {
+//		this.bookTitleDao = bookTitleDao;
+//		this.bookCopyDao = bookCopyDao;
+//		this.memberDao = memberDao;
+//		this.subscriptionDao = subscriptionDao;
+//		this.bookTransactionDao = bookTransactionDao;
+//		this.auxiliaryDao = auxiliaryDao;
+//		this.librarySectionService = librarySectionService;
+//		this.subpkgService = subpkgService;
+//		this.accountService = accountService;
+//	}
 
 	@PostConstruct
 	private void setClazz() {

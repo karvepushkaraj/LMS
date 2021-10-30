@@ -23,12 +23,13 @@ import com.app.lms.model.Subscription;
 @Repository("AuxiliaryDao")
 public class AuxiliaryDaoImpl implements AuxiliaryDao {
 
-	private final EntityManager em;
-
 	@Autowired
-	public AuxiliaryDaoImpl(EntityManager em) {
-		this.em = em;
-	}
+	private EntityManager em;
+
+//	@Autowired
+//	public AuxiliaryDaoImpl(EntityManager em) {
+//		this.em = em;
+//	}
 
 	private Session getSession() {
 		return em.unwrap(Session.class);

@@ -40,16 +40,18 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @RequestMapping("api/v1/lms")
 public class LibraryAdminController {
 
-	private final LibrarySectionService librarySectionService;
-
-	private final SubscriptionPackageService subpkgService;
+	@Autowired
+	private LibrarySectionService librarySectionService;
 
 	@Autowired
-	public LibraryAdminController(LibrarySectionService librarySectionService,
-			SubscriptionPackageService subpkgService) {
-		this.librarySectionService = librarySectionService;
-		this.subpkgService = subpkgService;
-	}
+	private SubscriptionPackageService subpkgService;
+
+//	@Autowired
+//	public LibraryAdminController(LibrarySectionService librarySectionService,
+//			SubscriptionPackageService subpkgService) {
+//		this.librarySectionService = librarySectionService;
+//		this.subpkgService = subpkgService;
+//	}
 
 	/**
 	 * Get single Library Section.

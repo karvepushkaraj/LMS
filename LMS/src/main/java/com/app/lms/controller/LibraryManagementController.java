@@ -45,19 +45,22 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @RequestMapping("api/v1/lms")
 public class LibraryManagementController {
 
-	private final BookService bookService;
-
-	private final MemberService memberService;
-
-	private final BookTransactionService bookTransactionService;
+	@Autowired
+	private BookService bookService;
 
 	@Autowired
-	public LibraryManagementController(BookService bookService, MemberService memberService,
-			BookTransactionService bookTransactionService) {
-		this.bookService = bookService;
-		this.memberService = memberService;
-		this.bookTransactionService = bookTransactionService;
-	}
+	private MemberService memberService;
+
+	@Autowired
+	private BookTransactionService bookTransactionService;
+
+//	@Autowired
+//	public LibraryManagementController(BookService bookService, MemberService memberService,
+//			BookTransactionService bookTransactionService) {
+//		this.bookService = bookService;
+//		this.memberService = memberService;
+//		this.bookTransactionService = bookTransactionService;
+//	}
 
 	/**
 	 * Get single Book Title if id length is 4 or Book Copy if id length is 5.
