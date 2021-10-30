@@ -46,15 +46,6 @@ public class AppConfig {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-//	@Autowired
-//	public AppConfig(Environment env, LibraryAdminController lac, LibraryManagementController lmc,
-//			LibraryManagementService lms) {
-//		this.env = env;
-//		this.lac = lac;
-//		this.lmc = lmc;
-//		this.lms = lms;
-//	}
-
 	/**
 	 * Cron job to update the expired subscriptions. Runs every 5 mins. Note : It is
 	 * updating all active subscriptions.

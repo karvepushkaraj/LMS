@@ -28,11 +28,6 @@ public class BasicDaoImpl<T, K extends Serializable> implements BasicDao<T, K> {
 
 	private Class<T> clazz;
 
-//	@Autowired
-//	public BasicDaoImpl(EntityManager em) {
-//		this.em = em;
-//	}
-
 	@Override
 	public void setClazz(Class<T> clazz) {
 		this.clazz = clazz;

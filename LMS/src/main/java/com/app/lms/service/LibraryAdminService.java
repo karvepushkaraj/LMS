@@ -41,15 +41,6 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	@Autowired
 	private BasicDao<PackageSection, PackageSectionId> pkgSecDao;
 
-//	@Autowired
-//	public LibraryAdminService(BasicDao<LibrarySection, String> librarySectionDao,
-//			BasicDao<SubscriptionPackage, Integer> subscriptionPackageDao,
-//			BasicDao<PackageSection, PackageSectionId> pkgSecDao) {
-//		this.librarySectionDao = librarySectionDao;
-//		this.subscriptionPackageDao = subscriptionPackageDao;
-//		this.pkgSecDao = pkgSecDao;
-//	}
-
 	@PostConstruct
 	private void setClazz() {
 		librarySectionDao.setClazz(LibrarySection.class);

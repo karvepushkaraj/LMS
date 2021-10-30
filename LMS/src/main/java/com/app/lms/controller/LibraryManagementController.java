@@ -54,14 +54,6 @@ public class LibraryManagementController {
 	@Autowired
 	private BookTransactionService bookTransactionService;
 
-//	@Autowired
-//	public LibraryManagementController(BookService bookService, MemberService memberService,
-//			BookTransactionService bookTransactionService) {
-//		this.bookService = bookService;
-//		this.memberService = memberService;
-//		this.bookTransactionService = bookTransactionService;
-//	}
-
 	/**
 	 * Get single Book Title if id length is 4 or Book Copy if id length is 5.
 	 * 

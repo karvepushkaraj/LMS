@@ -46,13 +46,6 @@ public class LibraryAdminController {
 	@Autowired
 	private SubscriptionPackageService subpkgService;
 
-//	@Autowired
-//	public LibraryAdminController(LibrarySectionService librarySectionService,
-//			SubscriptionPackageService subpkgService) {
-//		this.librarySectionService = librarySectionService;
-//		this.subpkgService = subpkgService;
-//	}
-
 	/**
 	 * Get single Library Section.
 	 * 

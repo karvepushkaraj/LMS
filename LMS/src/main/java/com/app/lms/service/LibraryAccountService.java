@@ -37,14 +37,6 @@ public class LibraryAccountService implements AccountService {
 	@Autowired
 	private BasicDao<LateFee, Integer> lateFeeDao;
 
-//	@Autowired
-//	public LibraryAccountService(BasicDao<Deposite, String> depositeDao,
-//			BasicDao<SubscriptionFee, Integer> subscriptionFeeDao, BasicDao<LateFee, Integer> lateFeeDao) {
-//		this.depositeDao = depositeDao;
-//		this.subscriptionFeeDao = subscriptionFeeDao;
-//		this.lateFeeDao = lateFeeDao;
-//	}
-
 	@PostConstruct
 	private void SetClazz() {
 		depositeDao.setClazz(Deposite.class);

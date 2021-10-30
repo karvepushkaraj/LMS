@@ -26,11 +26,6 @@ public class AuxiliaryDaoImpl implements AuxiliaryDao {
 	@Autowired
 	private EntityManager em;
 
-//	@Autowired
-//	public AuxiliaryDaoImpl(EntityManager em) {
-//		this.em = em;
-//	}
-
 	private Session getSession() {
 		return em.unwrap(Session.class);
 	}
