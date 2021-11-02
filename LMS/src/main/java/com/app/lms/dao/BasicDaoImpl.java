@@ -1,6 +1,7 @@
 package com.app.lms.dao;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -40,6 +41,11 @@ public class BasicDaoImpl<T, K extends Serializable> implements BasicDao<T, K> {
 	@Override
 	public Optional<T> getById(K key) {
 		return Optional.ofNullable(getSession().get(clazz, key));
+	}
+
+	@Override
+	public List<?> getAll() {
+		return getSession().createQuery("from " + clazz.getName()).list();
 	}
 
 	@Override

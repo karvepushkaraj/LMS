@@ -1,6 +1,7 @@
 package com.app.lms.dao;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,6 +29,13 @@ public interface BasicDao<T, K extends Serializable> {
 	 * @return
 	 */
 	Optional<T> getById(K key);
+
+	/**
+	 * Get all records of model
+	 * 
+	 * @return
+	 */
+	List<?> getAll();
 
 	/**
 	 * Add new record of model.

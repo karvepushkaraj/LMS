@@ -53,7 +53,10 @@ public class LibraryAdminController {
 	 * @return {@link LibrarySection} or {@code null}
 	 */
 	@GetMapping("/section")
-	public LibrarySection getLibrarySection(@RequestParam("id") String id) {
+	public Object getLibrarySection(@RequestParam(value = "id", required = false) String id,
+			@RequestParam(value = "all", required = false, defaultValue = "false") boolean flag) {
+		if (flag)
+			return librarySectionService.getLibrarySection();
 		if (id.length() != 3) // fail fast
 			throw new IllegalRequestException("Invalid id : " + id);
 		try {

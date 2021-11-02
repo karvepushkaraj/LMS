@@ -1,5 +1,7 @@
 package com.app.lms.service;
 
+import java.util.List;
+
 import com.app.lms.model.LibrarySection;
 import com.app.lms.util.InvalidBusinessCondition;
 
@@ -13,6 +15,8 @@ import com.app.lms.util.InvalidBusinessCondition;
 public interface LibrarySectionService {
 
 	LibrarySection getLibrarySection(String id) throws InvalidBusinessCondition;
+
+	List<LibrarySection> getLibrarySection();
 
 	void addLibrarySection(LibrarySection librarySection) throws InvalidBusinessCondition;
 

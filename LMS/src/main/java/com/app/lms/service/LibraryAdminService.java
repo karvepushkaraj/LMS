@@ -1,5 +1,6 @@
 package com.app.lms.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -52,6 +53,12 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 	public LibrarySection getLibrarySection(String id) throws InvalidBusinessCondition {
 		return librarySectionDao.getById(id)
 				.orElseThrow(() -> new InvalidBusinessCondition("Library Section does not exist"));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LibrarySection> getLibrarySection() {
+		return (List<LibrarySection>) librarySectionDao.getAll();
 	}
 
 	@Override
