@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.app.lms.model.LibrarySection;
-import com.app.lms.model.PackageSection;
 import com.app.lms.model.SubscriptionPackage;
 import com.app.lms.service.LibrarySectionService;
 import com.app.lms.service.SubscriptionPackageService;
@@ -26,7 +25,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Controller for Library Admin Operations. Note : Exceptions of this class are
@@ -106,20 +104,13 @@ public class LibraryAdminController {
 	 *         {@link LibrarySection} id and no. of Books
 	 */
 	@GetMapping("/package")
-	public String getSubscriptionPackage(@RequestParam("id") int id) {
-		ObjectMapper mapper = new ObjectMapper();
+	public Object getSubscriptionPackage(@RequestParam(value = "id", required = false, defaultValue = "0") int id,
+			@RequestParam(value = "all", required = false, defaultValue = "false") boolean flag) {
+		if (flag)
+			return subpkgService.getSubscriptionPackage();
 		try {
-			SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(id);
-			ObjectNode objectNode = mapper.valueToTree(pkg); // add pkg to ObjectNode
-			ArrayNode arrayNode = objectNode.putArray("sections"); // add array named sections
-			for (PackageSection ps : pkg.getPackageSection()) {
-				ObjectNode node = mapper.createObjectNode();
-				node.put("sectionId", ps.getSection().getSectionId());
-				node.put("noOfBooks", ps.getNumberOfBooks());
-				arrayNode.add(node); // add node to ArrayNode
-			}
-			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
-		} catch (JsonProcessingException | IllegalArgumentException | InvalidBusinessCondition e) {
+			return subpkgService.getSubscriptionPackage(id);
+		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e);
 		}
 	}

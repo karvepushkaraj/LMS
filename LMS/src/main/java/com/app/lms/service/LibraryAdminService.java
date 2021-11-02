@@ -84,6 +84,12 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 				.orElseThrow(() -> new InvalidBusinessCondition("Subscription Package does not exist"));
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SubscriptionPackage> getSubscriptionPackage() {
+		return (List<SubscriptionPackage>) subscriptionPackageDao.getAll();
+	}
+
 	@Override
 	public int addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map)
 			throws InvalidBusinessCondition {
