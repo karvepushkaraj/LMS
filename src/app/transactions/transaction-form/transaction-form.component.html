@@ -1,0 +1,30 @@
+<mat-drawer-container fxFill>
+    <mat-drawer mode="side" opened>
+        <div class="mt-4">
+            <h3 class="text-center">Book Transactions</h3>
+            <div class="mt-4" fxLayout="row" fxLayoutAlign="space-around center">
+                <div class="col-8">
+                    <form [formGroup]="bookTransactionForm" class="example-form">
+                        <mat-form-field class="example-full-width" appearance="fill"> 
+                            <mat-label class="col-form-label">Book Id</mat-label>
+                            <input type="number" matInput formControlName="bookId">
+                            <mat-error *ngIf="bookId.invalid">Book Id is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width" appearance="fill"> 
+                            <mat-label class="col-form-label">Member Id</mat-label>
+                            <input type="number" matInput formControlName="memberId">
+                            <mat-error *ngIf="memberId.invalid">Book Id is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                        <div fxLayout="row" fxLayoutAlign="space-around center" class="mt-2">
+                            <button mat-raised-button color="primary" type="button" (click)="issueBook()">Issue</button>
+                            <button mat-raised-button color="primary" type="button" (click)="returnBook()">Return</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <app-subscription-form></app-subscription-form>
+    </mat-drawer-content>
+</mat-drawer-container>

@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Late Fee</h1>
+<div mat-dialog-content>
+    <form [formGroup]="lateFeeForm" class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill"> 
+            <mat-label class="col-form-label">Fees</mat-label>
+            <input type="number" matInput formControlName="lateFees">
+            <mat-error *ngIf="lateFees.invalid">Fees is <strong>Required</strong></mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill"> 
+            <mat-label class="col-form-label">Receipt Number</mat-label>
+            <input type="text" matInput formControlName="receiptNumber">
+            <mat-error *ngIf="receiptNumber.invalid">Receipt Number is <strong>Required</strong></mat-error>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
+    <button type="button" (click)="payFees()" mat-raised-button color="primary">Pay</button>
+    <button mat-button (click)="closeDialog()">Close</button>
+  </div>

@@ -1,0 +1,90 @@
+<mat-drawer-container fxFill>
+    <mat-drawer mode="side" opened>
+        <div class="mt-4">
+            <h3 class="text-center">Library Section Form</h3>
+            <div class="ml-5 mr-5">
+                <mat-radio-group [(ngModel)]="requestType" (change)="setRequestType()" fxLayout="row" fxLayoutAlign="space-around center">
+                    <mat-radio-button value="get" name="requestType" checked>Search</mat-radio-button>
+                    <mat-radio-button value="add" name="requestType">Add</mat-radio-button>
+                    <mat-radio-button value="update" name="requestType">Update</mat-radio-button>
+                 </mat-radio-group>
+            </div>
+            <div class="mt-4 mr-4 ml-4">
+                <div *ngIf="getFormFlag">
+                    <form [formGroup]="getSectionForm" (ngSubmit)="getSection()" (change)="toUpper(getSectionForm)" class="example-form">
+                        <mat-form-field class="example-full-width" appearance="fill"> 
+                            <mat-label class="col-form-label">Section Id</mat-label>
+                            <input type="text" matInput [formControl]="sectionId">
+                            <mat-error *ngIf="sectionId.hasError('required') && !sectionId.hasError('pattern')">Section Id is <strong>Required</strong></mat-error>
+                            <mat-error *ngIf="sectionId.hasError('pattern')">Length of Section Id should be 3</mat-error>
+                        </mat-form-field>
+                        <div fxLayout="row" fxLayoutAlign="space-around center" class="mt-3">
+                            <button mat-raised-button color="primary" class="col-3" type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <div *ngIf="addFormFlag">
+                    <form [formGroup]="addSectionForm" (ngSubmit)="addSection()" (change)="toUpper(addSectionForm)" class="example-form">
+                        <mat-form-field class="example-full-width" appearance="fill"> 
+                            <mat-label class="col-form-label">Section Id</mat-label>
+                            <input type="text" matInput [formControl]="sectionId">
+                            <mat-error *ngIf="sectionId.hasError('required') && !sectionId.hasError('pattern')">Section Id is <strong>Required</strong></mat-error>
+                            <mat-error *ngIf="sectionId.hasError('pattern')">Length of Section Id should be 3</mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width mt-3" appearance="fill">
+                            <mat-label class="col-form-label">Section Name</mat-label>
+                            <input type="text" matInput [formControl]="sectionName">
+                            <mat-error *ngIf="sectionName.hasError('required')">Section Name is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                       <div fxLayout="row" fxLayoutAlign="space-around center" class="mt-3">
+                        <button mat-raised-button color="primary" class="col-3" type="submit">Add</button>
+                       </div>
+                    </form>
+                </div>
+                <div *ngIf="updateFormFlag">
+                    <form [formGroup]="updateSectionForm" (ngSubmit)="updateSection()" (change)="toUpper(updateSectionForm)" class="example-form">
+                        <mat-form-field class="example-full-width" appearance="fill"> 
+                            <mat-label class="col-form-label">Section Id</mat-label>
+                            <input type="text" matInput [formControl]="sectionId">
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width mt-3" appearance="fill">
+                            <mat-label class="col-form-label">Section Name</mat-label>
+                            <input type="text" matInput [formControl]="sectionName">
+                            <mat-error *ngIf="sectionName.hasError('required')">Section Name is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                       <div fxLayout="row" fxLayoutAlign="space-around center" class="mt-3">
+                        <button mat-raised-button color="primary" class="col-3" type="submit">Update</button>
+                       </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div class="mt-4 mr-4 ml-4" *ngIf="showOutputFlag">
+            <div *ngIf="!errorFlag">
+                <mat-card [ngClass]="sucessStyle">
+                    <mat-card-title>Library Section {{sucessMsg}}</mat-card-title>
+                    <div class="mt-4">
+                        <mat-card-content>
+                            <p>Section Id : {{librarySection.sectionId}}</p>
+                            <p>Section Name : {{librarySection.sectionName}}</p>
+                        </mat-card-content>
+                    </div>
+                </mat-card>
+            </div>
+            <div *ngIf="errorFlag">
+                <mat-card class="alert alert-danger" role="alert">
+                    <mat-card-title>
+                        <h1 class="text-center alert-heading">Oops...</h1>
+                    </mat-card-title>
+                    <div class="mt-4">
+                        <mat-card-content>
+                            <p>{{errorMsg}}</p>
+                        </mat-card-content>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

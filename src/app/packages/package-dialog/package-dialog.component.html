@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Subscription Package</h1>
+<div mat-dialog-content>
+  <p>Package Number : {{data.packageId}}</p>
+  <p>Package Name : {{data.packageName}}</p>
+  <p>Fees : {{data.fees}}</p>
+  <div fxLayout="row" fxLayoutAlign="start start">
+    <div>Sections :</div>
+    <div>
+      <ul *ngFor="let element of data.sections" class="list-unstyled pl-2">
+       <li>{{element.sectionId}} - {{element.noOfBooks}}</li>
+      </ul>
+   </div> 
+  </div>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
+  <button type="button" (click)="deletePackage()" mat-mini-fab color="warn" fxLayout="row" fxLayoutAlign="space-around center">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <button mat-button (click)="closeDialog(false)">Close</button>
+</div>

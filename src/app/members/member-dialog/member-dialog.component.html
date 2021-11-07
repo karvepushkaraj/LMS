@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Library Member</h1>
+<div mat-dialog-content>
+    <div>
+        <p>Member Id : {{data.memberId}}</p>
+        <p>Name : {{data.name}}</p>
+        <p>Mobile No. : {{data.mobileNumber}}</p>
+        <p>Email : {{data.emailId}}</p>
+        <p>Status : <span [ngClass]="style">{{data.status}}</span></p>
+        <p>Enrollment Date : {{data.enrollmentDate}}</p>
+        <p *ngIf="data.status=='EXPIRED'">Exit Date : {{data.exitDate}}</p>
+        <p *ngIf="data.status=='ACTIVE'">Books : {{data.book.toString()}}</p>
+    </div>
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
+        <button mat-button (click)="closeDialog()">Close</button>
+</div>
+

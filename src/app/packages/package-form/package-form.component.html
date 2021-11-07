@@ -1,0 +1,73 @@
+<mat-drawer-container fxFill>
+    <mat-drawer mode="side" opened>
+        <div class="mt-4">
+            <h3 class="text-center">New Subscription Package</h3>
+            <div class="mt-4 mr-4 ml-4">
+                <form [formGroup]="addPackageForm" (ngSubmit)="createPackage()" (change)="toUpper()" class="example-form">
+                    <div formGroupName="package">
+                        <mat-form-field class="example-full-width" appearance="fill"> 
+                            <mat-label class="col-form-label">Package Name</mat-label>
+                            <input type="text" matInput formControlName="packageName">
+                            <mat-error *ngIf="packageName.invalid">Package Name is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width mt-3" appearance="fill">
+                            <mat-label class="col-form-label">Fees</mat-label>
+                            <input type="number" matInput formControlName="fees">
+                            <span matPrefix>₹&nbsp;</span>
+                            <mat-error *ngIf="fees.invalid">Fees should be greater than 0</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div formArrayName="sections" *ngFor="let _ of sections.controls; index as i">
+                        <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="space-around center">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Library Section</mat-label>
+                                <mat-select formControlName="sectionId">
+                                  <mat-option *ngFor="let section of libSections" [value]="section.sectionId">{{section.sectionName}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="sections.invalid">Library Section is <strong>Required</strong></mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="ml-2" style="width: 100px;">
+                                <mat-label>No. of Books</mat-label>
+                                <input matInput type="number" formControlName="noOfBooks">
+                                <mat-error *ngIf="sections.invalid">No. of Books should be greater than 0</mat-error>
+                            </mat-form-field>
+                            <button (click)="removeSection(i)" type="button" mat-mini-fab color="warn" class="ml-2 mb-3 remove-button" fxLayout="row" fxLayoutAlign="space-around center">
+                                <mat-icon>remove</mat-icon>
+                            </button>                         
+                        </div>
+                    </div>
+                    <div class="example-button-container">
+                        <button type="button" (click)="addSection()" mat-mini-fab color="accent">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="space-around center" class="mt-3">
+                        <button mat-raised-button color="primary" class="col-5" type="submit">Create Package</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <div fxFill class="mt-4">
+            <div class="ml-2 mr-2">
+                <table mat-table [dataSource]="subPkg" class="mat-elevation-z8">
+                    <ng-container matColumnDef="packageId">
+                        <th mat-header-cell *matHeaderCellDef>Package Id</th>
+                        <td mat-cell *matCellDef="let element"> {{element.packageId}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="packageName">
+                        <th mat-header-cell *matHeaderCellDef>Package Name</th>
+                        <td mat-cell *matCellDef="let element"> {{element.packageName}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fees">
+                        <th mat-header-cell *matHeaderCellDef>Fees</th>
+                        <td mat-cell *matCellDef="let element"> {{element.fees}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row;let i=index; columns: displayedColumns;" (click)="show(i)"></tr>
+                </table>
+            </div>
+        </div>
+    </mat-drawer-content>
+</mat-drawer-container>

@@ -1,0 +1,29 @@
+:host{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.hdiv,.fdiv{
+    background-color: #673AB7;
+}
+
+.shdiv{
+    background-color: #FFD740;
+}
+
+.example-container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: none;
+}
+
+mat-drawer{
+    width: 20%;
+    background-color: transparent;
+    border: none;
+}
+
+
+

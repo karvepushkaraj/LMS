@@ -1,0 +1,37 @@
+<div class="mt-4">
+    <h3 class="text-center">Member Subscriptions</h3>
+    <div class="mt-4" fxLayout="row" fxLayoutAlign="space-around center">
+        <div class="col-8">
+            <form [formGroup]="subscriptionForm" (ngSubmit)="addSubscription()" class="example-form">
+                <mat-form-field class="example-full-width" appearance="fill"> 
+                    <mat-label class="col-form-label">Member Id</mat-label>
+                    <input type="number" matInput formControlName="memberId">
+                    <mat-error *ngIf="memberId.invalid">Member Id is <strong>Required</strong></mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Subscription Package</mat-label>
+                    <mat-select formControlName="packageId">
+                      <mat-option *ngFor="let pkg of subPkg; let i=index" (click)="setFees(i)" [value]="pkg.packageId">{{pkg.packageName}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="packageId.invalid">Library Section is <strong>Required</strong></mat-error>
+                </mat-form-field>
+                <div formGroupName="subscriptionFee" fxLayout="row" fxLayoutAlign="space-between center">
+                    <mat-form-field class="example-full-width" appearance="fill" fxFlex="40">
+                        <mat-label class="col-form-label">Fees</mat-label>
+                        <input type="number" matInput formControlName="fees">
+                        <span matPrefix>₹&nbsp;</span>
+                        <mat-error *ngIf="fees.invalid">Deposite is <strong>Required</strong></mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width" appearance="fill" fxFlex="50"> 
+                        <mat-label class="col-form-label">Receipt No.</mat-label>
+                        <input type="text" matInput formControlName="receiptNumber">
+                        <mat-error *ngIf="receiptNumber.invalid">Receipt No. is <strong>Required</strong></mat-error>
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-around center" class="mt-2">
+                    <button mat-raised-button color="primary" type="submit">Add Subscription</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

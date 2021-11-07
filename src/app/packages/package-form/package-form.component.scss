@@ -1,0 +1,38 @@
+mat-drawer{
+    width: 40%;
+    background: transparent;
+    border: none;
+}
+
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+.example-full-width {
+    width: 100%;
+}
+
+.example-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.remove-button {
+    width: 30px;
+    height: 30px;
+}
+
+table{
+    width: 100%;
+}
+
+.mat-row  {
+    cursor: pointer;
+}
+  
+.mat-row:hover .mat-cell {
+    background-color: #FFD740;
+}

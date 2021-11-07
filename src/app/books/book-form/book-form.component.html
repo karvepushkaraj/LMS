@@ -1,0 +1,77 @@
+<mat-drawer-container fxFill>
+    <mat-drawer mode="side" opened>
+        <div class="mt-4">
+            <h3 class="text-center">Book Management</h3>
+            <div class="mt-4 mr-4 ml-4">
+                <form [formGroup]="getBookForm" (ngSubmit)="getBook()" class="example-form">
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+                        <mat-form-field class="example-full-width" appearance="fill" fxFlex="60"> 
+                            <mat-label class="col-form-label">Book Id</mat-label>
+                            <input type="number" matInput formControlName="bookId">
+                            <mat-error *ngIf="bookId.invalid">Book Id is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                        <div fxFlex="20">
+                            <button mat-raised-button color="primary" type="submit" class="mb-3" fxFill>Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div *ngIf="outputFlag">
+                <mat-card>
+                    <mat-card-header fxLayout="row" fxLayoutAlign="space-between center">
+                        <mat-card-title>{{book.title}}</mat-card-title>
+                        <div *ngIf="bookCopyFlag">
+                            <button type="button" (click)="deleteBook(book.bookCopies[0].copyId)" mat-mini-fab color="warn" fxLayout="row" fxLayoutAlign="space-around center" class="delete-button">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </mat-card-header>
+                    <mat-card-content class="mt-3">
+                        <div fxLayout="row">
+                            <p fxFlex="34">Title Id : {{book.titleId}}</p>
+                            <p *ngIf="bookCopyFlag" fxFlex="33">Copy Id : {{book.bookCopies[0].copyId}}</p>
+                            <p>Section Id : {{book.sectionId}}</p>
+                        </div>
+                        <p>Author : {{book.author}}</p>
+                        <p>Publication : {{book.publication}}</p>
+                        <div *ngIf="bookCopyFlag" fxLayout="row wrap">
+                            <p fxFlex="50">Price : {{book.bookCopies[0].price}}</p>
+                            <p fxFlex="50">Purchase Date : {{book.bookCopies[0].purchaseDate}}</p>
+                            <p>Member Id : {{book.bookCopies[0].member}}</p>
+                        </div>
+                        <div *ngIf="!bookCopyFlag">
+                            <p>Book Copies :</p>
+                            <table mat-table [dataSource]="book.bookCopies" class="mat-elevation-z8">
+                                <ng-container matColumnDef="copyId">
+                                    <th mat-header-cell *matHeaderCellDef>Copy Id</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.copyId}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="price">
+                                    <th mat-header-cell *matHeaderCellDef>Price</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="purchaseDate">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">Purchase Date</th>
+                                    <td mat-cell *matCellDef="let element" class="text-center"> {{(element.purchaseDate==null)?"-":element.purchaseDate}} </td>
+                                </ng-container>
+                                <ng-container matColumnDef="delete">
+                                    <th mat-header-cell *matHeaderCellDef class="col-1"></th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <button type="button" (click)="deleteBook(element.copyId)" mat-mini-fab color="warn" fxLayout="row" fxLayoutAlign="space-around center" class="delete-button">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content>
+        <app-new-book-form></app-new-book-form>
+    </mat-drawer-content>
+</mat-drawer-container>

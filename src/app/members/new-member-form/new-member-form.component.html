@@ -1,0 +1,73 @@
+<div class="mt-4 mb-3">
+    <h3 class="text-center">Member Form - II</h3>
+    <div class="ml-5 mr-5">
+        <mat-radio-group [(ngModel)]="requestType" (change)="setRequestType()" fxLayout="row" fxLayoutAlign="space-around center">
+            <mat-radio-button value="add" name="requestType" checked>Add</mat-radio-button>
+            <mat-radio-button value="delete" name="requestType">Deactivate</mat-radio-button>
+         </mat-radio-group>
+    </div>
+    <div class="mt-2 mr-4 ml-4">
+        <div *ngIf="addFormFlag">
+                <form [formGroup]="addMemberForm" (ngSubmit)="addMember()" (change)="toUpper(addMemberForm)" class="example-form">
+                    <div formGroupName="member">
+                        <mat-form-field class="example-full-width mt-3" appearance="fill">
+                            <mat-label class="col-form-label">Name</mat-label>
+                            <input type="text" matInput formControlName="name">
+                            <mat-error *ngIf="name.invalid">Name is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width mt-3" appearance="fill">
+                            <mat-label class="col-form-label">Mobile Number</mat-label>
+                            <input type="number" matInput formControlName="mobileNumber">
+                            <mat-error *ngIf="mobileNumber.invalid">Mobile Number is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width mt-3" appearance="fill">
+                            <mat-label class="col-form-label">Email</mat-label>
+                            <input type="email" matInput formControlName="emailId">
+                            <mat-error *ngIf="emailId.invalid">Email Id is invalid</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div formGroupName="deposite" fxLayout="row" fxLayoutAlign="space-between center">
+                        <mat-form-field class="example-full-width mt-3" appearance="fill" fxFlex="40">
+                            <mat-label class="col-form-label">Deposite</mat-label>
+                            <input type="number" matInput formControlName="deposite">
+                            <span matPrefix>₹&nbsp;</span>
+                            <mat-error *ngIf="deposite.invalid">Deposite is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width mt-3" appearance="fill" fxFlex="50">
+                            <mat-label class="col-form-label">Receipt No.</mat-label>
+                            <input type="text" matInput formControlName="receiptNumber">
+                            <mat-error *ngIf="receiptNumber.invalid">Receipt No. is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                    </div>
+                   <div fxLayout="row" fxLayoutAlign="space-around center" class="mt-2">
+                    <button mat-raised-button color="primary" class="col-3" type="submit">Add</button>
+                   </div>
+                </form>
+        </div>
+        <div *ngIf="deleteFormFlag">
+                <form [formGroup]="deleteMemberForm" (ngSubmit)="deleteMember()" class="example-form">
+                    <mat-form-field class="example-full-width" appearance="fill"> 
+                        <mat-label class="col-form-label">Member Id</mat-label>
+                        <input type="number" matInput [formControl]="memberId">
+                        <mat-error *ngIf="memberId.invalid">Member Id is <strong>Required</strong></mat-error>
+                    </mat-form-field>
+                    <div formGroupName="deposite" fxLayout="row" fxLayoutAlign="space-between center">
+                        <mat-form-field class="example-full-width mt-3" appearance="fill" fxFlex="40">
+                            <mat-label class="col-form-label">Deposite</mat-label>
+                            <input type="number" matInput formControlName="deposite">
+                            <span matPrefix>₹&nbsp;</span>
+                            <mat-error *ngIf="deposite.invalid">Deposite is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width mt-3" appearance="fill" fxFlex="50"> 
+                            <mat-label class="col-form-label">Receipt No.</mat-label>
+                            <input type="text" matInput formControlName="receiptNumber">
+                            <mat-error *ngIf="receiptNumber.invalid">Receipt No. is <strong>Required</strong></mat-error>
+                        </mat-form-field>
+                    </div>
+                   <div fxLayout="row" fxLayoutAlign="space-around center" class="mt-2">
+                    <button mat-raised-button color="primary" class="col-4" type="submit">Deactivate</button>
+                   </div>
+                </form>
+        </div>
+    </div>
+</div>
