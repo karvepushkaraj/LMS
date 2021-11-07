@@ -1,5 +1,6 @@
 package com.app.lms.controller;
 
+import java.text.SimpleDateFormat;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,10 @@ public class LibraryManagementController {
 					ObjectNode node = mapper.createObjectNode();
 					node.put("copyId", bookCopy.getCopyId());
 					node.put("price", bookCopy.getPrice());
+					if (bookCopy.getPurchaseDate() != null)
+						node.put("purchaseDate", new SimpleDateFormat("dd-MM-yyyy").format(bookCopy.getPurchaseDate()));
+					else
+						node.putNull("purchaseDate");
 					arrayNode.add(node); // add BookCopy to array
 				}
 				return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectNode);
@@ -103,9 +108,9 @@ public class LibraryManagementController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode jsonNode = mapper.readTree(input);
-			String sectionId = jsonNode.get("sectionId").asText(); // read sectionId
-			BookTitle bookTitle = mapper.treeToValue(jsonNode.get("BookTitle"), BookTitle.class); // read BookTitle
-			BookCopy bookCopy = mapper.treeToValue(jsonNode.get("BookCopy"), BookCopy.class); // read BookCopy
+			String sectionId = jsonNode.get("sectionId") == null ? "" : jsonNode.get("sectionId").asText();
+			BookTitle bookTitle = mapper.treeToValue(jsonNode.get("bookTitle"), BookTitle.class); // read BookTitle
+			BookCopy bookCopy = mapper.treeToValue(jsonNode.get("bookCopy"), BookCopy.class); // read BookCopy
 			String bookId = bookService.addBook(sectionId, bookTitle, bookCopy);
 			return "Book added successfully. Book Id : " + bookId;
 		} catch (JsonProcessingException | IllegalArgumentException | NullPointerException
@@ -162,7 +167,7 @@ public class LibraryManagementController {
 	 * @param member {@link Member}
 	 * @return String message
 	 */
-	@PostMapping("/member")
+	@PostMapping("/member/new")
 	public String addMember(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -199,7 +204,7 @@ public class LibraryManagementController {
 	 * @param memberId {@link Member} id
 	 * @return String message
 	 */
-	@DeleteMapping("/member")
+	@PostMapping("/member/delete")
 	public String deleteMember(@RequestBody String input) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -247,8 +252,8 @@ public class LibraryManagementController {
 	public String issueBook(@RequestBody String input) {
 		try {
 			JsonNode node = new ObjectMapper().readTree(input);
-			String bookId = node.get("bookid").asText(); // read bookId
-			int memberId = node.get("memberid").asInt(); // read memberId
+			String bookId = node.get("bookId").asText(); // read bookId
+			int memberId = node.get("memberId").asInt(); // read memberId
 			int response = bookTransactionService.issueBook(bookId, memberId);
 			return "Transaction Successful. Transaction Id : " + response;
 		} catch (JsonProcessingException | NullPointerException | InvalidBusinessCondition e) {
@@ -267,8 +272,8 @@ public class LibraryManagementController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode node = mapper.readTree(input);
-			String bookId = node.get("bookid").asText(); // read bookId
-			int memberId = node.get("memberid").asInt(); // read memberId
+			String bookId = node.get("bookId").asText(); // read bookId
+			int memberId = node.get("memberId").asInt(); // read memberId
 			LateFee fee = mapper.treeToValue(node.get("lateFee"), LateFee.class); // read LateFee
 			int response = bookTransactionService.returnBook(bookId, memberId, fee);
 			return "Transaction Successful. Transaction Id : " + response;

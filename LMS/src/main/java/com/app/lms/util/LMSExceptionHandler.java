@@ -47,10 +47,9 @@ public class LMSExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	/**
-	 * Handles {@link HibernateException}, {@link IllegalRequestException},
-	 * {@link ConstraintViolationException}
+	 * Handles {@link HibernateException}, {@link ConstraintViolationException}
 	 */
-	@ExceptionHandler({ HibernateException.class, IllegalRequestException.class, ConstraintViolationException.class })
+	@ExceptionHandler({ HibernateException.class, ConstraintViolationException.class })
 	protected ResponseEntity<ErrorMessage> handleHibernateException(Exception ex, WebRequest request) {
 		StringBuilder sb = new StringBuilder(ex.getMessage());
 		Throwable t = ex.getCause();
@@ -58,6 +57,17 @@ public class LMSExceptionHandler extends ResponseEntityExceptionHandler {
 			sb.append(t.getMessage());
 		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), HttpStatus.BAD_REQUEST,
 				sb.toString());
+		return new ResponseEntity<>(error, new HttpHeaders(), error.getStatus());
+	}
+
+	/**
+	 * Handles {@link IllegalRequestException}
+	 */
+	@ExceptionHandler(IllegalRequestException.class)
+	protected ResponseEntity<ErrorMessage> handleIllegalRequestException(IllegalRequestException ex,
+			WebRequest request) {
+		ErrorMessage error = new ErrorMessage(new Date(System.currentTimeMillis()), HttpStatus.BAD_REQUEST,
+				ex.getCause().getMessage());
 		return new ResponseEntity<>(error, new HttpHeaders(), error.getStatus());
 	}
 

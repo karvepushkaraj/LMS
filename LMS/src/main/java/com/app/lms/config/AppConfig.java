@@ -105,7 +105,7 @@ public class AppConfig {
 	}
 
 	private void addBooks() throws IOException {
-		final String json = "{ \"sectionId\": \"%s\", \"BookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"BookCopy\": { \"price\": \"%s\"} }";
+		final String json = "{ \"sectionId\": \"%s\", \"bookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"bookCopy\": { \"price\": \"%s\"} }";
 		try (Stream<String> stream = Files
 				.lines(Path.of("src/main/resources/LMS_Books.csv"), StandardCharsets.ISO_8859_1).skip(1)) {
 			stream.parallel().map(line -> String.format(json, (Object[]) line.split(","))).forEach(lmc::addBook);
