@@ -106,6 +106,7 @@ export class TransactionFormComponent implements OnInit {
                     content : "Transaction Failed. Late Fees not paid."
                   }
                 });
+                this.bookTransactionForm.reset();
               }
               else{
                 this.bookTransactionForm.get('lateFee')?.get('lateFees')?.setValue(data.lateFees);
