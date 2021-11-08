@@ -103,7 +103,6 @@ export class PackageFormComponent implements OnInit {
     if(this.addPackageForm.invalid){
       return;
     }
-    console.log(this.addPackageForm.value);
     this.http.post(this.packageUrl,this.addPackageForm.value,{ responseType: 'text' }).subscribe(
       data=>{
         this.dialog.open(ConfirmDialogComponent,{

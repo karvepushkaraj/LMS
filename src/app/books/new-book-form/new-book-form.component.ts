@@ -28,6 +28,7 @@ export class NewBookFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.libSecService.getLibrarySections().subscribe(data=>this.libSections=data,error=>console.log(error.error));
+    this.updateForm();
   }
 
   addBookForm = new FormGroup({
@@ -40,7 +41,7 @@ export class NewBookFormComponent implements OnInit {
     }),
     bookCopy: new FormGroup({
       price: new FormControl(''),
-      purchaseDate: new FormControl(new Date())
+      purchaseDate: new FormControl('')
     })
   });
 
@@ -84,12 +85,14 @@ export class NewBookFormComponent implements OnInit {
     this.addBookForm.get('bookCopy')?.get('purchaseDate')?.setValue(new Date());
     if(this.bookCopyFlag){
       this.addBookForm.get('sectionId')?.disable();
+      this.addBookForm.get('bookTitle')?.get('titleId')?.enable();
       this.addBookForm.get('bookTitle')?.get('title')?.disable();
       this.addBookForm.get('bookTitle')?.get('author')?.disable();
       this.addBookForm.get('bookTitle')?.get('publication')?.disable();
     }
     else{
       this.addBookForm.get('sectionId')?.enable();
+      this.addBookForm.get('bookTitle')?.get('titleId')?.disable();
       this.addBookForm.get('bookTitle')?.get('title')?.enable();
       this.addBookForm.get('bookTitle')?.get('author')?.enable();
       this.addBookForm.get('bookTitle')?.get('publication')?.enable();

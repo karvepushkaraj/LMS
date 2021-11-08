@@ -83,7 +83,6 @@ export class SectionFormComponent implements OnInit {
     }
     const sectionId = this.getSectionForm.get('sectionId')?.value;
     const url = this.sectionUrl + "?id=" + sectionId;
-    console.log(url);
     this.http.get<LibrarySection>(url).subscribe(
       data=>{
         this.errorFlag=false;

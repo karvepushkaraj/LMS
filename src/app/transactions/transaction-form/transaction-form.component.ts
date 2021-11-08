@@ -124,8 +124,8 @@ export class TransactionFormComponent implements OnInit {
               content : message
             }
           });
+          this.bookTransactionForm.reset();
         }
-        this.bookTransactionForm.reset();
       }
     );
   }
