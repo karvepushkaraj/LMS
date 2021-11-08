@@ -165,6 +165,8 @@ public class LibraryManagementService implements BookService, MemberService, Boo
 	@Override
 	public int addSubscription(int memberId, int pkgId, SubscriptionFee fee) throws InvalidBusinessCondition {
 		Member member = getMember(memberId);
+		if (!member.isActive())
+			throw new InvalidBusinessCondition("Member is not Active");
 		SubscriptionPackage pkg = subpkgService.getSubscriptionPackage(pkgId);
 		Subscription sub = new Subscription(member, pkg, new Date(System.currentTimeMillis()), ActivityStatus.ACTIVE);
 		subscriptionDao.add(Optional.of(sub));
