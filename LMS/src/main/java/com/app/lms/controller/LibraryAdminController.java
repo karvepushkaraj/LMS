@@ -21,6 +21,7 @@ import com.app.lms.service.SubscriptionPackageService;
 import com.app.lms.util.IllegalRequestException;
 import com.app.lms.util.InvalidBusinessCondition;
 import com.app.lms.util.LMSExceptionHandler;
+import com.app.lms.util.SubPkgJsonSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +46,7 @@ public class LibraryAdminController {
 	private SubscriptionPackageService subpkgService;
 
 	/**
-	 * Get single Library Section.
+	 * Get single or all Library Sections.
 	 * 
 	 * @param id {@link LibrarySection} id
 	 * @return {@link LibrarySection} or {@code null}
@@ -53,12 +54,12 @@ public class LibraryAdminController {
 	@GetMapping("/section")
 	public Object getLibrarySection(@RequestParam(value = "id", required = false) String id,
 			@RequestParam(value = "all", required = false, defaultValue = "false") boolean flag) {
-		if (flag)
+		if (flag) // return all Library Sections
 			return librarySectionService.getLibrarySection();
 		if (id.length() != 3) // fail fast
 			throw new IllegalRequestException("Invalid id : " + id);
 		try {
-			return librarySectionService.getLibrarySection(id);
+			return librarySectionService.getLibrarySection(id); // return single Library Section
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e);
 		}
@@ -97,7 +98,10 @@ public class LibraryAdminController {
 	}
 
 	/**
-	 * Get single Subscription Package.
+	 * Get single or all Subscription Packages.
+	 * 
+	 * Note : JSON Serialization of {@link SubscriptionPackage} is handled by
+	 * {@link SubPkgJsonSerializer}
 	 * 
 	 * @param id {@link SubscriptionPackage} id
 	 * @return String of {@link SubscriptionPackage} and array of
@@ -106,10 +110,10 @@ public class LibraryAdminController {
 	@GetMapping("/package")
 	public Object getSubscriptionPackage(@RequestParam(value = "id", required = false, defaultValue = "0") int id,
 			@RequestParam(value = "all", required = false, defaultValue = "false") boolean flag) {
-		if (flag)
+		if (flag) // return all Subscription Packages
 			return subpkgService.getSubscriptionPackage();
 		try {
-			return subpkgService.getSubscriptionPackage(id);
+			return subpkgService.getSubscriptionPackage(id); // return single Subscription Packages
 		} catch (InvalidBusinessCondition e) {
 			throw new IllegalRequestException(e);
 		}

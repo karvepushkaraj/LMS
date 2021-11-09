@@ -10,6 +10,13 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
+/**
+ * Custom JSON Serializer for {@link SubscriptionPackage}
+ * 
+ * @author karve
+ *
+ */
+
 @JsonComponent
 public class SubPkgJsonSerializer extends JsonSerializer<SubscriptionPackage> {
 
