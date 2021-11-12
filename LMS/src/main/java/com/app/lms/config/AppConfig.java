@@ -111,5 +111,14 @@ public class AppConfig {
 			stream.parallel().map(line -> String.format(json, (Object[]) line.split(","))).forEach(lmc::addBook);
 		}
 	}
+	
+	@Bean
+	public void startAngular() {
+		try {
+			Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"cd C:\\Users\\karve\\Angular\\lms-app && ng serve --open\"");
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+	}
 
 }
