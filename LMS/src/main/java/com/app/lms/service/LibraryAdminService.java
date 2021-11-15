@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -55,6 +56,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 				.orElseThrow(() -> new InvalidBusinessCondition("Library Section does not exist"));
 	}
 
+	@Cacheable("libsec")
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<LibrarySection> getLibrarySection() {
@@ -84,6 +86,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 				.orElseThrow(() -> new InvalidBusinessCondition("Subscription Package does not exist"));
 	}
 
+	@Cacheable("subpkg")
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SubscriptionPackage> getSubscriptionPackage() {
