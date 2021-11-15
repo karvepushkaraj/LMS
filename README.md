@@ -1,6 +1,7 @@
 # LMS
 
 Library Management System REST API developed in Spring Boot, Hibernate and Oracle.
+Written in Java 11.
 
 Use Case :
 A Library consists of Library Sections (eg.: Children, General, Magazine).
