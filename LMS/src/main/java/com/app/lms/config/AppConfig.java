@@ -3,7 +3,6 @@ package com.app.lms.config;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -13,6 +12,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -92,7 +92,8 @@ public class AppConfig {
 	}
 
 	private void addLibrarySections() throws IOException {
-		try (Stream<String> stream = Files.lines(Path.of("src/main/resources/LMS_Sections.csv")).skip(1)) {
+		try (Stream<String> stream = Files.lines(new ClassPathResource("LMS_Sections.csv").getFile().toPath())
+				.skip(1)) {
 			stream.map(line -> {
 				String[] sarr = line.split(",");
 				return new LibrarySection(sarr[0], sarr[1]);
@@ -101,7 +102,7 @@ public class AppConfig {
 	}
 
 	private void addSubscriptionPackages() throws IOException {
-		try (Stream<String> stream = Files.lines(Path.of("src/main/resources/LMS_Packages.txt"))) {
+		try (Stream<String> stream = Files.lines(new ClassPathResource("LMS_Packages.txt").getFile().toPath())) {
 			stream.forEach(lac::addSubscriptionPackage);
 		}
 	}
@@ -109,18 +110,21 @@ public class AppConfig {
 	private void addBooks() throws IOException {
 		final String json = "{ \"sectionId\": \"%s\", \"bookTitle\": { \"title\": \"%s\", \"author\": \"%s\"}, \"bookCopy\": { \"price\": \"%s\"} }";
 		try (Stream<String> stream = Files
-				.lines(Path.of("src/main/resources/LMS_Books.csv"), StandardCharsets.ISO_8859_1).skip(1)) {
+				.lines(new ClassPathResource("LMS_Books.csv").getFile().toPath(), StandardCharsets.ISO_8859_1)
+				.skip(1)) {
 			stream.parallel().map(line -> String.format(json, (Object[]) line.split(","))).forEach(lmc::addBook);
 		}
 	}
-	
+
 	@Bean
 	public void startAngular() {
 		try {
-			Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"cd C:\\Users\\karve\\Angular\\lms-app && ng serve --open\"");
+			Runtime.getRuntime()
+					.exec("cmd /c start cmd.exe /K \"cd C:\\Users\\karve\\Angular\\lms-app && ng serve --open\"");
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
+		logger.info("Started Angular");
 	}
 
 }
