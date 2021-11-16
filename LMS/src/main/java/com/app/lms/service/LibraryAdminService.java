@@ -10,6 +10,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,8 @@ import com.app.lms.util.InvalidBusinessCondition;
 /**
  * Implementation of {@link LibrarySectionService},
  * {@link SubscriptionPackageService} interfaces.
+ * 
+ * Methods getLibrarySection() and getSubscriptionPackage() are cached.
  * 
  * @author karve
  *
@@ -63,6 +66,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 		return (List<LibrarySection>) librarySectionDao.getAll();
 	}
 
+	@CacheEvict(value = "libsec", allEntries = true)
 	@Override
 	public void addLibrarySection(LibrarySection bookSection) throws InvalidBusinessCondition {
 		try {
@@ -72,12 +76,13 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 		}
 	}
 
+	@CacheEvict(value = "libsec", allEntries = true)
 	@Override
-	public void updateLibrarySection(LibrarySection bookSection) throws InvalidBusinessCondition {
-		if (bookSection == null)
+	public void updateLibrarySection(LibrarySection librarySection) throws InvalidBusinessCondition {
+		if (librarySection == null)
 			throw new InvalidBusinessCondition("Invalid Input");
-		LibrarySection ls = getLibrarySection(bookSection.getSectionId());
-		ls.setSectionName(bookSection.getSectionName());
+		LibrarySection ls = getLibrarySection(librarySection.getSectionId());
+		ls.setSectionName(librarySection.getSectionName());
 	}
 
 	@Override
@@ -93,6 +98,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 		return (List<SubscriptionPackage>) subscriptionPackageDao.getAll();
 	}
 
+	@CacheEvict(value = "subpkg", allEntries = true)
 	@Override
 	public int addSubscriptionPackage(SubscriptionPackage pkg, Map<String, Integer> map)
 			throws InvalidBusinessCondition {
@@ -111,6 +117,7 @@ public class LibraryAdminService implements LibrarySectionService, SubscriptionP
 		}
 	}
 
+	@CacheEvict(value = "subpkg", allEntries = true)
 	@Override
 	public void deleteSubscriptionPackage(int id) throws InvalidBusinessCondition {
 		subscriptionPackageDao.delete(Optional.of(getSubscriptionPackage(id)));
