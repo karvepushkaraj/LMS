@@ -10,6 +10,7 @@ import { PackagesModule } from 'src/app/packages/packages.module';
 import { MembersModule } from 'src/app/members/members.module';
 import { BooksModule } from 'src/app/books/books.module';
 import { TransactionsModule } from 'src/app/transactions/transactions.module';
+import { ReportsModule } from 'src/app/reports/reports.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { TransactionsModule } from 'src/app/transactions/transactions.module';
     PackagesModule,
     MembersModule,
     BooksModule,
-    TransactionsModule
+    TransactionsModule,
+    ReportsModule
   ],
   exports: [
     StandardComponent
